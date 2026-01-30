@@ -4,21 +4,19 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { NAVIGATION_ITEMS, ROUTES } from '@/config/routes';
 import { useNavigation } from '@/hooks/useNavigation';
+import { useCart } from '@/contexts/CartContext';
 
 /**
  * Header Component
  * Professional header with active route detection, mobile menu, and cart integration
  * 
  * @param {Object} props
- * @param {number} props.cartCount - Number of items in cart
- * @param {Function} props.onCartClick - Callback when cart button is clicked
  * @param {Function} props.onUserClick - Callback when user button is clicked
  */
 export default function Header({ 
-  cartCount = 0, 
-  onCartClick,
   onUserClick 
 }) {
+  const { totalItems, openCart } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { getRouteClassName, checkActiveRoute } = useNavigation();
@@ -55,12 +53,7 @@ export default function Header({
   };
 
   const handleCartClick = () => {
-    if (onCartClick) {
-      onCartClick();
-    } else {
-      // Default behavior: navigate to cart page if exists
-      window.location.href = '/cart';
-    }
+    openCart();
   };
 
   const handleUserClick = () => {
@@ -125,12 +118,12 @@ export default function Header({
             <button
               onClick={handleCartClick}
               className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-gray-900 transition-colors cursor-pointer relative group"
-              aria-label={`Shopping cart${cartCount > 0 ? ` with ${cartCount} items` : ''}`}
+              aria-label={`Shopping cart${totalItems > 0 ? ` with ${totalItems} items` : ''}`}
             >
               <i className="ri-shopping-cart-line text-2xl transition-transform group-hover:scale-110"></i>
-              {cartCount > 0 && (
+              {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 w-5 h-5 bg-gray-900 text-white text-xs font-bold rounded-full flex items-center justify-center animate-pulse">
-                  {cartCount > 99 ? '99+' : cartCount}
+                  {totalItems > 99 ? '99+' : totalItems}
                 </span>
               )}
             </button>

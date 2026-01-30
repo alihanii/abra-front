@@ -16,6 +16,7 @@ export const ROUTES = {
   PRIVACY: '/privacy',
   TERMS: '/terms',
   FAQ: '/faq',
+  CHECKOUT: '/checkout',
 };
 
 /**
