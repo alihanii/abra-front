@@ -45,8 +45,9 @@ function isValidUrl(url) {
  * @param {Object} props
  * @param {string} props.src - Image source URL
  * @param {string} props.alt - Alt text for image
- * @param {number} props.width - Image width
- * @param {number} props.height - Image height
+ * @param {number} props.width - Image width (required if fill is false)
+ * @param {number} props.height - Image height (required if fill is false)
+ * @param {boolean} props.fill - Use fill layout (default: false)
  * @param {string} props.className - Additional CSS classes
  * @param {string} props.fallback - Fallback image source (default: EmptyPhoto)
  * @param {Object} props.imageProps - Additional props to pass to Next.js Image component
@@ -56,6 +57,7 @@ export default function BaseImage({
   alt,
   width,
   height,
+  fill = false,
   className = '',
   fallback = emptyPhoto,
   ...imageProps
@@ -107,6 +109,40 @@ export default function BaseImage({
   // Use fallback if error occurred or invalid URL
   const finalSrc = hasError || !validatedSrc ? fallback : imageSrc;
 
+  // Check if fill prop is provided in imageProps
+  const useFill = imageProps.fill || false;
+
+  // If fill is true, render without wrapper div (for absolute positioning)
+  if (useFill) {
+    return (
+      <>
+        {/* Loading Placeholder */}
+        {isLoading && (
+          <div
+            className="absolute inset-0 bg-gray-100 animate-pulse z-0"
+            aria-hidden="true"
+          />
+        )}
+        
+        {/* Image */}
+        <Image
+          src={finalSrc}
+          alt={alt || 'Image'}
+          fill
+          className={`
+            relative z-10 object-cover transition-opacity duration-300
+            ${isLoading ? 'opacity-0' : 'opacity-100'}
+            ${className}
+          `}
+          onLoad={handleLoad}
+          onError={handleError}
+          {...imageProps}
+        />
+      </>
+    );
+  }
+
+  // Default layout with width/height
   return (
     <div
       className={`

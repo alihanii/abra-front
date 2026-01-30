@@ -4,6 +4,12 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* Custom Colors */
+  --color-white: #fff;
+  --color-lab-dark: lab(8.11897% .811279 -12.254);
+  --color-sky-light: #e6f3fa;
+  --color-sky-light-rgb: 230, 243, 250;
 }
 
 @theme inline {
@@ -12,6 +18,11 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-pacifico: var(--font-pacifico);
+  
+  /* Custom Color Variables for Tailwind */
+  --color-white: var(--color-white);
+  --color-lab-dark: var(--color-lab-dark);
+  --color-sky-light: var(--color-sky-light);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -88,4 +99,75 @@ body {
 
 .animate-fadeIn {
   animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* Hide scrollbar for product slider */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scroll Navigation Animations */
+@keyframes slideOutLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-out-left {
+  animation: slideOutLeft 0.3s ease-out forwards;
+}
+
+.animate-slide-out-right {
+  animation: slideOutRight 0.3s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.3s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s ease-out forwards;
 }

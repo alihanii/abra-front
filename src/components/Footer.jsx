@@ -21,7 +21,7 @@ export default function Footer() {
                 <a
                   key={social.id}
                   href={social.href}
-                  className="w-10 h-10 flex items-center justify-center bg-[#E6F3FA] rounded-full hover:bg-gray-900 hover:text-white transition-all duration-200 cursor-pointer group"
+                  className="w-10 h-10 flex items-center justify-center bg-[var(--color-sky-light)] rounded-full hover:bg-gray-900 hover:text-white transition-all duration-200 cursor-pointer group"
                   aria-label={social.label}
                   target="_blank"
                   rel="noopener noreferrer"
