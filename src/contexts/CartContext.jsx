@@ -26,7 +26,7 @@ const MOCK_CART_ITEMS = [
     id: 'cart-item-2',
     name: 'Couple Hoodies Set',
     price: 79.99,
-    image: 'https://readdy.ai/api/search-image?query=Two%20matching%20navy%20blue%20hoodies%20side%20by%20side%20on%20clean%20white%20background%2C%20couple%20matching%20set%2C%20minimalist%20product%20photography%2C%20soft%20natural%20lighting%2C%20professional%20e-commerce%20style%2C%20centered%20composition%2C%20high%20resolution%2C%20modern%20casual%20wear&width=400&height=500&seq=cart2&orientation=portrait',
+    image: 'httarch-image?query=Two%20matching%20navy%20blue%20hoodies%20side%20by%20side%20on%20clean%20white%20background%2C%20couple%20matching%20set%2C%20minimalist%20product%20photography%2C%20soft%20natural%20lighting%2C%20professional%20e-commerce%20style%2C%20centered%20composition%2C%20high%20resolution%2C%20modern%20casual%20wear&width=400&height=500&seq=cart2&orientation=portrait',
     size: 'M/L',
     color: 'Navy',
     quantity: 1,

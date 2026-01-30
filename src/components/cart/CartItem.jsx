@@ -1,8 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import { useCart } from '@/contexts/CartContext';
 import QuantityControl from '@/components/ui/QuantityControl';
+import BaseImage from '@/components/ui/BaseImage';
 import { container } from '@/lib/styles';
 
 /**
@@ -31,20 +31,14 @@ export default function CartItem({ item }) {
     <div className={container}>
       <div className="flex gap-4">
         {/* Product Image */}
-        <div className="w-24 h-24 bg-gray-100 rounded-lg overflow-hidden shrink-0">
-          {item.image ? (
-            <Image
-              src={item.image}
-              alt={item.name}
-              width={96}
-              height={96}
-              className="w-full h-full object-cover object-top"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <i className="ri-image-line text-3xl text-gray-400"></i>
-            </div>
-          )}
+        <div className="w-24 h-24 rounded-lg overflow-hidden shrink-0">
+          <BaseImage
+            src={item.image}
+            alt={item.name}
+            width={96}
+            height={96}
+            className="rounded-lg"
+          />
         </div>
 
         {/* Product Details */}
