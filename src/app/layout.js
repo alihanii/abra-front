@@ -24,20 +24,11 @@ const pacifico = Pacifico({
 export const metadata = {
   title: "Abra - Premium Custom Clothing",
   description: "Premium custom clothing with professional printing quality.",
-  other: {
-    "remix-icon": "https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css",
-  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
-        />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${pacifico.variable} antialiased`}
       >
