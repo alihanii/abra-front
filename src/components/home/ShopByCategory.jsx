@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import CategorySlider from './CategorySlider';
 import ShopCategoryCard from './ShopCategoryCard';
 import ScrollNavigation from '@/components/ui/ScrollNavigation';
+import ScrollReveal from '@/components/ui/ScrollReveal';
 import { ROUTES } from '@/config/routes';
 
 /**
@@ -77,23 +78,29 @@ export default function ShopByCategory() {
     <section className="py-20 bg-[var(--color-sky-light)]">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-12">
-          <div className="text-center md:text-left flex-1">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Shop by Category
-            </h2>
-            <p className="text-lg sm:text-xl text-gray-700">
-              Choose your perfect canvas
-            </p>
-          </div>
+        <ScrollReveal animation="fadeUp" delay={0}>
+          <div className="flex items-center justify-between mb-12">
+            <ScrollReveal animation="slideRight" delay={100}>
+              <div className="text-center md:text-left flex-1">
+                <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                  Shop by Category
+                </h2>
+                <p className="text-lg sm:text-xl text-gray-700">
+                  Choose your perfect canvas
+                </p>
+              </div>
+            </ScrollReveal>
 
-          {/* Desktop Navigation Buttons */}
-          <ScrollNavigation
-            scrollRef={sliderRef}
-            onScrollLeft={handleScrollLeft}
-            onScrollRight={handleScrollRight}
-          />
-        </div>
+            {/* Desktop Navigation Buttons */}
+            <ScrollReveal animation="slideLeft" delay={200}>
+              <ScrollNavigation
+                scrollRef={sliderRef}
+                onScrollLeft={handleScrollLeft}
+                onScrollRight={handleScrollRight}
+              />
+            </ScrollReveal>
+          </div>
+        </ScrollReveal>
 
         {/* Desktop Slider */}
         <div className="hidden md:block">
@@ -102,15 +109,25 @@ export default function ShopByCategory() {
 
         {/* Mobile Grid */}
         <div className="md:hidden grid grid-cols-1 gap-8">
-          {CATEGORIES.map((category) => (
-            <ShopCategoryCard
-              key={category.id}
-              href={category.href}
-              image={category.image}
-              alt={category.title}
-              title={category.title}
-            />
-          ))}
+          {CATEGORIES.map((category, index) => {
+            const animations = ['fadeUp', 'slideLeft', 'slideRight'];
+            const animation = animations[index % animations.length];
+            
+            return (
+              <ScrollReveal
+                key={category.id}
+                animation={animation}
+                delay={index * 150}
+              >
+                <ShopCategoryCard
+                  href={category.href}
+                  image={category.image}
+                  alt={category.title}
+                  title={category.title}
+                />
+              </ScrollReveal>
+            );
+          })}
         </div>
       </div>
     </section>

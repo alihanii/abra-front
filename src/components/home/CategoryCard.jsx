@@ -30,7 +30,7 @@ export default function CategoryCard({
     <Link
       href={href}
       className={cn(
-        'group cursor-pointer relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500',
+        'group cursor-pointer  relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500',
         className
       )}
       style={{ animationDelay: `${delay}ms` }}

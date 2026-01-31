@@ -4,4 +4,5 @@
  */
 
 export * from './useNavigation';
+export * from './useScrollAnimation';
 

@@ -1,6 +1,7 @@
 'use client';
 
 import WhyChooseCard from './WhyChooseCard';
+import ScrollReveal from '@/components/ui/ScrollReveal';
 
 /**
  * Why Choose Data Configuration
@@ -53,13 +54,18 @@ export default function WhyChooseSection() {
 
         {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {WHY_CHOOSE_ITEMS.map((item) => (
-            <WhyChooseCard
+          {WHY_CHOOSE_ITEMS.map((item, index) => (
+            <ScrollReveal
               key={item.id}
-              icon={item.icon}
-              title={item.title}
-              description={item.description}
-            />
+              animation="fadeUp"
+              delay={index * 100}
+            >
+              <WhyChooseCard
+                icon={item.icon}
+                title={item.title}
+                description={item.description}
+              />
+            </ScrollReveal>
           ))}
         </div>
       </div>

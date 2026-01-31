@@ -1,10 +1,7 @@
 import { HeroSlider, CategoryGrid, HeroSection, ShopByCategory, FeaturesSection, WhyChooseSection, CTASection } from '@/components/home';
 import { FeaturedProducts } from '@/components/products';
 
-/**
- * Home Page
- * Main landing page with hero slider and other sections
- */
+
 export default function Home() {
   return (
     <main>

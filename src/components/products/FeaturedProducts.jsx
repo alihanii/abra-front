@@ -5,6 +5,7 @@ import ProductSlider from './ProductSlider';
 import ProductCard from './ProductCard';
 import BaseButton from '@/components/ui/BaseButton';
 import ScrollNavigation from '@/components/ui/ScrollNavigation';
+import ScrollReveal from '@/components/ui/ScrollReveal';
 import { ROUTES } from '@/config/routes';
 
 /**
@@ -90,21 +91,27 @@ export default function FeaturedProducts() {
     <section className="py-16 bg-[var(--color-sky-light)]">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-2">
-              Featured Products
-            </h2>
-            <p className="text-lg text-gray-700">Bestsellers & new arrivals</p>
+        <ScrollReveal animation="slideRight" delay={0}>
+          <div className="flex items-center justify-between mb-8">
+            <ScrollReveal animation="fadeIn" delay={100}>
+              <div>
+                <h2 className="text-4xl font-bold text-gray-900 mb-2">
+                  Featured Products
+                </h2>
+                <p className="text-lg text-gray-700">Bestsellers & new arrivals</p>
+              </div>
+            </ScrollReveal>
+            
+            {/* Navigation Buttons */}
+            <ScrollReveal animation="slideLeft" delay={200}>
+              <ScrollNavigation
+                scrollRef={sliderRef}
+                onScrollLeft={handleScrollLeft}
+                onScrollRight={handleScrollRight}
+              />
+            </ScrollReveal>
           </div>
-          
-          {/* Navigation Buttons */}
-          <ScrollNavigation
-            scrollRef={sliderRef}
-            onScrollLeft={handleScrollLeft}
-            onScrollRight={handleScrollRight}
-          />
-        </div>
+        </ScrollReveal>
 
         {/* Desktop Slider */}
         <ProductSlider ref={sliderRef} products={MOCK_PRODUCTS} />

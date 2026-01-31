@@ -1,6 +1,7 @@
 'use client';
 
 import CategoryCard from './CategoryCard';
+import ScrollReveal from '@/components/ui/ScrollReveal';
 import { ROUTES } from '@/config/routes';
 
 /**

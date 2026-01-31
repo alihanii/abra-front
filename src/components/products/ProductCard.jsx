@@ -82,13 +82,21 @@ export default function ProductCard({
     <div
       onClick={handleCardClick}
       className={cn(
-        'bg-white rounded-2xl overflow-hidden shadow-lg group cursor-pointer hover:shadow-2xl transition-all duration-300',
-        isMobile ? 'p-4' : 'p-5',
+        'bg-white overflow-hidden shadow-lg group cursor-pointer hover:shadow-2xl transition-all duration-300',
+        'flex flex-row md:flex-col',
+        'w-full md:w-auto',
+        'border-b md:border-b-0 border-gray-200 last:border-b-0',
+        'rounded-none md:rounded-2xl',
+        isMobile ? 'p-3' : 'p-5',
         className
       )}
     >
       {/* Image Container */}
-      <div className="relative aspect-[5/6] overflow-hidden mb-4 rounded-lg">
+      <div className={cn(
+        'relative overflow-hidden rounded-lg shrink-0',
+        'w-24 h-24 md:w-full md:h-auto',
+        'md:aspect-5/6 md:mb-4'
+      )}>
         <BaseImage
           src={image}
           alt={name}
@@ -100,8 +108,8 @@ export default function ProductCard({
         {badge && (
           <span
             className={cn(
-              'absolute top-3 left-3 px-2 py-1 bg-gray-900 text-white text-xs font-semibold rounded-full z-10',
-              isMobile ? 'top-3 left-3 px-2 py-1' : 'top-4 left-4 px-3 py-1'
+              'absolute top-1 left-1 md:top-3 md:left-3 px-1.5 py-0.5 md:px-2 md:py-1',
+              'bg-gray-900 text-white text-[10px] md:text-xs font-semibold rounded-full z-10'
             )}
           >
             {badge}
@@ -110,53 +118,62 @@ export default function ProductCard({
       </div>
 
       {/* Product Info */}
-      <div className={isMobile ? 'p-0' : ''}>
-        <h3
-          className={cn(
-            'font-bold text-gray-900 mb-2',
-            isMobile ? 'text-sm' : 'text-lg'
-          )}
-        >
-          {name}
-        </h3>
-
-        {/* Price */}
-        <div className="flex items-center justify-between mb-4">
-          <span
+      <div className={cn(
+        'flex flex-col flex-1',
+        'ml-3 md:ml-0',
+        'justify-between md:justify-start'
+      )}>
+        <div className="flex-1">
+          <h3
             className={cn(
-              'font-bold text-gray-900',
-              isMobile ? 'text-xl' : 'text-2xl'
+              'font-bold text-gray-900 mb-1 md:mb-2',
+              'text-xs md:text-lg',
+              'line-clamp-2 md:line-clamp-none'
             )}
           >
-            ${price.toFixed(2)}
-          </span>
+            {name}
+          </h3>
+
+          {/* Price */}
+          <div className="flex items-center justify-between mb-2 md:mb-4">
+            <span
+              className={cn(
+                'font-bold text-gray-900',
+                'text-base md:text-2xl'
+              )}
+            >
+              ${price.toFixed(2)}
+            </span>
+          </div>
         </div>
 
         {/* Add to Cart or Quantity Control */}
-        {isInCart ? (
-          <div data-product-action onClick={(e) => e.stopPropagation()}>
-            <QuantityControl
-              value={cartItem.quantity}
-              onIncrease={() => handleQuantityChange(cartItem.quantity + 1)}
-              onDecrease={() => handleQuantityChange(cartItem.quantity - 1)}
-              min={1}
-              max={99}
-              size={isMobile ? 'xs' : 'sm'}
-              className="w-full justify-center"
-            />
-          </div>
-        ) : (
-          <BaseButton
-            onClick={handleAddToCart}
-            variant="primary"
-            size={isMobile ? 'sm' : 'md'}
-            fullWidth
-            className="whitespace-nowrap"
-            data-product-action
-          >
-            Add to Cart
-          </BaseButton>
-        )}
+        <div className="mt-auto md:mt-0">
+          {isInCart ? (
+            <div data-product-action onClick={(e) => e.stopPropagation()}>
+              <QuantityControl
+                value={cartItem.quantity}
+                onIncrease={() => handleQuantityChange(cartItem.quantity + 1)}
+                onDecrease={() => handleQuantityChange(cartItem.quantity - 1)}
+                min={1}
+                max={99}
+                size={isMobile ? 'xs' : 'sm'}
+                className="w-full justify-center"
+              />
+            </div>
+          ) : (
+            <BaseButton
+              onClick={handleAddToCart}
+              variant="primary"
+              size={isMobile ? 'xs' : 'md'}
+              fullWidth
+              className="whitespace-nowrap text-xs md:text-sm"
+              data-product-action
+            >
+              Add to Cart
+            </BaseButton>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 'use client';
 
 import FeatureCard from './FeatureCard';
+import ScrollReveal from '@/components/ui/ScrollReveal';
 
 /**
  * Features Data Configuration
@@ -35,13 +36,18 @@ export default function FeaturesSection() {
     <section className="bg-white py-12 shadow-sm">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {FEATURES.map((feature) => (
-            <FeatureCard
+          {FEATURES.map((feature, index) => (
+            <ScrollReveal
               key={feature.id}
-              icon={feature.icon}
-              title={feature.title}
-              description={feature.description}
-            />
+              animation="fadeUp"
+              delay={index * 100}
+            >
+              <FeatureCard
+                icon={feature.icon}
+                title={feature.title}
+                description={feature.description}
+              />
+            </ScrollReveal>
           ))}
         </div>
       </div>
