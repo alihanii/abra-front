@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { NAVIGATION_ITEMS, ROUTES } from '@/config/routes';
 import { useNavigation } from '@/hooks/useNavigation';
 import { useCart } from '@/contexts/CartContext';
+import { useProfile } from '@/contexts/ProfileContext';
 
 /**
  * Header Component
@@ -17,6 +18,7 @@ export default function Header({
   onUserClick 
 }) {
   const { totalItems, openCart } = useCart();
+  const { openProfile } = useProfile();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { getRouteClassName, checkActiveRoute } = useNavigation();
@@ -60,8 +62,8 @@ export default function Header({
     if (onUserClick) {
       onUserClick();
     } else {
-      // Default behavior: navigate to account page if exists
-      window.location.href = '/account';
+      // Open profile drawer
+      openProfile();
     }
   };
 

@@ -238,7 +238,7 @@ export default function ProductsPage() {
       {/* Products Grid Section */}
       <div className="max-w-7xl mx-auto px-1 sm:px-6 pt-2 sm:py-8">
         {/* Results Count */}
-        <div className="mb-6">
+        <div className="mb-6 md:px-0 px-4 ">
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 mt-4">
             Products
           </h1>

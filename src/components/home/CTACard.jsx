@@ -60,7 +60,6 @@ export default function CTACard({
           href={buttonHref}
           variant="secondary"
           size="lg"
-          className="shadow-lg hover:shadow-xl bg-white text-gray-900 hover:bg-gray-100"
         >
           {buttonText}
         </BaseButton>
@@ -69,7 +68,6 @@ export default function CTACard({
           onClick={onButtonClick}
           variant="secondary"
           size="lg"
-          className="shadow-lg hover:shadow-xl bg-white text-gray-900 hover:bg-gray-100"
         >
           {buttonText}
         </BaseButton>

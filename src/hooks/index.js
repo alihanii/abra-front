@@ -5,4 +5,5 @@
 
 export * from './useNavigation';
 export * from './useScrollAnimation';
+export * from './useAuth';
 
