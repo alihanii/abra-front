@@ -95,7 +95,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Powered by Readdy
+            Powered by AliHaNi
           </a>
         </div>
       </div>

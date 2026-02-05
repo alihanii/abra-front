@@ -56,7 +56,7 @@ export default function ProductImageGallery({
               <BaseImage
                 src={image.url}
                 alt={image.alt || `View ${index + 1}`}
-                imageProps={{ fill: true }}
+                fill
                 className="object-cover object-top"
               />
             </button>
@@ -70,7 +70,7 @@ export default function ProductImageGallery({
           <BaseImage
             src={currentImage.url}
             alt={currentImage.alt || 'Product image'}
-            imageProps={{ fill: true }}
+            fill
             className="object-cover object-top"
           />
           <button

@@ -72,6 +72,7 @@ export default function ProductDetailPage() {
 
     addItem({
       id: `${product.id}-${selectedColor}-${selectedSize}`,
+      slug: product.slug,
       name: product.name,
       price: finalPrice,
       image: product.images?.[0]?.url || '',
