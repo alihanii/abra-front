@@ -7,6 +7,7 @@ import BaseImage from '@/components/ui/BaseImage';
 import BaseButton from '@/components/ui/BaseButton';
 import QuantityControl from '@/components/ui/QuantityControl';
 import { useCart } from '@/contexts/CartContext';
+import { ROUTES } from '@/config/routes';
 import { cn } from '@/lib/utils';
 
 /**
