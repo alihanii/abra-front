@@ -207,8 +207,8 @@ export default function ProductCard({
                 onDecrease={() => handleQuantityChange(cartItem.quantity - 1)}
                 min={1}
                 max={maxQuantity || 99}
-                size={isMobile ? 'xs' : 'sm'}
-                className="w-full justify-center"
+                size={'md'}
+                className="w-full justify-center mb-3"
                 />
             </div>
           ) : (

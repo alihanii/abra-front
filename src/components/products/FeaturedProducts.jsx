@@ -118,7 +118,7 @@ export default function FeaturedProducts() {
         <ProductSlider ref={sliderRef} products={MOCK_PRODUCTS} />
 
         {/* Mobile Grid */}
-        <div className="md:hidden grid grid-cols-2 gap-4">
+        <div className="md:hidden grid md:grid-cols-2 grid-cols-1 md:gap-4 gap-0.5">
           {MOCK_PRODUCTS.slice(0, 4).map((product) => (
             <ProductCard key={product.id} {...product} size="sm" />
           ))}
