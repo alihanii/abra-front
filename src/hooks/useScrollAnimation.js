@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 /**
  * useScrollAnimation Hook
  * Detects when element enters viewport and triggers animation
- * 
+ *
  * @param {Object} options
  * @param {number} options.threshold - Intersection threshold (0-1)
  * @param {string} options.rootMargin - Root margin for intersection observer
@@ -14,8 +14,8 @@ import { useEffect, useRef, useState } from 'react';
  */
 export function useScrollAnimation({
   threshold = 0.1,
-  rootMargin = '0px',
-  triggerOnce = true,
+  rootMargin = "0px",
+  triggerOnce = true
 } = {}) {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef(null);
@@ -37,7 +37,7 @@ export function useScrollAnimation({
       },
       {
         threshold,
-        rootMargin,
+        rootMargin
       }
     );
 
@@ -52,9 +52,3 @@ export function useScrollAnimation({
 
   return { ref, isVisible };
 }
-
-
-
-
-
-

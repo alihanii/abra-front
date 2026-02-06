@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useRef } from 'react';
-import ProductSlider from './ProductSlider';
-import ProductCard from './ProductCard';
-import BaseButton from '@/components/ui/BaseButton';
-import ScrollNavigation from '@/components/ui/ScrollNavigation';
-import ScrollReveal from '@/components/ui/ScrollReveal';
-import { ROUTES } from '@/config/routes';
-import { MOCK_PRODUCTS } from '@/lib/mockProducts';
+import { useRef } from "react";
+import ProductSlider from "./ProductSlider";
+import ProductCard from "./ProductCard";
+import BaseButton from "@/components/ui/BaseButton";
+import ScrollNavigation from "@/components/ui/ScrollNavigation";
+import ScrollReveal from "@/components/ui/ScrollReveal";
+import { ROUTES } from "@/config/routes";
+import { MOCK_PRODUCTS } from "@/lib/mockProducts";
 
 /**
  * Mock Products Data
@@ -92,19 +92,26 @@ export default function FeaturedProducts() {
     <section className="py-16 bg-[var(--color-sky-light)]">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
-        <ScrollReveal animation="slideRight" delay={0}>
+        <ScrollReveal
+          animation="slideRight"
+          delay={0}
+        >
           <div className="flex items-center justify-between mb-8">
-            <ScrollReveal animation="fadeIn" delay={100}>
+            <ScrollReveal
+              animation="fadeIn"
+              delay={100}
+            >
               <div>
-                <h2 className="text-4xl font-bold text-gray-900 mb-2">
-                  Featured Products
-                </h2>
+                <h2 className="text-4xl font-bold text-gray-900 mb-2">Featured Products</h2>
                 <p className="text-lg text-gray-700">Bestsellers & new arrivals</p>
               </div>
             </ScrollReveal>
-            
+
             {/* Navigation Buttons */}
-            <ScrollReveal animation="slideLeft" delay={200}>
+            <ScrollReveal
+              animation="slideLeft"
+              delay={200}
+            >
               <ScrollNavigation
                 scrollRef={sliderRef}
                 onScrollLeft={handleScrollLeft}
@@ -115,12 +122,19 @@ export default function FeaturedProducts() {
         </ScrollReveal>
 
         {/* Desktop Slider */}
-        <ProductSlider ref={sliderRef} products={MOCK_PRODUCTS} />
+        <ProductSlider
+          ref={sliderRef}
+          products={MOCK_PRODUCTS}
+        />
 
         {/* Mobile Grid */}
         <div className="md:hidden grid md:grid-cols-2 grid-cols-1 md:gap-4 gap-0.5">
           {MOCK_PRODUCTS.slice(0, 4).map((product) => (
-            <ProductCard key={product.id} {...product} size="sm" />
+            <ProductCard
+              key={product.id}
+              {...product}
+              size="sm"
+            />
           ))}
         </div>
 
@@ -139,4 +153,3 @@ export default function FeaturedProducts() {
     </section>
   );
 }
-

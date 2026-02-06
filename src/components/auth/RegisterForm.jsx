@@ -1,31 +1,26 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import BaseInput from '@/components/ui/BaseInput';
-import BaseButton from '@/components/ui/BaseButton';
-import Alert from '@/components/ui/Alert';
-import { cn } from '@/lib/utils';
+import { useState } from "react";
+import BaseInput from "@/components/ui/BaseInput";
+import BaseButton from "@/components/ui/BaseButton";
+import Alert from "@/components/ui/Alert";
+import { cn } from "@/lib/utils";
 
 /**
  * Register Form Component
  * Form for user registration with phone and password
- * 
+ *
  * @param {Object} props
  * @param {Function} props.onRegister - Callback when register is submitted
  * @param {Function} props.onLogin - Callback to switch to login form
  * @param {boolean} props.isLoading - Loading state
  * @param {string} props.error - Error message to display
  */
-export default function RegisterForm({
-  onRegister,
-  onLogin,
-  isLoading = false,
-  error = null,
-}) {
+export default function RegisterForm({ onRegister, onLogin, isLoading = false, error = null }) {
   const [formData, setFormData] = useState({
-    phone: '',
-    password: '',
-    confirmPassword: '',
+    phone: "",
+    password: "",
+    confirmPassword: ""
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -36,7 +31,7 @@ export default function RegisterForm({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (formData.password !== formData.confirmPassword) {
       return;
     }
@@ -44,7 +39,7 @@ export default function RegisterForm({
     if (onRegister && formData.phone && formData.password) {
       onRegister({
         phone: formData.phone,
-        password: formData.password,
+        password: formData.password
       });
     }
   };
@@ -54,7 +49,8 @@ export default function RegisterForm({
     formData.password.length >= 6 &&
     formData.password === formData.confirmPassword;
 
-  const passwordMismatch = formData.confirmPassword && formData.password !== formData.confirmPassword;
+  const passwordMismatch =
+    formData.confirmPassword && formData.password !== formData.confirmPassword;
 
   return (
     <div className="w-full">
@@ -64,17 +60,25 @@ export default function RegisterForm({
       </div>
 
       {error && (
-        <Alert variant="error" size="md" message={error} className="mb-4" />
+        <Alert
+          variant="error"
+          size="md"
+          message={error}
+          className="mb-4"
+        />
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4"
+      >
         <BaseInput
           label="شماره تماس"
           type="tel"
           variant="primary"
           size="md"
           value={formData.phone}
-          onChange={(e) => handleChange('phone', e.target.value)}
+          onChange={(e) => handleChange("phone", e.target.value)}
           placeholder="09123456789"
           disabled={isLoading}
           required
@@ -84,11 +88,11 @@ export default function RegisterForm({
         <div className="relative">
           <BaseInput
             label="رمز عبور"
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             variant="primary"
             size="md"
             value={formData.password}
-            onChange={(e) => handleChange('password', e.target.value)}
+            onChange={(e) => handleChange("password", e.target.value)}
             placeholder="حداقل ۶ کاراکتر"
             disabled={isLoading}
             required
@@ -97,32 +101,34 @@ export default function RegisterForm({
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             className="absolute left-3 top-9 text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            aria-label={showPassword ? "Hide password" : "Show password"}
           >
-            <i className={cn('text-xl', showPassword ? 'ri-eye-off-line' : 'ri-eye-line')}></i>
+            <i className={cn("text-xl", showPassword ? "ri-eye-off-line" : "ri-eye-line")}></i>
           </button>
         </div>
 
         <div className="relative">
           <BaseInput
             label="تأیید رمز عبور"
-            type={showConfirmPassword ? 'text' : 'password'}
+            type={showConfirmPassword ? "text" : "password"}
             variant="primary"
             size="md"
             value={formData.confirmPassword}
-            onChange={(e) => handleChange('confirmPassword', e.target.value)}
+            onChange={(e) => handleChange("confirmPassword", e.target.value)}
             placeholder="رمز عبور را مجدداً وارد کنید"
             disabled={isLoading}
             required
-            className={passwordMismatch ? 'border-red-300' : ''}
+            className={passwordMismatch ? "border-red-300" : ""}
           />
           <button
             type="button"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             className="absolute left-3 top-9 text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
-            aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+            aria-label={showConfirmPassword ? "Hide password" : "Show password"}
           >
-            <i className={cn('text-xl', showConfirmPassword ? 'ri-eye-off-line' : 'ri-eye-line')}></i>
+            <i
+              className={cn("text-xl", showConfirmPassword ? "ri-eye-off-line" : "ri-eye-line")}
+            ></i>
           </button>
           {passwordMismatch && (
             <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
@@ -167,4 +173,3 @@ export default function RegisterForm({
     </div>
   );
 }
-

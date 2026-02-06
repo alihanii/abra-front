@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
-import ProductCard from './ProductCard';
+import { useRef, useEffect, useImperativeHandle, forwardRef } from "react";
+import ProductCard from "./ProductCard";
 
 /**
  * Product Slider Component
  * Horizontal scrolling product slider
- * 
+ *
  * @param {Object} props
  * @param {Array} props.products - Array of product objects
  */
@@ -21,15 +21,15 @@ const ProductSlider = forwardRef(({ products }, ref) => {
     const scrollDistance = itemWidth;
 
     container.scrollBy({
-      left: direction === 'left' ? -scrollDistance : scrollDistance,
-      behavior: 'smooth',
+      left: direction === "left" ? -scrollDistance : scrollDistance,
+      behavior: "smooth"
     });
   };
 
   // Expose scroll methods to parent
   useImperativeHandle(ref, () => ({
-    scrollLeft: () => scroll('left'),
-    scrollRight: () => scroll('right'),
+    scrollLeft: () => scroll("left"),
+    scrollRight: () => scroll("right"),
     canScrollLeft: () => {
       if (!scrollContainerRef.current) return false;
       return scrollContainerRef.current.scrollLeft > 0;
@@ -37,11 +37,8 @@ const ProductSlider = forwardRef(({ products }, ref) => {
     canScrollRight: () => {
       if (!scrollContainerRef.current) return false;
       const container = scrollContainerRef.current;
-      return (
-        container.scrollLeft <
-        container.scrollWidth - container.clientWidth - 10
-      );
-    },
+      return container.scrollLeft < container.scrollWidth - container.clientWidth - 10;
+    }
   }));
 
   return (
@@ -51,8 +48,8 @@ const ProductSlider = forwardRef(({ products }, ref) => {
         ref={scrollContainerRef}
         className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth"
         style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
+          scrollbarWidth: "none",
+          msOverflowStyle: "none"
         }}
       >
         {products.map((product) => (
@@ -60,7 +57,10 @@ const ProductSlider = forwardRef(({ products }, ref) => {
             key={product.id}
             className="flex-shrink-0 w-[calc(25%-18px)]"
           >
-            <ProductCard {...product} size="md" />
+            <ProductCard
+              {...product}
+              size="md"
+            />
           </div>
         ))}
       </div>
@@ -68,7 +68,6 @@ const ProductSlider = forwardRef(({ products }, ref) => {
   );
 });
 
-ProductSlider.displayName = 'ProductSlider';
+ProductSlider.displayName = "ProductSlider";
 
 export default ProductSlider;
-

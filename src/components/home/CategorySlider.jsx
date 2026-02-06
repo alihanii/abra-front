@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useRef, useImperativeHandle, forwardRef } from 'react';
-import ShopCategoryCard from './ShopCategoryCard';
+import { useRef, useImperativeHandle, forwardRef } from "react";
+import ShopCategoryCard from "./ShopCategoryCard";
 
 /**
  * Category Slider Component
  * Horizontal scrolling category slider for desktop
- * 
+ *
  * @param {Object} props
  * @param {Array} props.categories - Array of category objects
  */
@@ -21,15 +21,15 @@ const CategorySlider = forwardRef(({ categories }, ref) => {
     const scrollDistance = itemWidth;
 
     container.scrollBy({
-      left: direction === 'left' ? -scrollDistance : scrollDistance,
-      behavior: 'smooth',
+      left: direction === "left" ? -scrollDistance : scrollDistance,
+      behavior: "smooth"
     });
   };
 
   // Expose scroll methods to parent
   useImperativeHandle(ref, () => ({
-    scrollLeft: () => scroll('left'),
-    scrollRight: () => scroll('right'),
+    scrollLeft: () => scroll("left"),
+    scrollRight: () => scroll("right"),
     canScrollLeft: () => {
       if (!scrollContainerRef.current) return false;
       return scrollContainerRef.current.scrollLeft > 0;
@@ -37,11 +37,8 @@ const CategorySlider = forwardRef(({ categories }, ref) => {
     canScrollRight: () => {
       if (!scrollContainerRef.current) return false;
       const container = scrollContainerRef.current;
-      return (
-        container.scrollLeft <
-        container.scrollWidth - container.clientWidth - 10
-      );
-    },
+      return container.scrollLeft < container.scrollWidth - container.clientWidth - 10;
+    }
   }));
 
   return (
@@ -51,8 +48,8 @@ const CategorySlider = forwardRef(({ categories }, ref) => {
         ref={scrollContainerRef}
         className="flex gap-8 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
         style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
+          scrollbarWidth: "none",
+          msOverflowStyle: "none"
         }}
       >
         {categories.map((category) => (
@@ -73,7 +70,6 @@ const CategorySlider = forwardRef(({ categories }, ref) => {
   );
 });
 
-CategorySlider.displayName = 'CategorySlider';
+CategorySlider.displayName = "CategorySlider";
 
 export default CategorySlider;
-

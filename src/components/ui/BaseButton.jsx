@@ -1,47 +1,50 @@
-'use client';
+"use client";
 
-import { forwardRef } from 'react';
-import Link from 'next/link';
-import { cva } from 'class-variance-authority';
-import { cn } from '@/lib/utils';
+import { forwardRef } from "react";
+import Link from "next/link";
+import { cva } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 /**
  * Button variants using class-variance-authority
  */
 const buttonVariants = cva(
   // Base styles
-  'inline-flex items-center justify-center rounded-full font-semibold transition-all cursor-pointer whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none',
+  "inline-flex items-center justify-center rounded-full font-semibold transition-all cursor-pointer whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
   {
     variants: {
       variant: {
-        primary: 'bg-gradient-to-r from-gray-900 to-gray-800 text-white hover:from-gray-800 hover:to-gray-700 shadow-lg hover:shadow-xl focus:ring-gray-900',
-        secondary: 'bg-white text-gray-900 border-2 border-gray-900 hover:bg-gray-900 hover:text-white focus:ring-gray-900',
-        outline: 'bg-transparent text-gray-900 border-2 border-gray-300 hover:bg-gray-50 hover:border-gray-900 focus:ring-gray-900',
-        ghost: 'bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-900',
+        primary:
+          "bg-gradient-to-r from-gray-900 to-gray-800 text-white hover:from-gray-800 hover:to-gray-700 shadow-lg hover:shadow-xl focus:ring-gray-900",
+        secondary:
+          "bg-white text-gray-900 border-2 border-gray-900 hover:bg-gray-900 hover:text-white focus:ring-gray-900",
+        outline:
+          "bg-transparent text-gray-900 border-2 border-gray-300 hover:bg-gray-50 hover:border-gray-900 focus:ring-gray-900",
+        ghost: "bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-900"
       },
       size: {
-        xs: 'px-2 py-1 text-xs sm:px-4 sm:py-2 sm:text-sm',
-        sm: 'px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm',
-        md: 'px-4 py-2 text-sm sm:px-6 sm:py-3 sm:text-base',
-        lg: 'px-5 py-3 text-base sm:px-6 sm:py-4 sm:text-lg',
+        xs: "px-2 py-1 text-xs sm:px-4 sm:py-2 sm:text-sm",
+        sm: "px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm",
+        md: "px-4 py-2 text-sm sm:px-6 sm:py-3 sm:text-base",
+        lg: "px-5 py-3 text-base sm:px-6 sm:py-4 sm:text-lg"
       },
       fullWidth: {
-        true: 'w-full',
-        false: '',
-      },
+        true: "w-full",
+        false: ""
+      }
     },
     defaultVariants: {
-      variant: 'primary',
-      size: 'md',
-      fullWidth: false,
-    },
+      variant: "primary",
+      size: "md",
+      fullWidth: false
+    }
   }
 );
 
 /**
  * BaseButton Component
  * Reusable button component with variants and Link support
- * 
+ *
  * @param {Object} props
  * @param {string} props.variant - Button variant: 'primary' | 'secondary' | 'outline' | 'ghost'
  * @param {string} props.size - Button size: 'sm' | 'md' | 'lg'
@@ -52,21 +55,10 @@ const buttonVariants = cva(
  */
 const BaseButton = forwardRef(
   (
-    {
-      variant = 'primary',
-      size = 'md',
-      fullWidth = false,
-      href,
-      className,
-      children,
-      ...props
-    },
+    { variant = "primary", size = "md", fullWidth = false, href, className, children, ...props },
     ref
   ) => {
-    const baseClasses = cn(
-      buttonVariants({ variant, size, fullWidth }),
-      className
-    );
+    const baseClasses = cn(buttonVariants({ variant, size, fullWidth }), className);
 
     // If href is provided, render as Link
     if (href) {
@@ -95,8 +87,7 @@ const BaseButton = forwardRef(
   }
 );
 
-BaseButton.displayName = 'BaseButton';
+BaseButton.displayName = "BaseButton";
 
 export default BaseButton;
 export { buttonVariants };
-

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback } from "react";
 
 /**
  * Profile Context
@@ -41,7 +41,7 @@ export function ProfileProvider({ children }) {
     isOpen,
     openProfile,
     closeProfile,
-    toggleProfile,
+    toggleProfile
   };
 
   return <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>;
@@ -54,8 +54,7 @@ export function ProfileProvider({ children }) {
 export function useProfile() {
   const context = useContext(ProfileContext);
   if (context === undefined) {
-    throw new Error('useProfile must be used within a ProfileProvider');
+    throw new Error("useProfile must be used within a ProfileProvider");
   }
   return context;
 }
-

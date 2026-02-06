@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import CTACard from './CTACard';
-import { ROUTES } from '@/config/routes';
+import CTACard from "./CTACard";
+import { ROUTES } from "@/config/routes";
 
 /**
  * CTA Section Component
  * Call-to-action section with customizable CTA card
- * 
+ *
  * @param {Object} props
  * @param {string} props.title - Main heading text
  * @param {string} props.description - Description text below title
@@ -17,13 +17,13 @@ import { ROUTES } from '@/config/routes';
  * @param {string} props.className - Additional CSS classes
  */
 export default function CTASection({
-  title = 'Ready to Create?',
-  description = 'Start designing your custom clothing today and wear your creativity',
-  buttonText = 'Launch Design Studio',
+  title = "Ready to Create?",
+  description = "Start designing your custom clothing today and wear your creativity",
+  buttonText = "Launch Design Studio",
   buttonHref = ROUTES.DESIGN_STUDIO,
   onButtonClick,
-  variant = 'primary',
-  className,
+  variant = "primary",
+  className
 }) {
   return (
     <section className="py-20 bg-[var(--color-sky-light)]">
@@ -41,4 +41,3 @@ export default function CTASection({
     </section>
   );
 }
-

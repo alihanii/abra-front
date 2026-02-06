@@ -1,30 +1,30 @@
-'use client';
+"use client";
 
-import FeatureCard from './FeatureCard';
-import ScrollReveal from '@/components/ui/ScrollReveal';
+import FeatureCard from "./FeatureCard";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 
 /**
  * Features Data Configuration
  */
 const FEATURES = [
   {
-    id: 'print-guarantee',
-    icon: 'ri-shield-check-line',
-    title: 'Print Guarantee',
-    description: 'High-quality printing that lasts',
+    id: "print-guarantee",
+    icon: "ri-shield-check-line",
+    title: "Print Guarantee",
+    description: "High-quality printing that lasts"
   },
   {
-    id: 'cotton-fabric',
-    icon: 'ri-t-shirt-line',
-    title: 'Cotton Fabric',
-    description: '100% premium cotton material',
+    id: "cotton-fabric",
+    icon: "ri-t-shirt-line",
+    title: "Cotton Fabric",
+    description: "100% premium cotton material"
   },
   {
-    id: 'fast-delivery',
-    icon: 'ri-truck-line',
-    title: 'Fast Delivery',
-    description: 'Quick shipping to your door',
-  },
+    id: "fast-delivery",
+    icon: "ri-truck-line",
+    title: "Fast Delivery",
+    description: "Quick shipping to your door"
+  }
 ];
 
 /**
@@ -54,4 +54,3 @@ export default function FeaturesSection() {
     </section>
   );
 }
-

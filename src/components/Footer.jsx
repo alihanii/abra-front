@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import { SHOP_LINKS, SUPPORT_LINKS, COMPANY_LINKS, SOCIAL_LINKS, ROUTES } from '@/config/routes';
+import Link from "next/link";
+import { SHOP_LINKS, SUPPORT_LINKS, COMPANY_LINKS, SOCIAL_LINKS, ROUTES } from "@/config/routes";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -10,7 +10,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
           <div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'var(--font-pacifico), serif' }}>
+            <h3
+              className="text-2xl font-bold text-gray-900 mb-4"
+              style={{ fontFamily: "var(--font-pacifico), serif" }}
+            >
               Abra
             </h3>
             <p className="text-gray-600 mb-4">
@@ -26,7 +29,9 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <i className={`${social.icon} text-lg transition-transform group-hover:scale-110`}></i>
+                  <i
+                    className={`${social.icon} text-lg transition-transform group-hover:scale-110`}
+                  ></i>
                 </a>
               ))}
             </div>
@@ -86,9 +91,7 @@ export default function Footer() {
 
         {/* Copyright Section */}
         <div className="border-t border-[#F5F5F5] pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-600 text-sm">
-            © {currentYear} Abra. All rights reserved.
-          </p>
+          <p className="text-gray-600 text-sm">© {currentYear} Abra. All rights reserved.</p>
           <a
             href="https://readdy.ai/?origin=logo"
             className="text-gray-600 text-sm hover:text-gray-900 transition-colors cursor-pointer"
@@ -102,4 +105,3 @@ export default function Footer() {
     </footer>
   );
 }
-

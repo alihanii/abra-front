@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 /**
  * ScrollNavigation Component
  * Reusable navigation buttons for horizontal scrolling containers
- * 
+ *
  * @param {Object} props
  * @param {Object} props.scrollRef - Ref to the scrollable container (must expose canScrollLeft, canScrollRight, scrollLeft, scrollRight methods)
  * @param {Function} props.onScrollLeft - Callback when left button is clicked
@@ -18,9 +18,9 @@ export default function ScrollNavigation({
   scrollRef,
   onScrollLeft,
   onScrollRight,
-  className = '',
-  size = 'md',
-  showOnMobile = false,
+  className = "",
+  size = "md",
+  showOnMobile = false
 }) {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -67,12 +67,12 @@ export default function ScrollNavigation({
   };
 
   const sizeClasses = {
-    sm: 'w-8 h-8 text-lg',
-    md: 'w-12 h-12 text-2xl',
-    lg: 'w-14 h-14 text-3xl',
+    sm: "w-8 h-8 text-lg",
+    md: "w-12 h-12 text-2xl",
+    lg: "w-14 h-14 text-3xl"
   };
 
-  const displayClass = showOnMobile ? 'flex' : 'hidden md:flex';
+  const displayClass = showOnMobile ? "flex" : "hidden md:flex";
 
   return (
     <div className={`${displayClass} gap-2 ${className}`}>
@@ -82,7 +82,7 @@ export default function ScrollNavigation({
         className={`
           ${sizeClasses[size]} flex items-center justify-center bg-white rounded-full shadow-md
           hover:shadow-lg transition-all cursor-pointer
-          ${!canScrollLeft ? 'opacity-50 cursor-not-allowed' : ''}
+          ${!canScrollLeft ? "opacity-50 cursor-not-allowed" : ""}
         `}
         aria-label="Scroll left"
       >
@@ -94,7 +94,7 @@ export default function ScrollNavigation({
         className={`
           ${sizeClasses[size]} flex items-center justify-center bg-white rounded-full shadow-md
           hover:shadow-lg transition-all cursor-pointer
-          ${!canScrollRight ? 'opacity-50 cursor-not-allowed' : ''}
+          ${!canScrollRight ? "opacity-50 cursor-not-allowed" : ""}
         `}
         aria-label="Scroll right"
       >
@@ -103,4 +103,3 @@ export default function ScrollNavigation({
     </div>
   );
 }
-

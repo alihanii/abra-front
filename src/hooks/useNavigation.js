@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { usePathname } from 'next/navigation';
-import { useCallback } from 'react';
-import { isActiveRoute } from '@/config/routes';
+import { usePathname } from "next/navigation";
+import { useCallback } from "react";
+import { isActiveRoute } from "@/config/routes";
 
 /**
  * Custom hook for navigation logic
@@ -31,7 +31,7 @@ export function useNavigation() {
    * @returns {string}
    */
   const getRouteClassName = useCallback(
-    (routePath, activeClass = 'text-gray-900 font-semibold', defaultClass = 'text-gray-700') => {
+    (routePath, activeClass = "text-gray-900 font-semibold", defaultClass = "text-gray-700") => {
       return checkActiveRoute(routePath) ? activeClass : defaultClass;
     },
     [checkActiveRoute]
@@ -40,7 +40,6 @@ export function useNavigation() {
   return {
     pathname,
     checkActiveRoute,
-    getRouteClassName,
+    getRouteClassName
   };
 }
-

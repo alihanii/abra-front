@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useMemo } from 'react';
-import Image from 'next/image';
-import emptyPhoto from '@/assets/images/EmptyPhoto.png';
+import { useState, useEffect, useMemo } from "react";
+import Image from "next/image";
+import emptyPhoto from "@/assets/images/EmptyPhoto.png";
 
 /**
  * Validate if a string is a valid URL
@@ -10,22 +10,22 @@ import emptyPhoto from '@/assets/images/EmptyPhoto.png';
  * @returns {boolean}
  */
 function isValidUrl(url) {
-  if (!url || typeof url !== 'string') {
+  if (!url || typeof url !== "string") {
     return false;
   }
 
   // Check if it's a relative path (starts with /)
-  if (url.startsWith('/')) {
+  if (url.startsWith("/")) {
     return true;
   }
 
   // Check if it's a data URL
-  if (url.startsWith('data:')) {
+  if (url.startsWith("data:")) {
     return true;
   }
 
   // Check if it's an imported image (object with src property)
-  if (typeof url === 'object' && url.src) {
+  if (typeof url === "object" && url.src) {
     return true;
   }
 
@@ -41,7 +41,7 @@ function isValidUrl(url) {
 /**
  * BaseImage Component
  * Image component with loading placeholder, error handling, and fallback
- * 
+ *
  * @param {Object} props
  * @param {string} props.src - Image source URL
  * @param {string} props.alt - Alt text for image
@@ -58,7 +58,7 @@ export default function BaseImage({
   width,
   height,
   fill = false,
-  className = '',
+  className = "",
   fallback = emptyPhoto,
   ...imageProps
 }) {
@@ -123,15 +123,15 @@ export default function BaseImage({
             aria-hidden="true"
           />
         )}
-        
+
         {/* Image */}
         <Image
           src={finalSrc}
-          alt={alt || 'Image'}
+          alt={alt || "Image"}
           fill
           className={`
             relative z-10 object-cover transition-opacity duration-300
-            ${isLoading ? 'opacity-0' : 'opacity-100'}
+            ${isLoading ? "opacity-0" : "opacity-100"}
             ${className}
           `}
           onLoad={handleLoad}
@@ -148,24 +148,24 @@ export default function BaseImage({
       className={`
         relative bg-gray-100 overflow-hidden
         before:content-[''] before:absolute before:inset-0 before:bg-gray-100 before:z-0
-        ${isLoading ? 'before:block' : 'before:hidden'}
+        ${isLoading ? "before:block" : "before:hidden"}
         ${className}
       `}
       style={{
-        width: width || '100%',
-        height: height || '100%',
-        aspectRatio: width && height ? `${width} / ${height}` : undefined,
+        width: width || "100%",
+        height: height || "100%",
+        aspectRatio: width && height ? `${width} / ${height}` : undefined
       }}
     >
       {/* Image */}
       <Image
         src={finalSrc}
-        alt={alt || 'Image'}
+        alt={alt || "Image"}
         width={width || 400}
         height={height || 400}
         className={`
           relative z-10 w-full h-full object-cover object-top transition-opacity duration-300
-          ${isLoading ? 'opacity-0' : 'opacity-100'}
+          ${isLoading ? "opacity-0" : "opacity-100"}
         `}
         onLoad={handleLoad}
         onError={handleError}
@@ -174,4 +174,3 @@ export default function BaseImage({
     </div>
   );
 }
-

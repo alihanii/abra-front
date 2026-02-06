@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import BaseButton from '@/components/ui/BaseButton';
+import Image from "next/image";
+import BaseButton from "@/components/ui/BaseButton";
 
 /**
  * Hero Slide Component
  * Individual slide for hero slider with optional background image
- * 
+ *
  * @param {Object} props
  * @param {string} props.title - Slide title
  * @param {string} props.subtitle - Slide subtitle
@@ -22,15 +22,15 @@ export default function HeroSlide({
   subtitle,
   buttonText,
   buttonHref,
-  gradientFrom = 'from-blue-50',
-  gradientTo = 'to-blue-100',
+  gradientFrom = "from-blue-50",
+  gradientTo = "to-blue-100",
   image,
-  isActive = false,
+  isActive = false
 }) {
   // Determine which image to use based on screen size
   const getImageSrc = () => {
     if (!image) return null;
-    
+
     // Use responsive images: sm for mobile, md for tablet, lg for desktop
     // Fallback to lg if available, then md, then sm
     return image.lg || image.md || image.sm || null;
@@ -43,7 +43,7 @@ export default function HeroSlide({
     <div
       className={`
         absolute inset-0 transition-opacity duration-1000
-        ${isActive ? 'opacity-100' : 'opacity-0'}
+        ${isActive ? "opacity-100" : "opacity-0"}
       `}
     >
       <div className="relative h-full w-full">
@@ -61,7 +61,7 @@ export default function HeroSlide({
                 sizes="100vw"
               />
             )}
-            
+
             {/* Tablet Image */}
             {image.md && (
               <Image
@@ -73,7 +73,7 @@ export default function HeroSlide({
                 sizes="100vw"
               />
             )}
-            
+
             {/* Desktop Image */}
             {image.lg && (
               <Image
@@ -85,7 +85,7 @@ export default function HeroSlide({
                 sizes="100vw"
               />
             )}
-            
+
             {/* Overlay for better text readability */}
             <div className="absolute inset-0 bg-black/20" />
           </div>
@@ -95,7 +95,7 @@ export default function HeroSlide({
         <div
           className={`
             absolute inset-0 bg-gradient-to-br ${gradientFrom} ${gradientTo} z-10
-            ${hasImage ? 'opacity-60' : ''}
+            ${hasImage ? "opacity-60" : ""}
           `}
         />
 
@@ -105,7 +105,7 @@ export default function HeroSlide({
             <h2
               className={`
                 text-5xl md:text-6xl font-bold text-gray-900 mb-4
-                ${isActive ? 'animate-fadeIn' : ''}
+                ${isActive ? "animate-fadeIn" : ""}
               `}
             >
               {title}
@@ -113,7 +113,7 @@ export default function HeroSlide({
             <p
               className={`
                 text-2xl text-gray-700 mb-8
-                ${isActive ? 'animate-fadeIn' : ''}
+                ${isActive ? "animate-fadeIn" : ""}
               `}
             >
               {subtitle}
@@ -122,7 +122,7 @@ export default function HeroSlide({
               href={buttonHref}
               variant="primary"
               size="lg"
-              className={isActive ? 'animate-fadeIn' : ''}
+              className={isActive ? "animate-fadeIn" : ""}
             >
               {buttonText}
             </BaseButton>
@@ -132,4 +132,3 @@ export default function HeroSlide({
     </div>
   );
 }
-

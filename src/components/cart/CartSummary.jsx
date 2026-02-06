@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useCart } from '@/contexts/CartContext';
-import { ROUTES } from '@/config/routes';
-import BaseButton from '@/components/ui/BaseButton';
+import { useCart } from "@/contexts/CartContext";
+import { ROUTES } from "@/config/routes";
+import BaseButton from "@/components/ui/BaseButton";
 
 /**
  * Cart Summary Component
@@ -19,12 +19,12 @@ export default function CartSummary() {
           <span>Subtotal</span>
           <span className="font-semibold">${totals.subtotal}</span>
         </div>
-        
+
         <div className="flex justify-between text-gray-700">
           <span>Shipping</span>
           <span className="font-semibold">FREE</span>
         </div>
-        
+
         <div className="border-t border-gray-300 pt-3 flex justify-between text-lg font-bold text-gray-900">
           <span>Total</span>
           <span>${totals.total}</span>
@@ -34,7 +34,7 @@ export default function CartSummary() {
       {/* Action Buttons */}
       <div className="space-y-3">
         <BaseButton
-          href={ROUTES.CHECKOUT || '/checkout'}
+          href={ROUTES.CHECKOUT || "/checkout"}
           onClick={closeCart}
           variant="primary"
           size="lg"
@@ -42,7 +42,7 @@ export default function CartSummary() {
         >
           Proceed to Checkout
         </BaseButton>
-        
+
         <BaseButton
           onClick={closeCart}
           variant="secondary"
@@ -55,4 +55,3 @@ export default function CartSummary() {
     </div>
   );
 }
-

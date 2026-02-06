@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useProfile } from '@/contexts/ProfileContext';
-import ScrollReveal from '@/components/ui/ScrollReveal';
-import ProfileTabs from './ProfileTabs';
-import PurchaseHistory from './PurchaseHistory';
-import AccountSettings from './AccountSettings';
-import LoginForm from '@/components/auth/LoginForm';
-import RegisterForm from '@/components/auth/RegisterForm';
-import OTPVerification from '@/components/auth/OTPVerification';
+import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useProfile } from "@/contexts/ProfileContext";
+import ScrollReveal from "@/components/ui/ScrollReveal";
+import ProfileTabs from "./ProfileTabs";
+import PurchaseHistory from "./PurchaseHistory";
+import AccountSettings from "./AccountSettings";
+import LoginForm from "@/components/auth/LoginForm";
+import RegisterForm from "@/components/auth/RegisterForm";
+import OTPVerification from "@/components/auth/OTPVerification";
 
 /**
  * Profile Drawer Component
@@ -20,13 +20,13 @@ export default function ProfileDrawer() {
   const { isOpen, closeProfile } = useProfile();
   const [isMounted, setIsMounted] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [activeTab, setActiveTab] = useState('history');
-  
+  const [activeTab, setActiveTab] = useState("history");
+
   // Auth form states
-  const [authView, setAuthView] = useState('login'); // 'login' | 'register' | 'otp'
+  const [authView, setAuthView] = useState("login"); // 'login' | 'register' | 'otp'
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState("");
 
   // Handle mount/unmount with animation delay
   useEffect(() => {
@@ -49,38 +49,38 @@ export default function ProfileDrawer() {
   // Prevent body scroll when drawer is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
   // Handle escape key
   useEffect(() => {
     const handleEscape = (e) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === "Escape" && isOpen) {
         closeProfile();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
+      document.addEventListener("keydown", handleEscape);
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener("keydown", handleEscape);
     };
   }, [isOpen, closeProfile]);
 
   // Reset auth form when drawer closes
   useEffect(() => {
     if (!isOpen) {
-      setAuthView('login');
+      setAuthView("login");
       setError(null);
-      setPhone('');
+      setPhone("");
     }
   }, [isOpen]);
 
@@ -94,22 +94,22 @@ export default function ProfileDrawer() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Mock: Check if user exists (in real app, this would be an API call)
-      const mockUsers = JSON.parse(localStorage.getItem('mock_users') || '[]');
+      const mockUsers = JSON.parse(localStorage.getItem("mock_users") || "[]");
       const foundUser = mockUsers.find((u) => u.phone === formData.phone);
 
       if (!foundUser || foundUser.password !== formData.password) {
-        throw new Error('شماره تماس یا رمز عبور اشتباه است');
+        throw new Error("شماره تماس یا رمز عبور اشتباه است");
       }
 
       // Login successful
       const token = `mock_token_${Date.now()}`;
       login(token, {
         id: foundUser.id,
-        name: foundUser.name || '',
-        phone: foundUser.phone,
+        name: foundUser.name || "",
+        phone: foundUser.phone
       });
     } catch (err) {
-      setError(err.message || 'خطا در ورود. لطفاً دوباره تلاش کنید.');
+      setError(err.message || "خطا در ورود. لطفاً دوباره تلاش کنید.");
     } finally {
       setIsLoading(false);
     }
@@ -126,19 +126,19 @@ export default function ProfileDrawer() {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       // Mock: Check if user exists
-      const mockUsers = JSON.parse(localStorage.getItem('mock_users') || '[]');
+      const mockUsers = JSON.parse(localStorage.getItem("mock_users") || "[]");
       const userExists = mockUsers.some((u) => u.phone === phoneNumber);
 
       if (!userExists) {
         // User doesn't exist, go to register
-        setAuthView('register');
-        setError('حساب کاربری با این شماره تماس یافت نشد. لطفاً ثبت نام کنید.');
+        setAuthView("register");
+        setError("حساب کاربری با این شماره تماس یافت نشد. لطفاً ثبت نام کنید.");
       } else {
         // User exists, go to OTP verification
-        setAuthView('otp');
+        setAuthView("otp");
       }
     } catch (err) {
-      setError(err.message || 'خطا در ارسال کد. لطفاً دوباره تلاش کنید.');
+      setError(err.message || "خطا در ارسال کد. لطفاً دوباره تلاش کنید.");
     } finally {
       setIsLoading(false);
     }
@@ -154,11 +154,11 @@ export default function ProfileDrawer() {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       // Mock: Check if user already exists
-      const mockUsers = JSON.parse(localStorage.getItem('mock_users') || '[]');
+      const mockUsers = JSON.parse(localStorage.getItem("mock_users") || "[]");
       const userExists = mockUsers.some((u) => u.phone === formData.phone);
 
       if (userExists) {
-        throw new Error('حساب کاربری با این شماره تماس قبلاً ثبت شده است');
+        throw new Error("حساب کاربری با این شماره تماس قبلاً ثبت شده است");
       }
 
       // Save user and go to OTP verification
@@ -166,15 +166,15 @@ export default function ProfileDrawer() {
         id: `user_${Date.now()}`,
         phone: formData.phone,
         password: formData.password,
-        name: '',
+        name: ""
       };
       mockUsers.push(newUser);
-      localStorage.setItem('mock_users', JSON.stringify(mockUsers));
+      localStorage.setItem("mock_users", JSON.stringify(mockUsers));
 
       setPhone(formData.phone);
-      setAuthView('otp');
+      setAuthView("otp");
     } catch (err) {
-      setError(err.message || 'خطا در ثبت نام. لطفاً دوباره تلاش کنید.');
+      setError(err.message || "خطا در ثبت نام. لطفاً دوباره تلاش کنید.");
     } finally {
       setIsLoading(false);
     }
@@ -190,27 +190,27 @@ export default function ProfileDrawer() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Mock: Verify OTP (in real app, this would verify with backend)
-      if (code !== '12345') {
-        throw new Error('کد تأیید اشتباه است');
+      if (code !== "12345") {
+        throw new Error("کد تأیید اشتباه است");
       }
 
       // Get user from mock storage
-      const mockUsers = JSON.parse(localStorage.getItem('mock_users') || '[]');
+      const mockUsers = JSON.parse(localStorage.getItem("mock_users") || "[]");
       const foundUser = mockUsers.find((u) => u.phone === phone);
 
       if (!foundUser) {
-        throw new Error('کاربر یافت نشد');
+        throw new Error("کاربر یافت نشد");
       }
 
       // Login successful
       const token = `mock_token_${Date.now()}`;
       login(token, {
         id: foundUser.id,
-        name: foundUser.name || '',
-        phone: foundUser.phone,
+        name: foundUser.name || "",
+        phone: foundUser.phone
       });
     } catch (err) {
-      setError(err.message || 'خطا در تأیید کد. لطفاً دوباره تلاش کنید.');
+      setError(err.message || "خطا در تأیید کد. لطفاً دوباره تلاش کنید.");
     } finally {
       setIsLoading(false);
     }
@@ -226,7 +226,7 @@ export default function ProfileDrawer() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setError(null);
     } catch (err) {
-      setError('خطا در ارسال مجدد کد. لطفاً دوباره تلاش کنید.');
+      setError("خطا در ارسال مجدد کد. لطفاً دوباره تلاش کنید.");
     } finally {
       setIsLoading(false);
     }
@@ -234,7 +234,7 @@ export default function ProfileDrawer() {
 
   const handleLogout = () => {
     logout();
-    setAuthView('login');
+    setAuthView("login");
   };
 
   if (!isMounted) return null;
@@ -246,7 +246,7 @@ export default function ProfileDrawer() {
         className={`
           fixed inset-0 bg-black/50 backdrop-blur-sm z-40
           transition-opacity duration-300 ease-in-out
-          ${isAnimating ? 'opacity-100' : 'opacity-0'}
+          ${isAnimating ? "opacity-100" : "opacity-0"}
         `}
         onClick={closeProfile}
         aria-hidden="true"
@@ -257,7 +257,7 @@ export default function ProfileDrawer() {
         className={`
           fixed top-0 right-0 h-full w-full md:w-[480px] bg-white shadow-2xl z-50
           transform transition-transform duration-300 ease-out
-          ${isAnimating ? 'translate-x-0' : 'translate-x-full'}
+          ${isAnimating ? "translate-x-0" : "translate-x-full"}
         `}
         role="dialog"
         aria-modal="true"
@@ -270,7 +270,7 @@ export default function ProfileDrawer() {
               <i className="ri-user-line text-2xl text-gray-900"></i>
               <h2 className="text-2xl font-bold text-gray-900">حساب کاربری</h2>
             </div>
-            
+
             <button
               onClick={closeProfile}
               className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all cursor-pointer"
@@ -286,18 +286,15 @@ export default function ProfileDrawer() {
               <div
                 className={`
                   transition-all duration-300 ease-out
-                  ${isAnimating 
-                    ? 'opacity-100 translate-y-0' 
-                    : 'opacity-0 translate-y-4'
-                  }
+                  ${isAnimating ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
                 `}
               >
-                {authView === 'login' && (
+                {authView === "login" && (
                   <LoginForm
                     onLogin={handleLogin}
                     onSMSLogin={handleSMSLogin}
                     onRegister={() => {
-                      setAuthView('register');
+                      setAuthView("register");
                       setError(null);
                     }}
                     isLoading={isLoading}
@@ -305,11 +302,11 @@ export default function ProfileDrawer() {
                   />
                 )}
 
-                {authView === 'register' && (
+                {authView === "register" && (
                   <RegisterForm
                     onRegister={handleRegister}
                     onLogin={() => {
-                      setAuthView('login');
+                      setAuthView("login");
                       setError(null);
                     }}
                     isLoading={isLoading}
@@ -317,13 +314,13 @@ export default function ProfileDrawer() {
                   />
                 )}
 
-                {authView === 'otp' && (
+                {authView === "otp" && (
                   <OTPVerification
                     phone={phone}
                     onVerify={handleOTPVerify}
                     onResend={handleResendOTP}
                     onBack={() => {
-                      setAuthView('login');
+                      setAuthView("login");
                       setError(null);
                     }}
                     isLoading={isLoading}
@@ -334,43 +331,64 @@ export default function ProfileDrawer() {
             ) : (
               <>
                 {/* User Info Card */}
-                <ScrollReveal animation="fadeUp" delay={0} threshold={0.1}>
+                <ScrollReveal
+                  animation="fadeUp"
+                  delay={0}
+                  threshold={0.1}
+                >
                   <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-4 mb-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
-                      <i className="ri-user-fill text-3xl text-gray-600"></i>
+                    <div className="flex items-center gap-4">
+                      <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
+                        <i className="ri-user-fill text-3xl text-gray-600"></i>
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-bold text-gray-900 text-lg mb-1">
+                          {user?.name || "کاربر"}
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          {user?.phone || "شماره تماس ثبت نشده"}
+                        </p>
+                      </div>
+                      <button
+                        onClick={handleLogout}
+                        className="px-4 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-full transition-all cursor-pointer"
+                        aria-label="Logout"
+                      >
+                        <i className="ri-logout-box-line ml-2"></i>
+                        خروج
+                      </button>
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-gray-900 text-lg mb-1">
-                        {user?.name || 'کاربر'}
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        {user?.phone || 'شماره تماس ثبت نشده'}
-                      </p>
-                    </div>
-                    <button
-                      onClick={handleLogout}
-                      className="px-4 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-full transition-all cursor-pointer"
-                      aria-label="Logout"
-                    >
-                      <i className="ri-logout-box-line ml-2"></i>
-                      خروج
-                    </button>
-                  </div>
                   </div>
                 </ScrollReveal>
 
                 {/* Tabs */}
-                <ScrollReveal animation="fadeUp" delay={50} threshold={0.1}>
-                  <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />
+                <ScrollReveal
+                  animation="fadeUp"
+                  delay={50}
+                  threshold={0.1}
+                >
+                  <ProfileTabs
+                    activeTab={activeTab}
+                    onTabChange={setActiveTab}
+                  />
                 </ScrollReveal>
 
                 {/* Tab Content */}
-                <ScrollReveal animation="fadeUp" delay={100} threshold={0.1}>
-                  {activeTab === 'history' ? (
-                    <PurchaseHistory orders={user?.orders} isLoading={authLoading} />
+                <ScrollReveal
+                  animation="fadeUp"
+                  delay={100}
+                  threshold={0.1}
+                >
+                  {activeTab === "history" ? (
+                    <PurchaseHistory
+                      orders={user?.orders}
+                      isLoading={authLoading}
+                    />
                   ) : (
-                    <AccountSettings user={user} isLoading={authLoading} />
+                    <AccountSettings
+                      user={user}
+                      isLoading={authLoading}
+                    />
                   )}
                 </ScrollReveal>
               </>
@@ -381,4 +399,3 @@ export default function ProfileDrawer() {
     </>
   );
 }
-

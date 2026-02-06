@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import BaseInput from '@/components/ui/BaseInput';
-import BaseButton from '@/components/ui/BaseButton';
-import Alert from '@/components/ui/Alert';
-import { cn } from '@/lib/utils';
+import { useState } from "react";
+import BaseInput from "@/components/ui/BaseInput";
+import BaseButton from "@/components/ui/BaseButton";
+import Alert from "@/components/ui/Alert";
+import { cn } from "@/lib/utils";
 
 /**
  * Login Form Component
  * Form for user login with phone and password, or SMS login option
- * 
+ *
  * @param {Object} props
  * @param {Function} props.onLogin - Callback when login is successful
  * @param {Function} props.onSMSLogin - Callback when SMS login is requested
@@ -22,11 +22,11 @@ export default function LoginForm({
   onSMSLogin,
   onRegister,
   isLoading = false,
-  error = null,
+  error = null
 }) {
   const [formData, setFormData] = useState({
-    phone: '',
-    password: '',
+    phone: "",
+    password: ""
   });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -57,17 +57,25 @@ export default function LoginForm({
       </div>
 
       {error && (
-        <Alert variant="error" size="md" message={error} className="mb-4" />
+        <Alert
+          variant="error"
+          size="md"
+          message={error}
+          className="mb-4"
+        />
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4"
+      >
         <BaseInput
           label="شماره تماس"
           type="tel"
           variant="primary"
           size="md"
           value={formData.phone}
-          onChange={(e) => handleChange('phone', e.target.value)}
+          onChange={(e) => handleChange("phone", e.target.value)}
           placeholder="09123456789"
           disabled={isLoading}
           required
@@ -77,11 +85,11 @@ export default function LoginForm({
         <div className="relative">
           <BaseInput
             label="رمز عبور"
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             variant="primary"
             size="md"
             value={formData.password}
-            onChange={(e) => handleChange('password', e.target.value)}
+            onChange={(e) => handleChange("password", e.target.value)}
             placeholder="رمز عبور خود را وارد کنید"
             disabled={isLoading}
             required
@@ -90,9 +98,9 @@ export default function LoginForm({
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             className="absolute left-5 top-10 text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            aria-label={showPassword ? "Hide password" : "Show password"}
           >
-            <i className={cn('text-xl', showPassword ? 'ri-eye-off-line' : 'ri-eye-line')}></i>
+            <i className={cn("text-xl", showPassword ? "ri-eye-off-line" : "ri-eye-line")}></i>
           </button>
         </div>
 
@@ -145,4 +153,3 @@ export default function LoginForm({
     </div>
   );
 }
-

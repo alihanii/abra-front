@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
-import { ProductFilters, ProductGrid } from '@/components/products';
-import { ROUTES } from '@/config/routes';
-import { MOCK_PRODUCTS } from '@/lib/mockProducts';
+import { useState, useMemo } from "react";
+import { ProductFilters, ProductGrid } from "@/components/products";
+import { ROUTES } from "@/config/routes";
+import { MOCK_PRODUCTS } from "@/lib/mockProducts";
 
 /**
  * Mock Products Data
@@ -153,19 +153,19 @@ import { MOCK_PRODUCTS } from '@/lib/mockProducts';
 const filterProducts = (products, filters) => {
   return products.filter((product) => {
     // Category filter
-    if (filters.category && filters.category !== 'all') {
+    if (filters.category && filters.category !== "all") {
       if (product.category !== filters.category) return false;
     }
 
     // Color filter
-    if (filters.color && filters.color !== 'all') {
+    if (filters.color && filters.color !== "all") {
       if (product.color !== filters.color) return false;
     }
 
     // Price filter
-    if (filters.price && filters.price !== 'all') {
-      const [min, max] = filters.price.split('-').map((v) => {
-        if (v.endsWith('+')) return [parseFloat(v), Infinity];
+    if (filters.price && filters.price !== "all") {
+      const [min, max] = filters.price.split("-").map((v) => {
+        if (v.endsWith("+")) return [parseFloat(v), Infinity];
         return parseFloat(v);
       });
       if (max === Infinity) {
@@ -189,15 +189,15 @@ const sortProducts = (products, sortBy) => {
   const sorted = [...products];
 
   switch (sortBy) {
-    case 'price-low':
+    case "price-low":
       return sorted.sort((a, b) => a.price - b.price);
-    case 'price-high':
+    case "price-high":
       return sorted.sort((a, b) => b.price - a.price);
-    case 'name-asc':
+    case "name-asc":
       return sorted.sort((a, b) => a.name.localeCompare(b.name));
-    case 'name-desc':
+    case "name-desc":
       return sorted.sort((a, b) => b.name.localeCompare(a.name));
-    case 'newest':
+    case "newest":
       // For mock data, reverse the array
       return sorted.reverse();
     default:
@@ -215,7 +215,7 @@ export default function ProductsPage() {
   // Filter and sort products
   const filteredAndSortedProducts = useMemo(() => {
     let result = filterProducts(MOCK_PRODUCTS, filters);
-    result = sortProducts(result, filters.sort || 'default');
+    result = sortProducts(result, filters.sort || "default");
     return result;
   }, [filters]);
 
@@ -234,18 +234,19 @@ export default function ProductsPage() {
       </div> */}
 
       {/* Filters Section */}
-      <ProductFilters filters={filters} onFiltersChange={setFilters} />
+      <ProductFilters
+        filters={filters}
+        onFiltersChange={setFilters}
+      />
 
       {/* Products Grid Section */}
       <div className="max-w-7xl mx-auto px-1 sm:px-6 pt-2 sm:py-8">
         {/* Results Count */}
         <div className="mb-6 md:px-0 px-4 ">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 mt-4">
-            Products
-          </h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 mt-4">Products</h1>
           <p className="text-gray-700">
-            Showing <span className="font-semibold">{filteredAndSortedProducts.length}</span>{' '}
-            {filteredAndSortedProducts.length === 1 ? 'product' : 'products'}
+            Showing <span className="font-semibold">{filteredAndSortedProducts.length}</span>{" "}
+            {filteredAndSortedProducts.length === 1 ? "product" : "products"}
           </p>
         </div>
 
@@ -255,4 +256,3 @@ export default function ProductsPage() {
     </main>
   );
 }
-

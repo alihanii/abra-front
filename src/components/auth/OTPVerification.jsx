@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import OTPInput from './OTPInput';
-import BaseButton from '@/components/ui/BaseButton';
-import Alert from '@/components/ui/Alert';
+import { useState, useEffect } from "react";
+import OTPInput from "./OTPInput";
+import BaseButton from "@/components/ui/BaseButton";
+import Alert from "@/components/ui/Alert";
 
 /**
  * OTP Verification Component
  * Component for verifying OTP code sent via SMS
- * 
+ *
  * @param {Object} props
  * @param {string} props.phone - Phone number OTP was sent to
  * @param {Function} props.onVerify - Callback when OTP is verified
@@ -23,9 +23,9 @@ export default function OTPVerification({
   onResend,
   onBack,
   isLoading = false,
-  error = null,
+  error = null
 }) {
-  const [otp, setOtp] = useState('');
+  const [otp, setOtp] = useState("");
   const [resendTimer, setResendTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
 
@@ -64,7 +64,7 @@ export default function OTPVerification({
     }
   };
 
-  const maskedPhone = phone ? `${phone.slice(0, 4)}***${phone.slice(-2)}` : '';
+  const maskedPhone = phone ? `${phone.slice(0, 4)}***${phone.slice(-2)}` : "";
 
   return (
     <div className="w-full">
@@ -74,13 +74,19 @@ export default function OTPVerification({
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">تأیید شماره تماس</h2>
         <p className="text-sm text-gray-600 mb-1">
-          کد تأیید به شماره <span className="font-semibold text-gray-900">{maskedPhone}</span> ارسال شد
+          کد تأیید به شماره <span className="font-semibold text-gray-900">{maskedPhone}</span> ارسال
+          شد
         </p>
         <p className="text-xs text-gray-500">لطفاً کد ۵ رقمی را وارد کنید</p>
       </div>
 
       {error && (
-        <Alert variant="error" size="md" message={error} className="mb-4" />
+        <Alert
+          variant="error"
+          size="md"
+          message={error}
+          className="mb-4"
+        />
       )}
 
       <div className="mb-6">
@@ -137,13 +143,10 @@ export default function OTPVerification({
               ارسال مجدد کد
             </button>
           ) : (
-            <span className="text-gray-500">
-              ارسال مجدد کد در {resendTimer} ثانیه
-            </span>
+            <span className="text-gray-500">ارسال مجدد کد در {resendTimer} ثانیه</span>
           )}
         </div>
       </div>
     </div>
   );
 }
-

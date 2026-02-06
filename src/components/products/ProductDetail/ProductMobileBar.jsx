@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import BaseButton from '@/components/ui/BaseButton';
-import { cn } from '@/lib/utils';
+import BaseButton from "@/components/ui/BaseButton";
+import { cn } from "@/lib/utils";
 
 /**
  * ProductMobileBar Component
  * Mobile bottom bar for product page with price and add to cart
- * 
+ *
  * @param {Object} props
  * @param {Object} props.product - Product data object
  * @param {string} props.selectedSize - Selected size key
@@ -25,14 +25,14 @@ export default function ProductMobileBar({
   finalPrice,
   isInStock,
   onAddToCart,
-  className,
+  className
 }) {
   if (!product) return null;
 
   return (
     <div
       className={cn(
-        'lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-2xl',
+        "lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-2xl",
         className
       )}
     >
@@ -45,9 +45,7 @@ export default function ProductMobileBar({
             </p>
           </div>
           <div className="text-right">
-            <p className="text-xs text-gray-600">
-              Size: {selectedSizeData?.name || 'N/A'}
-            </p>
+            <p className="text-xs text-gray-600">Size: {selectedSizeData?.name || "N/A"}</p>
             <p className="text-sm text-gray-700">Qty: {quantity}</p>
           </div>
         </div>
@@ -60,11 +58,10 @@ export default function ProductMobileBar({
           disabled={!isInStock}
         >
           <i className="ri-shopping-cart-line text-xl"></i>
-          <span>{!isInStock ? 'Out of Stock' : 'Add to Cart'}</span>
+          <span>{!isInStock ? "Out of Stock" : "Add to Cart"}</span>
         </BaseButton>
         <div className="h-2"></div>
       </div>
     </div>
   );
 }
-

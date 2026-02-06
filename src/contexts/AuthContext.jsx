@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
-import { initializeMockUsers } from '@/lib/mockData';
+import { createContext, useContext, useState, useCallback, useMemo, useEffect } from "react";
+import { initializeMockUsers } from "@/lib/mockData";
 
 /**
  * Auth Context
@@ -13,8 +13,8 @@ const AuthContext = createContext(undefined);
 /**
  * Token storage key
  */
-const TOKEN_KEY = 'abra_auth_token';
-const USER_KEY = 'abra_user_data';
+const TOKEN_KEY = "abra_auth_token";
+const USER_KEY = "abra_user_data";
 
 /**
  * Auth Provider Component
@@ -33,20 +33,20 @@ export function AuthProvider({ children }) {
 
       const storedToken = localStorage.getItem(TOKEN_KEY);
       const storedUser = localStorage.getItem(USER_KEY);
-      
+
       if (storedToken) {
         setToken(storedToken);
       }
-      
+
       if (storedUser) {
         try {
           setUser(JSON.parse(storedUser));
         } catch (e) {
-          console.error('Failed to parse user data:', e);
+          console.error("Failed to parse user data:", e);
         }
       }
     } catch (error) {
-      console.error('Failed to load auth data:', error);
+      console.error("Failed to load auth data:", error);
     } finally {
       setIsLoading(false);
     }
@@ -64,7 +64,7 @@ export function AuthProvider({ children }) {
       setToken(authToken);
       setUser(userData);
     } catch (error) {
-      console.error('Failed to save auth data:', error);
+      console.error("Failed to save auth data:", error);
     }
   }, []);
 
@@ -78,7 +78,7 @@ export function AuthProvider({ children }) {
       setToken(null);
       setUser(null);
     } catch (error) {
-      console.error('Failed to remove auth data:', error);
+      console.error("Failed to remove auth data:", error);
     }
   }, []);
 
@@ -86,15 +86,18 @@ export function AuthProvider({ children }) {
    * Update user data
    * @param {Object} userData - Updated user data
    */
-  const updateUser = useCallback((userData) => {
-    try {
-      const updatedUser = { ...user, ...userData };
-      localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
-      setUser(updatedUser);
-    } catch (error) {
-      console.error('Failed to update user data:', error);
-    }
-  }, [user]);
+  const updateUser = useCallback(
+    (userData) => {
+      try {
+        const updatedUser = { ...user, ...userData };
+        localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+        setUser(updatedUser);
+      } catch (error) {
+        console.error("Failed to update user data:", error);
+      }
+    },
+    [user]
+  );
 
   /**
    * Check if user is authenticated
@@ -110,7 +113,7 @@ export function AuthProvider({ children }) {
     isAuthenticated,
     login,
     logout,
-    updateUser,
+    updateUser
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -123,8 +126,7 @@ export function AuthProvider({ children }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }
-

@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
-import { useRouter } from 'next/navigation';
-import BaseImage from '@/components/ui/BaseImage';
-import BaseButton from '@/components/ui/BaseButton';
-import QuantityControl from '@/components/ui/QuantityControl';
-import { useProduct } from '@/hooks/useProduct';
-import { useCart } from '@/contexts/CartContext';
-import { ROUTES } from '@/config/routes';
-import { cn } from '@/lib/utils';
+import { useMemo } from "react";
+import { useRouter } from "next/navigation";
+import BaseImage from "@/components/ui/BaseImage";
+import BaseButton from "@/components/ui/BaseButton";
+import QuantityControl from "@/components/ui/QuantityControl";
+import { useProduct } from "@/hooks/useProduct";
+import { useCart } from "@/contexts/CartContext";
+import { ROUTES } from "@/config/routes";
+import { cn } from "@/lib/utils";
 
 /**
  * Product Card Component
  * Card component for displaying products with add to cart functionality
- * 
+ *
  * @param {Object} props
  * @param {string} props.id - Product ID
  * @param {string} props.slug - Product slug
@@ -33,8 +33,8 @@ export default function ProductCard({
   image,
   badge,
   href,
-  size = 'md',
-  className,
+  size = "md",
+  className
 }) {
   const router = useRouter();
   const { items, addItem, updateQuantity, removeItem, openCart } = useCart();
@@ -49,7 +49,7 @@ export default function ProductCard({
     quantity,
     availableStock,
     isInStock,
-    finalPrice,
+    finalPrice
   } = useProduct(slug);
 
   // Check if product is in cart using the same ID format as page.js
@@ -65,10 +65,7 @@ export default function ProductCard({
 
   const handleCardClick = (e) => {
     // Don't navigate if clicking on button or quantity control
-    if (
-      e.target.closest('button') ||
-      e.target.closest('[data-product-action]')
-    ) {
+    if (e.target.closest("button") || e.target.closest("[data-product-action]")) {
       return;
     }
     // Navigate to product detail page
@@ -94,10 +91,10 @@ export default function ProductCard({
       slug: product.slug,
       name: product.name,
       price: finalPrice,
-      image: product.images?.[0]?.url || '',
+      image: product.images?.[0]?.url || "",
       size: selectedSizeData?.name || selectedSize,
       color: selectedColorData?.name || selectedColor,
-      quantity: quantity,
+      quantity: quantity
     });
 
     // Open cart drawer
@@ -106,7 +103,7 @@ export default function ProductCard({
 
   const handleQuantityChange = (newQuantity) => {
     if (!cartItemId) return;
-    
+
     if (newQuantity === 0) {
       removeItem(cartItemId);
     } else {
@@ -114,7 +111,7 @@ export default function ProductCard({
     }
   };
 
-  const isMobile = size === 'sm';
+  const isMobile = size === "sm";
   const isInCart = Boolean(cartItem);
 
   // Use product data if available, otherwise fallback to props
@@ -122,45 +119,44 @@ export default function ProductCard({
   const displayPrice = product ? finalPrice : price;
   const displayImage = product?.images?.[0]?.url || image;
 
-  const maxQuantity = product && availableStock !== undefined 
-  ? cartItem?.quantity + availableStock 
-  : availableStock;
-
+  const maxQuantity =
+    product && availableStock !== undefined ? cartItem?.quantity + availableStock : availableStock;
 
   return (
     <div
       onClick={handleCardClick}
       className={cn(
-        'bg-white overflow-hidden shadow-lg group cursor-pointer hover:shadow-2xl transition-all duration-300',
-        'flex flex-row md:flex-col',
-        'w-full md:w-auto',
-        'border-b md:border-b-0 border-gray-200 last:border-b-0',
-        'rounded-none md:rounded-2xl',
-        isMobile ? 'p-3' : 'p-5',
+        "bg-white overflow-hidden shadow-lg group cursor-pointer hover:shadow-2xl transition-all duration-300",
+        "flex flex-row md:flex-col",
+        "w-full md:w-auto",
+        "border-b md:border-b-0 border-gray-200 last:border-b-0",
+        "rounded-none md:rounded-2xl",
+        isMobile ? "p-3" : "p-5",
         className
       )}
     >
-
       {/* Image Container */}
-      <div className={cn(
-        'relative overflow-hidden rounded-lg shrink-0',
-        'w-24 h-24 md:w-full md:h-auto',
-        'md:aspect-5/6 md:mb-4'
-      )}>
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-lg shrink-0",
+          "w-24 h-24 md:w-full md:h-auto",
+          "md:aspect-5/6 md:mb-4"
+        )}
+      >
         <BaseImage
           src={displayImage}
           alt={displayName}
           fill
           className="object-cover object-top group-hover:scale-105 transition-transform duration-500 rounded-lg"
-          />
+        />
 
         {/* Badge */}
         {badge && (
           <span
-          className={cn(
-            'absolute top-1 left-1 md:top-3 md:left-3 px-1.5 py-0.5 md:px-2 md:py-1',
-            'bg-gray-900 text-white text-[10px] md:text-xs font-semibold rounded-full z-10'
-          )}
+            className={cn(
+              "absolute top-1 left-1 md:top-3 md:left-3 px-1.5 py-0.5 md:px-2 md:py-1",
+              "bg-gray-900 text-white text-[10px] md:text-xs font-semibold rounded-full z-10"
+            )}
           >
             {badge}
           </span>
@@ -168,30 +164,23 @@ export default function ProductCard({
       </div>
 
       {/* Product Info */}
-      <div className={cn(
-        'flex flex-col flex-1',
-        'ml-3 md:ml-0',
-        'justify-between md:justify-start'
-      )}>
+      <div
+        className={cn("flex flex-col flex-1", "ml-3 md:ml-0", "justify-between md:justify-start")}
+      >
         <div className="flex-1">
           <h3
             className={cn(
-              'font-bold text-gray-900 mb-1 md:mb-2',
-              'text-xs md:text-lg',
-              'line-clamp-2 md:line-clamp-none'
+              "font-bold text-gray-900 mb-1 md:mb-2",
+              "text-xs md:text-lg",
+              "line-clamp-2 md:line-clamp-none"
             )}
-            >
+          >
             {displayName}
           </h3>
 
           {/* Price */}
           <div className="flex items-center justify-between mb-2 md:mb-4">
-            <span
-              className={cn(
-                'font-bold text-gray-900',
-                'text-base md:text-2xl'
-              )}
-              >
+            <span className={cn("font-bold text-gray-900", "text-base md:text-2xl")}>
               ${displayPrice.toFixed(2)}
             </span>
           </div>
@@ -200,30 +189,33 @@ export default function ProductCard({
         {/* Add to Cart or Quantity Control */}
         <div className="mt-auto md:mt-0">
           {isInCart && cartItem ? (
-            <div data-product-action onClick={(e) => e.stopPropagation()}>
+            <div
+              data-product-action
+              onClick={(e) => e.stopPropagation()}
+            >
               <QuantityControl
                 value={cartItem.quantity}
                 onIncrease={() => handleQuantityChange(cartItem.quantity + 1)}
                 onDecrease={() => handleQuantityChange(cartItem.quantity - 1)}
                 min={1}
                 max={maxQuantity || 99}
-                size={'md'}
+                size={"md"}
                 className="w-full justify-center mb-3"
-                />
+              />
             </div>
           ) : (
             <BaseButton
-            onClick={handleAddToCart}
-            variant="primary"
-            size={isMobile ? 'xs' : 'md'}
-            fullWidth
-            className="whitespace-nowrap text-xs md:text-sm"
+              onClick={handleAddToCart}
+              variant="primary"
+              size={isMobile ? "xs" : "md"}
+              fullWidth
+              className="whitespace-nowrap text-xs md:text-sm"
               data-product-action
-              >
+            >
               Add to Cart
             </BaseButton>
           )}
-            {/* <BaseButton
+          {/* <BaseButton
             onClick={isInCart && cartItem  ?  openCart:handleAddToCart  }
             variant="primary"
             size={isMobile ? 'xs' : 'md'}
@@ -238,4 +230,3 @@ export default function ProductCard({
     </div>
   );
 }
-

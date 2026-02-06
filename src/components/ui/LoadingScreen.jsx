@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { cn } from '@/lib/utils';
+import { useState, useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
 
 /**
  * Loading Screen Component
  * Displays a loading screen with typewriter animation for shop name
- * 
+ *
  * @param {Object} props
  * @param {boolean} props.isLoading - Whether loading is active
  * @param {string} props.logoText - Text to type (default: "Abra")
@@ -19,19 +19,19 @@ import { cn } from '@/lib/utils';
  */
 export default function LoadingScreen({
   isLoading = true,
-  logoText = 'Abra',
+  logoText = "Abra",
   typingSpeed = 150,
   minDisplayTime = 1500,
   onComplete,
   className,
-  size = 'lg',
-  loop = false,
+  size = "lg",
+  loop = false
 }) {
-  const [displayedText, setDisplayedText] = useState('');
+  const [displayedText, setDisplayedText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   const [isTypingComplete, setIsTypingComplete] = useState(false);
   const [startTime] = useState(Date.now());
-  
+
   // Use refs to store intervals/timeouts so they persist across re-renders
   const typeIntervalRef = useRef(null);
   const pauseTimeoutRef = useRef(null);
@@ -39,7 +39,7 @@ export default function LoadingScreen({
   // Typewriter effect with loop support
   useEffect(() => {
     if (!isLoading) {
-      setDisplayedText('');
+      setDisplayedText("");
       setIsTypingComplete(false);
       // Clear any running intervals/timeouts
       if (typeIntervalRef.current) {
@@ -69,7 +69,7 @@ export default function LoadingScreen({
 
       setIsTypingComplete(false);
       currentIndex = 0;
-      setDisplayedText('');
+      setDisplayedText("");
 
       typeIntervalRef.current = setInterval(() => {
         if (currentIndex < text.length) {
@@ -91,7 +91,7 @@ export default function LoadingScreen({
             // Call onComplete after minimum display time
             const elapsedTime = Date.now() - startTime;
             const remainingTime = Math.max(0, minDisplayTime - elapsedTime);
-            
+
             pauseTimeoutRef.current = setTimeout(() => {
               if (onComplete) {
                 onComplete();
@@ -144,9 +144,9 @@ export default function LoadingScreen({
   return (
     <div
       className={cn(
-        'fixed inset-0 z-[100] bg-white flex items-center justify-center',
-        'transition-opacity duration-500 ease-in-out',
-        isLoading ? 'opacity-100' : 'opacity-0 pointer-events-none',
+        "fixed inset-0 z-[100] bg-white flex items-center justify-center",
+        "transition-opacity duration-500 ease-in-out",
+        isLoading ? "opacity-100" : "opacity-0 pointer-events-none",
         className
       )}
     >
@@ -155,26 +155,26 @@ export default function LoadingScreen({
         <div className="flex items-center gap-2 mb-4">
           <h1
             className={cn(
-              'font-bold text-gray-900',
-              size === 'sm' && 'text-md sm:text-md',
-              size === 'sm' && 'text-xl sm:text-xl',
-              size === 'md' && 'text-2xl sm:text-3xl md:text-4xl',
-              size === 'lg' && 'text-3xl sm:text-4xl md:text-5xl',
-              size === 'xl' && 'text-5xl sm:text-6xl md:text-7xl',
-              !size && 'text-6xl sm:text-7xl md:text-8xl' // default lg
+              "font-bold text-gray-900",
+              size === "sm" && "text-md sm:text-md",
+              size === "sm" && "text-xl sm:text-xl",
+              size === "md" && "text-2xl sm:text-3xl md:text-4xl",
+              size === "lg" && "text-3xl sm:text-4xl md:text-5xl",
+              size === "xl" && "text-5xl sm:text-6xl md:text-7xl",
+              !size && "text-6xl sm:text-7xl md:text-8xl" // default lg
             )}
-            style={{ fontFamily: 'var(--font-pacifico), serif' }}
+            style={{ fontFamily: "var(--font-pacifico), serif" }}
           >
             {displayedText}
             {showCursor && (
               <span
                 className={cn(
-                  'inline-block w-0.5 bg-gray-900 ml-1 animate-pulse',
-                  size === 'sm' && 'h-3 sm:h-4',
-                  size === 'md' && 'h-5 sm:h-6md:h-8',
-                  size === 'lg' && 'h-12 sm:h-14 md:h-16',
-                  size === 'xl' && 'h-14 sm:h-16 md:h-20',
-                  !size && 'h-12 sm:h-14 md:h-16' // default lg
+                  "inline-block w-0.5 bg-gray-900 ml-1 animate-pulse",
+                  size === "sm" && "h-3 sm:h-4",
+                  size === "md" && "h-5 sm:h-6md:h-8",
+                  size === "lg" && "h-12 sm:h-14 md:h-16",
+                  size === "xl" && "h-14 sm:h-16 md:h-20",
+                  !size && "h-12 sm:h-14 md:h-16" // default lg
                 )}
               />
             )}
@@ -182,15 +182,23 @@ export default function LoadingScreen({
         </div>
 
         {/* Loading Indicator (shows after typing is complete, only if not looping) */}
-        { (
+        {
           <div className="flex items-center gap-2 mt-2">
-            <div className="w-1.5 h-1.5 bg-gray-900 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-            <div className="w-1.5 h-1.5 bg-gray-900 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-            <div className="w-1.5 h-1.5 bg-gray-900 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            <div
+              className="w-1.5 h-1.5 bg-gray-900 rounded-full animate-bounce"
+              style={{ animationDelay: "0ms" }}
+            />
+            <div
+              className="w-1.5 h-1.5 bg-gray-900 rounded-full animate-bounce"
+              style={{ animationDelay: "150ms" }}
+            />
+            <div
+              className="w-1.5 h-1.5 bg-gray-900 rounded-full animate-bounce"
+              style={{ animationDelay: "300ms" }}
+            />
           </div>
-        )}
+        }
       </div>
     </div>
   );
 }
-

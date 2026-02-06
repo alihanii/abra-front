@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
 /**
  * Slider Dots Component
  * Navigation dots for hero slider
- * 
+ *
  * @param {Object} props
  * @param {number} props.totalSlides - Total number of slides
  * @param {number} props.activeIndex - Currently active slide index
@@ -18,10 +18,7 @@ export default function SliderDots({ totalSlides, activeIndex, onDotClick }) {
           onClick={() => onDotClick(index)}
           className={`
             h-3 rounded-full transition-all cursor-pointer
-            ${index === activeIndex 
-              ? 'bg-gray-900 w-8' 
-              : 'bg-gray-400 w-3'
-            }
+            ${index === activeIndex ? "bg-gray-900 w-8" : "bg-gray-400 w-3"}
           `}
           aria-label={`Go to slide ${index + 1}`}
         />
@@ -29,4 +26,3 @@ export default function SliderDots({ totalSlides, activeIndex, onDotClick }) {
     </div>
   );
 }
-

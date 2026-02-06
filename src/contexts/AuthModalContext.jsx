@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback } from "react";
 
 /**
  * Auth Modal Context
@@ -41,7 +41,7 @@ export function AuthModalProvider({ children }) {
     isOpen,
     openAuthModal,
     closeAuthModal,
-    toggleAuthModal,
+    toggleAuthModal
   };
 
   return <AuthModalContext.Provider value={value}>{children}</AuthModalContext.Provider>;
@@ -54,8 +54,7 @@ export function AuthModalProvider({ children }) {
 export function useAuthModal() {
   const context = useContext(AuthModalContext);
   if (context === undefined) {
-    throw new Error('useAuthModal must be used within an AuthModalProvider');
+    throw new Error("useAuthModal must be used within an AuthModalProvider");
   }
   return context;
 }
-

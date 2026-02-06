@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useNavigation } from '@/hooks/useNavigation';
+import Link from "next/link";
+import { useNavigation } from "@/hooks/useNavigation";
 
 /**
  * Navigation Link Component
  * Reusable navigation link with active state detection
- * 
+ *
  * @param {Object} props
  * @param {string} props.href - Route path
  * @param {string} props.label - Link label
@@ -20,17 +20,17 @@ export default function NavLink({
   label,
   icon,
   onClick,
-  className = '',
+  className = "",
   showActiveIndicator = true,
   ...props
 }) {
   const { checkActiveRoute, getRouteClassName } = useNavigation();
   const isActive = checkActiveRoute(href);
 
-  const baseClasses = 'transition-all duration-200 cursor-pointer';
-  const activeClasses = isActive 
-    ? 'text-gray-900 font-semibold' 
-    : 'text-gray-700 hover:text-gray-900';
+  const baseClasses = "transition-all duration-200 cursor-pointer";
+  const activeClasses = isActive
+    ? "text-gray-900 font-semibold"
+    : "text-gray-700 hover:text-gray-900";
 
   const handleClick = (e) => {
     if (onClick) {
@@ -57,4 +57,3 @@ export default function NavLink({
     </Link>
   );
 }
-

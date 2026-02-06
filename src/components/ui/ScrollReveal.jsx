@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useScrollAnimation } from '@/hooks/useScrollAnimation';
-import { cn } from '@/lib/utils';
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { cn } from "@/lib/utils";
 
 /**
  * ScrollReveal Component
  * Wrapper component that adds scroll reveal animation to children
- * 
+ *
  * @param {Object} props
  * @param {React.ReactNode} props.children - Child elements to animate
  * @param {string} props.className - Additional CSS classes
@@ -20,29 +20,29 @@ export default function ScrollReveal({
   children,
   className,
   threshold = 0.1,
-  rootMargin = '0px',
+  rootMargin = "0px",
   triggerOnce = true,
-  animation = 'fadeUp',
-  delay = 0,
+  animation = "fadeUp",
+  delay = 0
 }) {
   const { ref, isVisible } = useScrollAnimation({
     threshold,
     rootMargin,
-    triggerOnce,
+    triggerOnce
   });
 
   const animationClasses = {
-    fadeUp: 'opacity-0 translate-y-8 transition-all duration-700 ease-out',
-    fadeIn: 'opacity-0 transition-all duration-700 ease-out',
-    slideLeft: 'opacity-0 -translate-x-8 transition-all duration-700 ease-out',
-    slideRight: 'opacity-0 translate-x-8 transition-all duration-700 ease-out',
+    fadeUp: "opacity-0 translate-y-8 transition-all duration-700 ease-out",
+    fadeIn: "opacity-0 transition-all duration-700 ease-out",
+    slideLeft: "opacity-0 -translate-x-8 transition-all duration-700 ease-out",
+    slideRight: "opacity-0 translate-x-8 transition-all duration-700 ease-out"
   };
 
   const visibleClasses = {
-    fadeUp: 'opacity-100 translate-y-0',
-    fadeIn: 'opacity-100',
-    slideLeft: 'opacity-100 translate-x-0',
-    slideRight: 'opacity-100 translate-x-0',
+    fadeUp: "opacity-100 translate-y-0",
+    fadeIn: "opacity-100",
+    slideLeft: "opacity-100 translate-x-0",
+    slideRight: "opacity-100 translate-x-0"
   };
 
   return (
@@ -54,16 +54,10 @@ export default function ScrollReveal({
         className
       )}
       style={{
-        transitionDelay: `${delay}ms`,
+        transitionDelay: `${delay}ms`
       }}
     >
       {children}
     </div>
   );
 }
-
-
-
-
-
-

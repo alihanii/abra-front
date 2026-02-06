@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useCart } from '@/contexts/CartContext';
-import CartItem from './CartItem';
-import EmptyCart from './EmptyCart';
-import CartSummary from './CartSummary';
+import { useEffect, useState } from "react";
+import { useCart } from "@/contexts/CartContext";
+import CartItem from "./CartItem";
+import EmptyCart from "./EmptyCart";
+import CartSummary from "./CartSummary";
 
 /**
  * Cart Drawer Component
@@ -32,29 +32,29 @@ export default function CartDrawer() {
   // Prevent body scroll when cart is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
   // Handle escape key
   useEffect(() => {
     const handleEscape = (e) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === "Escape" && isOpen) {
         closeCart();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
+      document.addEventListener("keydown", handleEscape);
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener("keydown", handleEscape);
     };
   }, [isOpen, closeCart]);
 
@@ -67,7 +67,7 @@ export default function CartDrawer() {
         className={`
           fixed inset-0 bg-black/50 backdrop-blur-sm z-40
           transition-opacity duration-300 ease-in-out
-          ${isAnimating ? 'opacity-100' : 'opacity-0'}
+          ${isAnimating ? "opacity-100" : "opacity-0"}
         `}
         onClick={closeCart}
         aria-hidden="true"
@@ -78,7 +78,7 @@ export default function CartDrawer() {
         className={`
           fixed top-0 right-0 h-full w-full md:w-[480px] bg-white shadow-2xl z-50
           transform transition-transform duration-300 ease-out
-          ${isAnimating ? 'translate-x-0' : 'translate-x-full'}
+          ${isAnimating ? "translate-x-0" : "translate-x-full"}
         `}
         role="dialog"
         aria-modal="true"
@@ -91,7 +91,7 @@ export default function CartDrawer() {
               <i className="ri-shopping-cart-line text-2xl text-gray-900"></i>
               <h2 className="text-2xl font-bold text-gray-900">Shopping Cart</h2>
             </div>
-            
+
             <button
               onClick={closeCart}
               className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all cursor-pointer"
@@ -112,13 +112,10 @@ export default function CartDrawer() {
                     key={item.id}
                     className={`
                       transition-all duration-300 ease-out
-                      ${isAnimating 
-                        ? 'opacity-100 translate-y-0' 
-                        : 'opacity-0 translate-y-4'
-                      }
+                      ${isAnimating ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
                     `}
                     style={{
-                      transitionDelay: `${index * 50}ms`,
+                      transitionDelay: `${index * 50}ms`
                     }}
                   >
                     <CartItem item={item} />
@@ -133,13 +130,10 @@ export default function CartDrawer() {
             <div
               className={`
                 transition-all duration-300 ease-out
-                ${isAnimating 
-                  ? 'opacity-100 translate-y-0' 
-                  : 'opacity-0 translate-y-4'
-                }
+                ${isAnimating ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
               `}
               style={{
-                transitionDelay: `${items.length * 50}ms`,
+                transitionDelay: `${items.length * 50}ms`
               }}
             >
               <CartSummary />
@@ -150,4 +144,3 @@ export default function CartDrawer() {
     </>
   );
 }
-

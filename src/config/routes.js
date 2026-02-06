@@ -4,19 +4,19 @@
  */
 
 export const ROUTES = {
-  HOME: '/',
-  PRODUCTS: '/products',
-  MATCHING_SETS: '/matching-sets',
-  DESIGN_STUDIO: '/design-studio',
-  CONTACT: '/contact',
-  SHIPPING: '/shipping',
-  RETURNS: '/returns',
-  SIZE_GUIDE: '/size-guide',
-  ABOUT: '/about',
-  PRIVACY: '/privacy',
-  TERMS: '/terms',
-  FAQ: '/faq',
-  CHECKOUT: '/checkout',
+  HOME: "/",
+  PRODUCTS: "/products",
+  MATCHING_SETS: "/matching-sets",
+  DESIGN_STUDIO: "/design-studio",
+  CONTACT: "/contact",
+  SHIPPING: "/shipping",
+  RETURNS: "/returns",
+  SIZE_GUIDE: "/size-guide",
+  ABOUT: "/about",
+  PRIVACY: "/privacy",
+  TERMS: "/terms",
+  FAQ: "/faq",
+  CHECKOUT: "/checkout"
 };
 
 /**
@@ -24,29 +24,29 @@ export const ROUTES = {
  */
 export const NAVIGATION_ITEMS = [
   {
-    id: 'home',
-    label: 'Home',
+    id: "home",
+    label: "Home",
     href: ROUTES.HOME,
-    icon: 'ri-home-line',
+    icon: "ri-home-line"
   },
   {
-    id: 'products',
-    label: 'Products',
+    id: "products",
+    label: "Products",
     href: ROUTES.PRODUCTS,
-    icon: 'ri-shopping-bag-line',
+    icon: "ri-shopping-bag-line"
   },
   {
-    id: 'matching-sets',
-    label: 'Matching Sets',
+    id: "matching-sets",
+    label: "Matching Sets",
     href: ROUTES.MATCHING_SETS,
-    icon: 'ri-t-shirt-line',
+    icon: "ri-t-shirt-line"
   },
   {
-    id: 'design-studio',
-    label: 'Design Studio',
+    id: "design-studio",
+    label: "Design Studio",
     href: ROUTES.DESIGN_STUDIO,
-    icon: 'ri-palette-line',
-  },
+    icon: "ri-palette-line"
+  }
 ];
 
 /**
@@ -54,21 +54,21 @@ export const NAVIGATION_ITEMS = [
  */
 export const SHOP_LINKS = [
   {
-    label: 'Hoodies',
-    href: `${ROUTES.PRODUCTS}?category=hoodies`,
+    label: "Hoodies",
+    href: `${ROUTES.PRODUCTS}?category=hoodies`
   },
   {
-    label: 'T-Shirts',
-    href: `${ROUTES.PRODUCTS}?category=tshirts`,
+    label: "T-Shirts",
+    href: `${ROUTES.PRODUCTS}?category=tshirts`
   },
   {
-    label: 'Sweatshirts',
-    href: `${ROUTES.PRODUCTS}?category=sweatshirts`,
+    label: "Sweatshirts",
+    href: `${ROUTES.PRODUCTS}?category=sweatshirts`
   },
   {
-    label: 'Custom Design',
-    href: ROUTES.DESIGN_STUDIO,
-  },
+    label: "Custom Design",
+    href: ROUTES.DESIGN_STUDIO
+  }
 ];
 
 /**
@@ -76,21 +76,21 @@ export const SHOP_LINKS = [
  */
 export const SUPPORT_LINKS = [
   {
-    label: 'Contact Us',
-    href: ROUTES.CONTACT,
+    label: "Contact Us",
+    href: ROUTES.CONTACT
   },
   {
-    label: 'Shipping Info',
-    href: ROUTES.SHIPPING,
+    label: "Shipping Info",
+    href: ROUTES.SHIPPING
   },
   {
-    label: 'Returns',
-    href: ROUTES.RETURNS,
+    label: "Returns",
+    href: ROUTES.RETURNS
   },
   {
-    label: 'Size Guide',
-    href: ROUTES.SIZE_GUIDE,
-  },
+    label: "Size Guide",
+    href: ROUTES.SIZE_GUIDE
+  }
 ];
 
 /**
@@ -98,21 +98,21 @@ export const SUPPORT_LINKS = [
  */
 export const COMPANY_LINKS = [
   {
-    label: 'About Us',
-    href: ROUTES.ABOUT,
+    label: "About Us",
+    href: ROUTES.ABOUT
   },
   {
-    label: 'Privacy Policy',
-    href: ROUTES.PRIVACY,
+    label: "Privacy Policy",
+    href: ROUTES.PRIVACY
   },
   {
-    label: 'Terms of Service',
-    href: ROUTES.TERMS,
+    label: "Terms of Service",
+    href: ROUTES.TERMS
   },
   {
-    label: 'FAQ',
-    href: ROUTES.FAQ,
-  },
+    label: "FAQ",
+    href: ROUTES.FAQ
+  }
 ];
 
 /**
@@ -120,23 +120,23 @@ export const COMPANY_LINKS = [
  */
 export const SOCIAL_LINKS = [
   {
-    id: 'facebook',
-    icon: 'ri-facebook-fill',
-    href: '#',
-    label: 'Facebook',
+    id: "facebook",
+    icon: "ri-facebook-fill",
+    href: "#",
+    label: "Facebook"
   },
   {
-    id: 'instagram',
-    icon: 'ri-instagram-line',
-    href: '#',
-    label: 'Instagram',
+    id: "instagram",
+    icon: "ri-instagram-line",
+    href: "#",
+    label: "Instagram"
   },
   {
-    id: 'twitter',
-    icon: 'ri-twitter-x-line',
-    href: '#',
-    label: 'Twitter',
-  },
+    id: "twitter",
+    icon: "ri-twitter-x-line",
+    href: "#",
+    label: "Twitter"
+  }
 ];
 
 /**
@@ -151,4 +151,3 @@ export const isActiveRoute = (currentPath, routePath) => {
   }
   return currentPath.startsWith(routePath);
 };
-

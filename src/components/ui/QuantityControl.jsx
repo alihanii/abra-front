@@ -1,57 +1,54 @@
-'use client';
+"use client";
 
-import { cva } from 'class-variance-authority';
-import { cn } from '@/lib/utils';
+import { cva } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 /**
  * Quantity Control Button Variants
  */
 const quantityButtonVariants = cva(
-  'flex items-center justify-center rounded-full transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 disabled:opacity-50 disabled:cursor-not-allowed',
+  "flex items-center justify-center rounded-full transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 disabled:opacity-50 disabled:cursor-not-allowed",
   {
     variants: {
       size: {
-        xs: 'w-6 h-6',
-        sm: 'w-7 h-7',
-        md: 'w-8 h-8',
-        lg: 'w-10 h-10',
+        xs: "w-6 h-6",
+        sm: "w-7 h-7",
+        md: "w-8 h-8",
+        lg: "w-10 h-10"
       },
       variant: {
-        default: 'bg-gray-100 hover:bg-gray-200 text-gray-700',
-        ghost: 'bg-transparent hover:bg-gray-100 text-gray-700',
-      },
+        default: "bg-gray-100 hover:bg-gray-200 text-gray-700",
+        ghost: "bg-transparent hover:bg-gray-100 text-gray-700"
+      }
     },
     defaultVariants: {
-      size: 'md',
-      variant: 'default',
-    },
+      size: "md",
+      variant: "default"
+    }
   }
 );
 
 /**
  * Quantity Display Variants
  */
-const quantityDisplayVariants = cva(
-  'text-center font-semibold text-gray-900 select-none',
-  {
-    variants: {
-      size: {
-        xs: 'w-4 text-xs',
-        sm: 'w-6 text-sm',
-        md: 'w-8 text-base',
-        lg: 'w-10 text-lg',
-      },
-    },
-    defaultVariants: {
-      size: 'sm',
-    },
+const quantityDisplayVariants = cva("text-center font-semibold text-gray-900 select-none", {
+  variants: {
+    size: {
+      xs: "w-4 text-xs",
+      sm: "w-6 text-sm",
+      md: "w-8 text-base",
+      lg: "w-10 text-lg"
+    }
+  },
+  defaultVariants: {
+    size: "sm"
   }
-);
+});
 
 /**
  * QuantityControl Component
  * Reusable quantity control with increase/decrease buttons
- * 
+ *
  * @param {Object} props
  * @param {number} props.value - Current quantity value
  * @param {Function} props.onIncrease - Callback when increase button is clicked
@@ -69,10 +66,10 @@ export default function QuantityControl({
   onDecrease,
   min = 1,
   max = 99,
-  size = 'md',
-  variant = 'default',
+  size = "md",
+  variant = "default",
   className,
-  disabled = false,
+  disabled = false
 }) {
   const isMinReached = value <= min;
   const isMaxReached = value >= max;
@@ -90,7 +87,7 @@ export default function QuantityControl({
   };
 
   return (
-    <div className={cn('flex items-center gap-2', className)}>
+    <div className={cn("flex items-center gap-2", className)}>
       {/* Decrease Button */}
       <button
         type="button"
@@ -98,7 +95,7 @@ export default function QuantityControl({
         disabled={disabled || isMinReached}
         className={cn(
           quantityButtonVariants({ size, variant }),
-          (disabled || isMinReached) && 'opacity-50 cursor-not-allowed'
+          (disabled || isMinReached) && "opacity-50 cursor-not-allowed"
         )}
         aria-label="Decrease quantity"
         aria-disabled={disabled || isMinReached}
@@ -107,9 +104,7 @@ export default function QuantityControl({
       </button>
 
       {/* Quantity Display */}
-      <span className={quantityDisplayVariants({ size })}>
-        {value}
-      </span>
+      <span className={quantityDisplayVariants({ size })}>{value}</span>
 
       {/* Increase Button */}
       <button
@@ -118,7 +113,7 @@ export default function QuantityControl({
         disabled={disabled || isMaxReached}
         className={cn(
           quantityButtonVariants({ size, variant }),
-          (disabled || isMaxReached) && 'opacity-50 cursor-not-allowed'
+          (disabled || isMaxReached) && "opacity-50 cursor-not-allowed"
         )}
         aria-label="Increase quantity"
         aria-disabled={disabled || isMaxReached}
@@ -128,4 +123,3 @@ export default function QuantityControl({
     </div>
   );
 }
-

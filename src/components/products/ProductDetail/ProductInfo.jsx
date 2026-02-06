@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
-import BaseButton from '@/components/ui/BaseButton';
-import QuantityControl from '@/components/ui/QuantityControl';
-import { cn } from '@/lib/utils';
+import { useMemo } from "react";
+import BaseButton from "@/components/ui/BaseButton";
+import QuantityControl from "@/components/ui/QuantityControl";
+import { cn } from "@/lib/utils";
 
 /**
  * ProductInfo Component
  * Displays product information, variants, and add to cart functionality
- * 
+ *
  * @param {Object} props
  * @param {Object} props.product - Product data object
  * @param {string} props.selectedColor - Selected color key
@@ -38,7 +38,7 @@ export default function ProductInfo({
   onQuantityDecrease,
   onAddToCart,
   isMobile = false,
-  className,
+  className
 }) {
   // Get selected color and size data
   const selectedColorData = useMemo(() => {
@@ -57,11 +57,9 @@ export default function ProductInfo({
   if (!product) return null;
 
   return (
-    <div className={cn('bg-white rounded-2xl p-6 lg:p-8 shadow-sm', className)}>
+    <div className={cn("bg-white rounded-2xl p-6 lg:p-8 shadow-sm", className)}>
       {/* Title */}
-      <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
-        {product.name}
-      </h1>
+      <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-3">{product.name}</h1>
 
       {/* Price */}
       <div className="flex items-baseline gap-3 mb-4">
@@ -70,9 +68,7 @@ export default function ProductInfo({
         </span>
         {hasDiscount && discountAmount && (
           <>
-            <span className="text-xl text-gray-500 line-through">
-              ${originalPrice.toFixed(2)}
-            </span>
+            <span className="text-xl text-gray-500 line-through">${originalPrice.toFixed(2)}</span>
             <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
               Save ${discountAmount}
             </span>
@@ -89,15 +85,17 @@ export default function ProductInfo({
       {product.colors && Object.keys(product.colors).length > 0 && (
         <div className="mb-6">
           <label className="block text-sm font-semibold text-gray-900 mb-3">
-            Color: {selectedColorData?.name || 'Select Color'}
+            Color: {selectedColorData?.name || "Select Color"}
           </label>
           <div className="flex gap-3">
             {Object.entries(product.colors).map(([key, color]) => {
               // Check if this color has any available stock with any size
-              const hasStock = product.stock && Object.keys(product.stock).some(
-                (stockKey) => stockKey.startsWith(`${key}-`) && product.stock[stockKey] > 0
-              );
-              
+              const hasStock =
+                product.stock &&
+                Object.keys(product.stock).some(
+                  (stockKey) => stockKey.startsWith(`${key}-`) && product.stock[stockKey] > 0
+                );
+
               return (
                 <BaseButton
                   key={key}
@@ -107,14 +105,14 @@ export default function ProductInfo({
                   variant="ghost"
                   size="sm"
                   className={cn(
-                    'w-12 h-12 !rounded-lg !p-0 border-2 relative',
+                    "w-12 h-12 !rounded-lg !p-0 border-2 relative",
                     selectedColor === key
-                      ? 'border-gray-900 scale-105'
-                      : 'border-gray-300 hover:border-gray-500',
-                    !hasStock && 'opacity-50'
+                      ? "border-gray-900 scale-105"
+                      : "border-gray-300 hover:border-gray-500",
+                    !hasStock && "opacity-50"
                   )}
                   style={{ backgroundColor: color.value }}
-                  aria-label={`Select color ${color.name}${!hasStock ? ' (Out of stock)' : ''}`}
+                  aria-label={`Select color ${color.name}${!hasStock ? " (Out of stock)" : ""}`}
                 >
                   {!hasStock && (
                     <span className="absolute inset-0 flex items-center justify-center">
@@ -131,28 +129,26 @@ export default function ProductInfo({
       {/* Size Selection */}
       {product.sizes && Object.keys(product.sizes).length > 0 && (
         <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-900 mb-3">
-            Size
-          </label>
+          <label className="block text-sm font-semibold text-gray-900 mb-3">Size</label>
           <div className="flex flex-wrap gap-2">
             {Object.entries(product.sizes).map(([key, size]) => {
               // Check if this size has stock for selected color
               const stockKey = selectedColor ? `${selectedColor}-${key}` : null;
-              const sizeStock = stockKey && product.stock ? (product.stock[stockKey] || 0) : 0;
+              const sizeStock = stockKey && product.stock ? product.stock[stockKey] || 0 : 0;
               const hasStock = sizeStock > 0;
-              
+
               return (
                 <BaseButton
                   key={key}
                   onClick={() => onSizeSelect?.(key)}
                   disabled={selectedColor ? !hasStock : false}
-                  variant={selectedSize === key ? 'primary' : 'outline'}
+                  variant={selectedSize === key ? "primary" : "outline"}
                   size="xs"
                   className={cn(
-                    '!rounded-lg px-6 py-3 whitespace-nowrap relative',
-                    selectedColor && !hasStock && 'opacity-50'
+                    "!rounded-lg px-6 py-3 whitespace-nowrap relative",
+                    selectedColor && !hasStock && "opacity-50"
                   )}
-                  aria-label={`Select size ${size.name}${selectedColor && !hasStock ? ' (Out of stock)' : ''}`}
+                  aria-label={`Select size ${size.name}${selectedColor && !hasStock ? " (Out of stock)" : ""}`}
                 >
                   {size.name}
                   {/* {selectedColor && hasStock && (
@@ -209,7 +205,7 @@ export default function ProductInfo({
           disabled={!isInStock || !selectedColor || !selectedSize}
         >
           <i className="ri-shopping-cart-line text-xl"></i>
-          <span>{!isInStock ? 'Out of Stock' : 'Add to Cart'}</span>
+          <span>{!isInStock ? "Out of Stock" : "Add to Cart"}</span>
         </BaseButton>
       )}
 
@@ -219,7 +215,10 @@ export default function ProductInfo({
           <h3 className="font-bold text-gray-900 mb-4">What&apos;s Included:</h3>
           <ul className="space-y-3">
             {product.features.map((feature, index) => (
-              <li key={index} className="flex items-start gap-3">
+              <li
+                key={index}
+                className="flex items-start gap-3"
+              >
                 <i className="ri-checkbox-circle-fill text-green-600 text-xl shrink-0 mt-0.5"></i>
                 <span className="text-gray-700">{feature}</span>
               </li>
@@ -230,4 +229,3 @@ export default function ProductInfo({
     </div>
   );
 }
-

@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { useParams, notFound } from 'next/navigation';
-import { useProduct } from '@/hooks/useProduct';
-import { useCart } from '@/contexts/CartContext';
+import { useParams, notFound } from "next/navigation";
+import { useProduct } from "@/hooks/useProduct";
+import { useCart } from "@/contexts/CartContext";
 import {
   Breadcrumbs,
   ProductImageGallery,
   ProductInfo,
   ProductMobileBar,
-  ProductShippingInfo,
-} from '@/components/products/ProductDetail';
-import { ROUTES } from '@/config/routes';
-import { cn } from '@/lib/utils';
+  ProductShippingInfo
+} from "@/components/products/ProductDetail";
+import { ROUTES } from "@/config/routes";
+import { cn } from "@/lib/utils";
 
 /**
  * Product Detail Page
@@ -39,7 +39,7 @@ export default function ProductDetailPage() {
     selectSize,
     selectImage,
     increaseQuantity,
-    decreaseQuantity,
+    decreaseQuantity
   } = useProduct(slug);
 
   // Show 404 if product not found
@@ -50,17 +50,17 @@ export default function ProductDetailPage() {
   // Prepare breadcrumbs
   const breadcrumbItems = [
     {
-      label: 'Home',
-      href: ROUTES.HOME,
+      label: "Home",
+      href: ROUTES.HOME
     },
     {
-      label: product.categoryLabel || 'Products',
-      href: product.category === 'matching-sets' ? ROUTES.MATCHING_SETS : ROUTES.PRODUCTS,
+      label: product.categoryLabel || "Products",
+      href: product.category === "matching-sets" ? ROUTES.MATCHING_SETS : ROUTES.PRODUCTS
     },
     {
       label: product.name,
-      href: null, // Current page, no link
-    },
+      href: null // Current page, no link
+    }
   ];
 
   // Handle add to cart
@@ -75,10 +75,10 @@ export default function ProductDetailPage() {
       slug: product.slug,
       name: product.name,
       price: finalPrice,
-      image: product.images?.[0]?.url || '',
+      image: product.images?.[0]?.url || "",
       size: selectedSizeData?.name || selectedSize,
       color: selectedColorData?.name || selectedColor,
-      quantity: quantity,
+      quantity: quantity
     });
 
     // Open cart drawer
@@ -141,4 +141,3 @@ export default function ProductDetailPage() {
     </main>
   );
 }
-

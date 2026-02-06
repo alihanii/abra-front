@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import BaseImage from '@/components/ui/BaseImage';
-import { cn } from '@/lib/utils';
+import { useState } from "react";
+import BaseImage from "@/components/ui/BaseImage";
+import { cn } from "@/lib/utils";
 
 /**
  * ProductImageGallery Component
  * Displays product images with thumbnail navigation
- * 
+ *
  * @param {Object} props
  * @param {Array} props.images - Array of image objects [{id, url, alt}]
  * @param {number} props.selectedIndex - Currently selected image index
@@ -18,7 +18,7 @@ export default function ProductImageGallery({
   images = [],
   selectedIndex = 0,
   onImageSelect,
-  className,
+  className
 }) {
   const [isZoomed, setIsZoomed] = useState(false);
 
@@ -37,7 +37,7 @@ export default function ProductImageGallery({
   const currentImage = images[selectedIndex] || images[0];
 
   return (
-    <div className={cn('flex flex-row gap-3', className)}>
+    <div className={cn("flex flex-row gap-3", className)}>
       {/* Thumbnail Grid - Vertical */}
       {images.length > 1 && (
         <div className="flex flex-col gap-2 order-2 lg:order-1">
@@ -46,10 +46,10 @@ export default function ProductImageGallery({
               key={image.id || index}
               onClick={() => handleThumbnailClick(index)}
               className={cn(
-                'w-16 h-16 lg:w-20 lg:h-20 rounded-xl overflow-hidden border-2 transition-all cursor-pointer shrink-0',
+                "w-16 h-16 lg:w-20 lg:h-20 rounded-xl overflow-hidden border-2 transition-all cursor-pointer shrink-0",
                 index === selectedIndex
-                  ? 'border-gray-900'
-                  : 'border-transparent hover:border-gray-300'
+                  ? "border-gray-900"
+                  : "border-transparent hover:border-gray-300"
               )}
               aria-label={`View image ${index + 1}`}
             >
@@ -69,7 +69,7 @@ export default function ProductImageGallery({
         <div className="aspect-square  relative group lg:aspect-4/4">
           <BaseImage
             src={currentImage.url}
-            alt={currentImage.alt || 'Product image'}
+            alt={currentImage.alt || "Product image"}
             fill
             className="object-cover object-top"
           />
@@ -85,4 +85,3 @@ export default function ProductImageGallery({
     </div>
   );
 }
-

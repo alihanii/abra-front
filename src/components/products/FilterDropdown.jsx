@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import BaseButton from '@/components/ui/BaseButton';
-import { cn } from '@/lib/utils';
+import { useState, useRef, useEffect } from "react";
+import BaseButton from "@/components/ui/BaseButton";
+import { cn } from "@/lib/utils";
 
 /**
  * FilterDropdown Component (Atomic)
  * Reusable dropdown component for filters
- * 
+ *
  * @param {Object} props
  * @param {string} props.label - Filter label
  * @param {Array} props.options - Array of filter options {value, label}
@@ -22,7 +22,7 @@ export default function FilterDropdown({
   value,
   onChange,
   multiple = false,
-  className,
+  className
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [openUp, setOpenUp] = useState(false);
@@ -38,22 +38,23 @@ export default function FilterDropdown({
         const viewportHeight = window.innerHeight;
         const spaceBelow = viewportHeight - buttonRect.bottom;
         const estimatedMenuHeight = Math.min(256, options.length * 40 + 16); // max-h-64 = 256px
-        
+
         // Open upward if not enough space below but enough space above
-        const shouldOpenUp = spaceBelow < estimatedMenuHeight && buttonRect.top > estimatedMenuHeight;
+        const shouldOpenUp =
+          spaceBelow < estimatedMenuHeight && buttonRect.top > estimatedMenuHeight;
         setOpenUp(shouldOpenUp);
       };
 
       // Use requestAnimationFrame to ensure DOM is updated
       requestAnimationFrame(checkPosition);
-      
+
       // Update position on scroll and resize
-      window.addEventListener('scroll', checkPosition, true);
-      window.addEventListener('resize', checkPosition);
-      
+      window.addEventListener("scroll", checkPosition, true);
+      window.addEventListener("resize", checkPosition);
+
       return () => {
-        window.removeEventListener('scroll', checkPosition, true);
-        window.removeEventListener('resize', checkPosition);
+        window.removeEventListener("scroll", checkPosition, true);
+        window.removeEventListener("resize", checkPosition);
       };
     }
   }, [isOpen, options.length]);
@@ -76,13 +77,13 @@ export default function FilterDropdown({
     };
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      window.addEventListener('scroll', handleScroll, true);
+      document.addEventListener("mousedown", handleClickOutside);
+      window.addEventListener("scroll", handleScroll, true);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      window.removeEventListener('scroll', handleScroll, true);
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll, true);
     };
   }, [isOpen]);
 
@@ -125,7 +126,10 @@ export default function FilterDropdown({
   };
 
   return (
-    <div ref={dropdownRef} className={cn('relative', className)}>
+    <div
+      ref={dropdownRef}
+      className={cn("relative", className)}
+    >
       {/* Dropdown Button */}
       <BaseButton
         ref={buttonRef}
@@ -135,12 +139,12 @@ export default function FilterDropdown({
         size="sm"
         fullWidth
         className={cn(
-          '!rounded-lg !font-medium',
-          'flex items-center justify-between gap-2',
-          '!text-xs',
-          '!border-2 !border-gray-200',
-          'hover:!border-gray-900',
-          isOpen && '!border-gray-900'
+          "!rounded-lg !font-medium",
+          "flex items-center justify-between gap-2",
+          "!text-xs",
+          "!border-2 !border-gray-200",
+          "hover:!border-gray-900",
+          isOpen && "!border-gray-900"
         )}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
@@ -148,8 +152,8 @@ export default function FilterDropdown({
         <span className="truncate">{displayValue()}</span>
         <i
           className={cn(
-            'ri-arrow-down-s-line text-base transition-transform duration-200 shrink-0',
-            isOpen && openUp && 'transform rotate-180'
+            "ri-arrow-down-s-line text-base transition-transform duration-200 shrink-0",
+            isOpen && openUp && "transform rotate-180"
           )}
         />
       </BaseButton>
@@ -159,39 +163,41 @@ export default function FilterDropdown({
         <div
           ref={menuRef}
           className={cn(
-            'absolute left-0 right-0 z-[9999]',
-            openUp ? 'bottom-full mb-2' : 'top-full mt-2',
-            'bg-white border-2 border-gray-200 rounded-lg shadow-xl',
-            'max-h-64 overflow-y-auto',
-            'animate-fadeIn'
+            "absolute left-0 right-0 z-[9999]",
+            openUp ? "bottom-full mb-2" : "top-full mt-2",
+            "bg-white border-2 border-gray-200 rounded-lg shadow-xl",
+            "max-h-64 overflow-y-auto",
+            "animate-fadeIn"
           )}
           role="listbox"
         >
           {options.length === 0 ? (
-            <div className="px-3 py-2 text-gray-500 text-xs text-center">
-              No options available
-            </div>
+            <div className="px-3 py-2 text-gray-500 text-xs text-center">No options available</div>
           ) : (
             <ul className="py-2">
               {options.map((option) => {
                 const selected = isSelected(option.value);
                 return (
-                  <li key={option.value} role="option" aria-selected={selected}>
+                  <li
+                    key={option.value}
+                    role="option"
+                    aria-selected={selected}
+                  >
                     <button
                       type="button"
                       onClick={() => handleSelect(option.value)}
                       className={cn(
-                        'w-full px-3 py-1.5 text-left text-xs cursor-pointer',
-                        'flex items-center gap-2',
-                        'hover:bg-gray-50 transition-colors duration-150',
-                        selected && 'bg-gray-100 font-semibold'
+                        "w-full px-3 py-1.5 text-left text-xs cursor-pointer",
+                        "flex items-center gap-2",
+                        "hover:bg-gray-50 transition-colors duration-150",
+                        selected && "bg-gray-100 font-semibold"
                       )}
                     >
                       {multiple && (
                         <i
                           className={cn(
-                            'ri-checkbox-blank-line text-base shrink-0',
-                            selected && 'ri-checkbox-line text-gray-900'
+                            "ri-checkbox-blank-line text-base shrink-0",
+                            selected && "ri-checkbox-line text-gray-900"
                           )}
                         />
                       )}
@@ -199,7 +205,7 @@ export default function FilterDropdown({
                         <i className="ri-check-line text-base text-gray-900 shrink-0" />
                       )}
                       {!multiple && !selected && <span className="w-4 shrink-0" />}
-                      <span className={cn('flex-1 text-gray-900', selected && 'text-gray-900')}>
+                      <span className={cn("flex-1 text-gray-900", selected && "text-gray-900")}>
                         {option.label}
                       </span>
                     </button>
@@ -213,4 +219,3 @@ export default function FilterDropdown({
     </div>
   );
 }
-

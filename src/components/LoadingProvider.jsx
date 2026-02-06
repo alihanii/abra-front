@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { LoadingScreen } from '@/components/ui';
-import { cn } from '@/lib/utils';
+import { useState, useEffect } from "react";
+import { LoadingScreen } from "@/components/ui";
+import { cn } from "@/lib/utils";
 
 /**
  * Loading Provider Component
@@ -37,8 +37,8 @@ export default function LoadingProvider({ children }) {
       {/* Always render children but hide them during loading */}
       <div
         className={cn(
-          'transition-opacity duration-500',
-          showContent ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          "transition-opacity duration-500",
+          showContent ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
       >
         {children}
@@ -46,4 +46,3 @@ export default function LoadingProvider({ children }) {
     </>
   );
 }
-

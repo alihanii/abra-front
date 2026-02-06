@@ -10,23 +10,23 @@ import { ProfileDrawer } from "@/components/profile";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
+  subsets: ["latin"]
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
-  subsets: ["latin"],
+  subsets: ["latin"]
 });
 
 const pacifico = Pacifico({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-pacifico",
+  variable: "--font-pacifico"
 });
 
 export const metadata = {
   title: "Abra - Premium Custom Clothing",
-  description: "Premium custom clothing with professional printing quality.",
+  description: "Premium custom clothing with professional printing quality."
 };
 
 export default function RootLayout({ children }) {

@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useState, useMemo, useEffect } from 'react';
-import { getProductBySlug } from '@/lib/mockProducts';
-import { useCart } from '@/contexts/CartContext';
+import { useState, useMemo, useEffect } from "react";
+import { getProductBySlug } from "@/lib/mockProducts";
+import { useCart } from "@/contexts/CartContext";
 
 /**
  * useProduct Hook
  * Composable hook for product data and state management
- * 
+ *
  * @param {string} slug - Product slug
  * @returns {Object} Product data and state management functions
  */
 export function useProduct(slug) {
   const { items } = useCart();
-  
+
   // Get product data
   const product = useMemo(() => {
     return getProductBySlug(slug);
@@ -44,7 +44,7 @@ export function useProduct(slug) {
     if (product) {
       const defaultColor = getDefaultColorKey();
       const defaultSize = getDefaultSizeKey();
-      
+
       // Only set if not already set
       if (defaultColor && !selectedColor) {
         setSelectedColor(defaultColor);
@@ -102,17 +102,17 @@ export function useProduct(slug) {
   // Calculate final price based on selected color and size
   const finalPrice = useMemo(() => {
     if (!product) return 0;
-    
+
     // Get base price from color or product default
     let basePrice = product.price || 0;
     let baseOriginalPrice = product.originalPrice || null;
-    
+
     // If color has specific price, use it
     if (selectedColor && product.colors?.[selectedColor]?.price !== undefined) {
       basePrice = product.colors[selectedColor].price;
       baseOriginalPrice = product.colors[selectedColor].originalPrice || null;
     }
-    
+
     // Apply size modifier
     if (selectedSize && product.sizes?.[selectedSize]?.priceModifier !== undefined) {
       const modifier = product.sizes[selectedSize].priceModifier || 0;
@@ -122,23 +122,23 @@ export function useProduct(slug) {
         baseOriginalPrice = baseOriginalPrice + modifier;
       }
     }
-    
+
     return Math.max(0, basePrice); // Ensure price is not negative
   }, [product, selectedColor, selectedSize]);
 
   // Calculate original price with modifiers
   const originalPrice = useMemo(() => {
     if (!product) return null;
-    
+
     let basePrice = product.price || 0;
     let baseOriginalPrice = product.originalPrice || null;
-    
+
     // If color has specific price, use it
     if (selectedColor && product.colors?.[selectedColor]?.price !== undefined) {
       basePrice = product.colors[selectedColor].price;
       baseOriginalPrice = product.colors[selectedColor].originalPrice || null;
     }
-    
+
     // Apply size modifier
     if (selectedSize && product.sizes?.[selectedSize]?.priceModifier !== undefined) {
       const modifier = product.sizes[selectedSize].priceModifier || 0;
@@ -146,7 +146,7 @@ export function useProduct(slug) {
         baseOriginalPrice = baseOriginalPrice + modifier;
       }
     }
-    
+
     return baseOriginalPrice;
   }, [product, selectedColor, selectedSize]);
 
@@ -227,6 +227,6 @@ export function useProduct(slug) {
     selectColor,
     selectSize,
     selectImage,
-    resetSelections,
+    resetSelections
   };
 }

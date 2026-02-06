@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import LoadingScreen from '@/components/ui/LoadingScreen';
+import LoadingScreen from "@/components/ui/LoadingScreen";
 
 /**
  * Loading Component for Next.js App Router
@@ -19,4 +19,3 @@ export default function Loading() {
     />
   );
 }
-

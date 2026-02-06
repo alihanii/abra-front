@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import BaseImage from '@/components/ui/BaseImage';
-import { cn } from '@/lib/utils';
+import Link from "next/link";
+import BaseImage from "@/components/ui/BaseImage";
+import { cn } from "@/lib/utils";
 
 /**
  * Category Card Component
  * Card component for category display with image, title, and description
- * 
+ *
  * @param {Object} props
  * @param {string} props.href - Link destination
  * @param {string} props.image - Image URL
@@ -24,13 +24,13 @@ export default function CategoryCard({
   title,
   description,
   delay = 0,
-  className,
+  className
 }) {
   return (
     <Link
       href={href}
       className={cn(
-        'group cursor-pointer  relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500',
+        "group cursor-pointer  relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500",
         className
       )}
       style={{ animationDelay: `${delay}ms` }}
@@ -63,4 +63,3 @@ export default function CategoryCard({
     </Link>
   );
 }
-
