@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { CartProvider } from "@/contexts/CartContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProfileProvider } from "@/contexts/ProfileContext";
+import { QueryProvider } from "@/providers/QueryProvider";
 import { CartDrawer } from "@/components/cart";
 import { ProfileDrawer } from "@/components/profile";
 
@@ -35,19 +36,21 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${pacifico.variable} antialiased`}
       >
-        <AuthProvider>
-          <ProfileProvider>
-            <CartProvider>
-              <div className="flex flex-col min-h-screen">
-                <Header />
-                <main className="grow">{children}</main>
-                <Footer />
-              </div>
-              <CartDrawer />
-              <ProfileDrawer />
-            </CartProvider>
-          </ProfileProvider>
-        </AuthProvider>
+        <QueryProvider>
+          <AuthProvider>
+            <ProfileProvider>
+              <CartProvider>
+                <div className="flex flex-col min-h-screen">
+                  <Header />
+                  <main className="grow">{children}</main>
+                  <Footer />
+                </div>
+                <CartDrawer />
+                <ProfileDrawer />
+              </CartProvider>
+            </ProfileProvider>
+          </AuthProvider>
+        </QueryProvider>
       </body>
     </html>
   );

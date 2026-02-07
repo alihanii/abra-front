@@ -114,6 +114,7 @@ export const MOCK_PRODUCTS = [
     ]
   },
   {
+    productId: 123,
     id: "classic-black-hoodie",
     slug: "classic-black-hoodie",
     name: "Classic Black Hoodie",

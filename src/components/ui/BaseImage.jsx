@@ -109,6 +109,10 @@ export default function BaseImage({
   // Use fallback if error occurred or invalid URL
   const finalSrc = hasError || !validatedSrc ? fallback : imageSrc;
 
+  // Check if we should use unoptimized (for localhost/127.0.0.1 URLs)
+  const shouldUnoptimize = typeof finalSrc === "string" && 
+    (finalSrc.includes("127.0.0.1") || finalSrc.includes("localhost"));
+
   // Check if fill prop is provided in imageProps
   const useFill = imageProps.fill || false;
 
@@ -129,6 +133,7 @@ export default function BaseImage({
           src={finalSrc}
           alt={alt || "Image"}
           fill
+          unoptimized={shouldUnoptimize}
           className={`
             relative z-10 object-cover transition-opacity duration-300
             ${isLoading ? "opacity-0" : "opacity-100"}
@@ -163,6 +168,7 @@ export default function BaseImage({
         alt={alt || "Image"}
         width={width || 400}
         height={height || 400}
+        unoptimized={shouldUnoptimize}
         className={`
           relative z-10 w-full h-full object-cover object-top transition-opacity duration-300
           ${isLoading ? "opacity-0" : "opacity-100"}
