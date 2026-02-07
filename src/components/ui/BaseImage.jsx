@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
 import emptyPhoto from "@/assets/images/EmptyPhoto.png";
 
@@ -78,20 +78,8 @@ export default function BaseImage({
     return src;
   }, [src]);
 
-  const [imageSrc, setImageSrc] = useState(validatedSrc || fallback);
-
-  // Update imageSrc when validatedSrc changes
-  useEffect(() => {
-    if (validatedSrc) {
-      setImageSrc(validatedSrc);
-      setIsLoading(true);
-      setHasError(false);
-    } else {
-      setImageSrc(fallback);
-      setIsLoading(false);
-      setHasError(false);
-    }
-  }, [validatedSrc, fallback]);
+  // Determine the source to use
+  const finalSrc = hasError || !validatedSrc ? fallback : (validatedSrc || fallback);
 
   const handleLoad = () => {
     setIsLoading(false);
@@ -101,20 +89,19 @@ export default function BaseImage({
   const handleError = () => {
     setIsLoading(false);
     setHasError(true);
-    if (imageSrc !== fallback) {
-      setImageSrc(fallback);
-    }
   };
-
-  // Use fallback if error occurred or invalid URL
-  const finalSrc = hasError || !validatedSrc ? fallback : imageSrc;
+  
+  // Reset loading when src changes - using key prop on Image component instead
+  // This will cause component to remount when src changes
 
   // Check if we should use unoptimized (for localhost/127.0.0.1 URLs)
+  // Next.js Image Optimization doesn't work well with localhost URLs
   const shouldUnoptimize = typeof finalSrc === "string" && 
-    (finalSrc.includes("127.0.0.1") || finalSrc.includes("localhost"));
+    (finalSrc.includes("127.0.0.1") || 
+     (finalSrc.includes("localhost") && finalSrc.includes(":8000")));
 
-  // Check if fill prop is provided in imageProps
-  const useFill = imageProps.fill || false;
+  // Check if fill prop is provided (from props or imageProps)
+  const useFill = fill || imageProps.fill || false;
 
   // If fill is true, render without wrapper div (for absolute positioning)
   if (useFill) {

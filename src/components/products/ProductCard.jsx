@@ -16,14 +16,15 @@ import { cn } from "@/lib/utils";
  *
  * @param {Object} props
  * @param {string} props.id - Product ID
- * @param {string} props.slug - Product slug
+ * @param {string} props.slug - Product slug (required if product prop is not provided)
  * @param {string} props.name - Product name
  * @param {number} props.price - Product price
- * @param {string} props.image - Product image URL
+ * @param {string|Object} props.image - Product image URL or image object
  * @param {string} props.badge - Badge text (e.g., "Bestseller", "New", "Popular")
  * @param {string} props.href - Product detail page URL
  * @param {string} props.size - Size variant: 'sm' | 'md' (default: 'md')
  * @param {string} props.className - Additional CSS classes
+ * @param {Object} props.product - Full product data object (optional, if provided, useProduct won't be called)
  */
 export default function ProductCard({
   id,
@@ -34,12 +35,15 @@ export default function ProductCard({
   badge,
   href,
   size = "md",
-  className
+  className,
+  product: productData // Full product data from API
 }) {
   const router = useRouter();
   const { items, addItem, updateQuantity, removeItem, openCart } = useCart();
 
-  // Use useProduct hook similar to page.js
+  // Use useProduct hook - it accepts either slug (string) or product object
+  // If productData is provided, pass it directly to avoid API call
+  // If only slug is provided, hook will fetch from mock data
   const {
     product,
     selectedColor,
@@ -50,7 +54,7 @@ export default function ProductCard({
     availableStock,
     isInStock,
     finalPrice
-  } = useProduct(slug);
+  } = useProduct(productData || slug);
 
   // Check if product is in cart using the same ID format as page.js
   const cartItemId = useMemo(() => {
@@ -115,9 +119,9 @@ export default function ProductCard({
   const isInCart = Boolean(cartItem);
 
   // Use product data if available, otherwise fallback to props
-  const displayName = product?.name || name;
-  const displayPrice = product ? finalPrice : price;
-  const displayImage = product?.images?.[0]?.url || image;
+  const displayName =  name;
+  const displayPrice =  price;
+  const displayImage =  image;
 
   const maxQuantity =
     product && availableStock !== undefined ? cartItem?.quantity + availableStock : availableStock;
@@ -144,8 +148,8 @@ export default function ProductCard({
         )}
       >
         <BaseImage
-          src={displayImage}
-          alt={displayName}
+          src={displayImage?.url}
+          alt={displayName?.alt}
           fill
           className="object-cover object-top group-hover:scale-105 transition-transform duration-500 rounded-lg"
         />

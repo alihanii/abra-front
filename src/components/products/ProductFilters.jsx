@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import FilterDropdown from "./FilterDropdown";
+import BaseInput from "@/components/ui/BaseInput";
+import { useCategories } from "@/hooks/useApi";
 import { cn } from "@/lib/utils";
 
 /**
@@ -15,11 +17,31 @@ import { cn } from "@/lib/utils";
  */
 export default function ProductFilters({ filters = {}, onFiltersChange, className }) {
   const [isOpen, setIsOpen] = useState(false);
+  
+  // Fetch categories from API
+  const { data: categoriesResponse, isLoading: isLoadingCategories } = useCategories(
+    {},
+    {
+      staleTime: 1000 * 60 * 10, // 10 minutes
+      refetchOnWindowFocus: false
+    }
+  );
+
+  // Use filters.search directly instead of local state
+  const searchValue = filters.search || "";
 
   const handleFilterChange = (filterKey, value) => {
     const newFilters = {
       ...filters,
       [filterKey]: value
+    };
+    onFiltersChange?.(newFilters);
+  };
+
+  const handleSearchChange = (value) => {
+    const newFilters = {
+      ...filters,
+      search: value.trim() || undefined
     };
     onFiltersChange?.(newFilters);
   };
@@ -38,14 +60,21 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
     setIsOpen((prev) => !prev);
   };
 
-  // Mock filter options
-  const categoryOptions = [
-    { value: "all", label: "All Categories" },
-    { value: "hoodies", label: "Hoodies" },
-    { value: "tshirts", label: "T-Shirts" },
-    { value: "sweatshirts", label: "Sweatshirts" },
-    { value: "jackets", label: "Jackets" }
-  ];
+  // Build category options from API response
+  const categoryOptions = useMemo(() => {
+    const options = [{ value: "all", label: "All Categories" }];
+    
+    if (categoriesResponse?.results) {
+      categoriesResponse.results.forEach((category) => {
+        options.push({
+          value: category.slug,
+          label: category.label || category.name
+        });
+      });
+    }
+    
+    return options;
+  }, [categoriesResponse]);
 
   const priceOptions = [
     { value: "all", label: "All Prices" },
@@ -83,6 +112,24 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
     { value: "name-desc", label: "Name: Z to A" },
     { value: "newest", label: "Newest First" }
   ];
+
+  // Map sort value to API format
+  const getSortParams = (sortValue) => {
+    switch (sortValue) {
+      case "price-low":
+        return { order_by: "price", order: "asc" };
+      case "price-high":
+        return { order_by: "price", order: "desc" };
+      case "name-asc":
+        return { order_by: "name", order: "asc" };
+      case "name-desc":
+        return { order_by: "name", order: "desc" };
+      case "newest":
+        return { order_by: "created_at", order: "desc" };
+      default:
+        return { order_by: "name", order: "asc" };
+    }
+  };
 
   return (
     <div
@@ -122,6 +169,20 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
 
           {/* Desktop: Always visible filters */}
           <div className="hidden md:flex items-center gap-4 flex-1 py-4 overflow-visible">
+            {/* Search Input */}
+            <div className="min-w-[200px] max-w-[300px]">
+              <BaseInput
+                type="text"
+                placeholder="Search products..."
+                value={searchValue}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                variant="primary"
+                size="sm"
+                className="mb-0"
+                inputClassName="rounded-lg"
+              />
+            </div>
+
             <div className="flex flex-wrap items-center gap-3 flex-1 overflow-visible relative">
               <FilterDropdown
                 label="Category"
@@ -213,6 +274,18 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
           )}
         >
           <div className="flex flex-col gap-3 pt-4 mx-1 overflow-visible relative">
+            {/* Search Input */}
+            <BaseInput
+              type="text"
+              placeholder="Search products..."
+              value={searchValue}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              variant="primary"
+              size="sm"
+              className="mb-0"
+              inputClassName="rounded-lg"
+            />
+
             <FilterDropdown
               label="Category"
               options={categoryOptions}

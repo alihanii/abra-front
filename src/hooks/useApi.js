@@ -5,12 +5,18 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import * as categoryService from "@/lib/api/services/categories";
+import * as productService from "@/lib/api/services/products";
 
 // Query Keys - Centralized query key factory
 export const queryKeys = {
   categories: {
     all: ["categories"],
     list: (params) => ["categories", "list", params],
+  },
+  products: {
+    all: ["products"],
+    list: (params) => ["products", "list", params],
+    detail: (slug) => ["products", "detail", slug],
   },
 };
 
@@ -19,6 +25,24 @@ export const useCategories = (params = {}, options = {}) => {
   return useQuery({
     queryKey: queryKeys.categories.list(params),
     queryFn: () => categoryService.getCategories(params),
+    ...options
+  });
+};
+
+// Product Hooks
+export const useProducts = (params = {}, options = {}) => {
+  return useQuery({
+    queryKey: queryKeys.products.list(params),
+    queryFn: () => productService.getProducts(params),
+    ...options
+  });
+};
+
+export const useProductBySlug = (slug, options = {}) => {
+  return useQuery({
+    queryKey: queryKeys.products.detail(slug),
+    queryFn: () => productService.getProductBySlug(slug),
+    enabled: !!slug,
     ...options
   });
 };

@@ -4,6 +4,7 @@
  */
 
 import axiosInstance from "./axios";
+import qs from "qs";
 
 /**
  * GET request
@@ -16,6 +17,14 @@ export const get = async (url, params = {}, options = {}) => {
   const { requireAuth = true, headers = {} } = options;
   return axiosInstance.get(url, {
     params,
+    paramsSerializer: (params) => {
+      // Use qs to serialize arrays as ?key=value1&key=value2
+      return qs.stringify(params, {
+        arrayFormat: 'repeat', // ?color=black&color=white
+        skipNulls: true, // Skip null values
+        encode: true
+      });
+    },
     headers,
     _requireAuth: requireAuth // Custom property for interceptor
   });

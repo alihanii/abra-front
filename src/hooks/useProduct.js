@@ -8,16 +8,25 @@ import { useCart } from "@/contexts/CartContext";
  * useProduct Hook
  * Composable hook for product data and state management
  *
- * @param {string} slug - Product slug
+ * @param {string|Object} slugOrProduct - Product slug (string) or product data object
  * @returns {Object} Product data and state management functions
  */
-export function useProduct(slug) {
+export function useProduct(slugOrProduct) {
   const { items } = useCart();
 
-  // Get product data
+  // Get product data - accept either slug (string) or product object
   const product = useMemo(() => {
-    return getProductBySlug(slug);
-  }, [slug]);
+    // If product object is provided, use it directly
+    if (slugOrProduct && typeof slugOrProduct === 'object') {
+      return slugOrProduct;
+    }
+    // If slug is provided, fetch from mock data
+    if (slugOrProduct && typeof slugOrProduct === 'string') {
+      return getProductBySlug(slugOrProduct);
+    }
+    // Return null if neither is provided
+    return null;
+  }, [slugOrProduct]);
 
   // Get default color key
   const getDefaultColorKey = () => {
