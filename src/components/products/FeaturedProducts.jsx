@@ -1,13 +1,13 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import ProductSlider from "./ProductSlider";
 import ProductCard from "./ProductCard";
 import BaseButton from "@/components/ui/BaseButton";
 import ScrollNavigation from "@/components/ui/ScrollNavigation";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import { ROUTES } from "@/config/routes";
-import { MOCK_PRODUCTS } from "@/lib/mockProducts";
+import { useProducts } from "@/hooks/useApi";
 
 /**
  * Mock Products Data
@@ -70,11 +70,57 @@ import { MOCK_PRODUCTS } from "@/lib/mockProducts";
 // ];
 
 /**
+ * Map API product response to component format
+ * @param {Object} apiProduct - Product from API
+ * @returns {Object} Mapped product for component
+ */
+const mapApiProductToComponent = (apiProduct) => {
+  return {
+    id: apiProduct.id || apiProduct.slug,
+    slug: apiProduct.slug,
+    name: apiProduct.name,
+    price: apiProduct.price,
+    image: apiProduct.images?.[0] || "",
+    href: `${ROUTES.PRODUCTS}/${apiProduct.slug}`,
+    badge: null, // Can be added based on product data if needed
+    category: apiProduct.category,
+    color: Object.keys(apiProduct.colors || {})[0] || null,
+    // Include full product data for ProductCard component
+    product: apiProduct
+  };
+};
+
+/**
  * Featured Products Section
  * Displays featured products with slider on desktop and grid on mobile
  */
 export default function FeaturedProducts() {
   const sliderRef = useRef(null);
+
+  // Fetch featured products from API
+  // Using limited page_size to get featured products
+  const {
+    data: productsResponse,
+    isLoading,
+    isError
+  } = useProducts(
+    {
+      page: 1,
+      page_size: 8, // Get 8 featured products
+      order_by: "created_at",
+      order: "desc"
+    },
+    {
+      staleTime: 1000 * 60 * 10, // 10 minutes
+      refetchOnWindowFocus: false
+    }
+  );
+
+  // Map API products to component format
+  const products = useMemo(() => {
+    if (!productsResponse?.results) return [];
+    return productsResponse.results.map(mapApiProductToComponent);
+  }, [productsResponse]);
 
   const handleScrollLeft = () => {
     if (sliderRef.current) {
@@ -122,21 +168,44 @@ export default function FeaturedProducts() {
         </ScrollReveal>
 
         {/* Desktop Slider */}
-        <ProductSlider
-          ref={sliderRef}
-          products={MOCK_PRODUCTS}
-        />
-
-        {/* Mobile Grid */}
-        <div className="md:hidden grid md:grid-cols-2 grid-cols-1 md:gap-4 gap-0.5">
-          {MOCK_PRODUCTS.slice(0, 4).map((product) => (
-            <ProductCard
-              key={product.id}
-              {...product}
-              size="sm"
+        {isLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center">
+              <i className="ri-loader-4-line text-6xl text-gray-400 animate-spin mb-4" />
+              <p className="text-gray-600">Loading featured products...</p>
+            </div>
+          </div>
+        ) : isError ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <i className="ri-error-warning-line text-6xl text-red-400 mb-4" />
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">Error loading products</h3>
+            <p className="text-gray-500 text-center">Please try again later.</p>
+          </div>
+        ) : products.length > 0 ? (
+          <>
+            <ProductSlider
+              ref={sliderRef}
+              products={products}
             />
-          ))}
-        </div>
+
+            {/* Mobile Grid */}
+            <div className="md:hidden grid md:grid-cols-2 grid-cols-1 md:gap-4 gap-0.5">
+              {products.slice(0, 4).map((product) => (
+                <ProductCard
+                  key={product.slug}
+                  {...product}
+                  size="sm"
+                />
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20">
+            <i className="ri-shopping-bag-line text-6xl text-gray-300 mb-4" />
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">No featured products</h3>
+            <p className="text-gray-500 text-center">Check back later for featured products.</p>
+          </div>
+        )}
 
         {/* View All Button */}
         <div className="text-center mt-8">

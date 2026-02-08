@@ -73,11 +73,11 @@ export default function ProductCard({
       return;
     }
     // Navigate to product detail page
-    if (href) {
-      router.push(href);
-    } else if (slug) {
+    // if (href) {
+    //   router.push(href);
+    // } else if (slug) {
       router.push(`${ROUTES.PRODUCTS}/${slug}`);
-    }
+    // }
   };
 
   // Handle add to cart - same logic as page.js

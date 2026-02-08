@@ -2,6 +2,7 @@
 
 import { useParams, notFound } from "next/navigation";
 import { useProduct } from "@/hooks/useProduct";
+import { useProductBySlug } from "@/hooks/useApi";
 import { useCart } from "@/contexts/CartContext";
 import {
   Breadcrumbs,
@@ -22,6 +23,9 @@ export default function ProductDetailPage() {
   const slug = params?.slug;
   const { addItem, openCart } = useCart();
 
+  // Fetch product data from API using TanStack Query
+  const { data: productData, isLoading, error } = useProductBySlug(slug);
+
   const {
     product,
     selectedColor,
@@ -40,7 +44,29 @@ export default function ProductDetailPage() {
     selectImage,
     increaseQuantity,
     decreaseQuantity
-  } = useProduct(slug);
+  } = useProduct(productData);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <main className="min-h-screen bg-[var(--color-sky-light)]">
+        <div className="max-w-7xl mx-auto px-6 py-2 pb-32 lg:pb-8">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+              <p className="mt-4 text-gray-600">Loading product...</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    console.error("Error fetching product:", error);
+    notFound();
+  }
 
   // Show 404 if product not found
   if (!product) {

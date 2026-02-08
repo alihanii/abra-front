@@ -35,7 +35,6 @@ export default function ProductGrid({ products = [], className }) {
         <ProductCard
           key={product.id}
           {...product}
-          product={product} // Pass full product data to avoid API call
         />
       ))}
     </div>

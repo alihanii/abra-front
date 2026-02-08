@@ -6,7 +6,7 @@
 import axios from "axios";
 
 // Get base URL from environment variables
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api";
 
 // Create axios instance
 const axiosInstance = axios.create({

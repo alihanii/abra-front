@@ -21,7 +21,7 @@ export const API_ROUTES = {
   PRODUCTS: {
     BASE: "/products",
     LIST: "/products",
-    DETAIL: (slug) => `/products/${slug}`,
+    DETAIL: (slug) => `/products/${slug}/`,
     SEARCH: "/products/search",
     FEATURED: "/products/featured",
     BY_CATEGORY: (category) => `/products/category/${category}`,

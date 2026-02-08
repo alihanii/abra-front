@@ -38,6 +38,12 @@ export const useProducts = (params = {}, options = {}) => {
   });
 };
 
+/**
+ * Get product by slug using TanStack Query
+ * @param {string} slug - Product slug
+ * @param {Object} options - Query options
+ * @returns {Object} Query result with product data
+ */
 export const useProductBySlug = (slug, options = {}) => {
   return useQuery({
     queryKey: queryKeys.products.detail(slug),

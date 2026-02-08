@@ -8,41 +8,26 @@ import { API_ROUTES } from "@/config/apiRoutes";
 
 /**
  * Build query parameters for products API
- * Handles array parameters (color, size, productId) correctly for axios
- * Axios automatically converts arrays to ?key=value1&key=value2 format
+ * Handles array parameters (color, size) and other filters
  * @param {Object} params - Filter parameters
  * @returns {Object} Formatted query parameters
  */
 const buildProductsQueryParams = (params = {}) => {
   const queryParams = {};
 
-  // Category filter (string)
+  // Category filter
   if (params.category && params.category !== "all") {
     queryParams.category = params.category;
   }
 
-  // Color filter (array) - axios converts to ?color=black&color=white
-  if (params.color) {
-    if (Array.isArray(params.color)) {
-      const validColors = params.color.filter(c => c && c !== "all");
-      if (validColors.length > 0) {
-        queryParams.color = validColors;
-      }
-    } else if (params.color !== "all") {
-      queryParams.color = [params.color];
-    }
+  // Color filter (array)
+  if (params.color && params.color !== "all") {
+    queryParams.color = Array.isArray(params.color) ? params.color : [params.color];
   }
 
-  // Size filter (array) - axios converts to ?size=s&size=m
-  if (params.size) {
-    if (Array.isArray(params.size)) {
-      const validSizes = params.size.filter(s => s && s !== "all");
-      if (validSizes.length > 0) {
-        queryParams.size = validSizes;
-      }
-    } else if (params.size !== "all") {
-      queryParams.size = [params.size];
-    }
+  // Size filter (array)
+  if (params.size && params.size !== "all") {
+    queryParams.size = Array.isArray(params.size) ? params.size : [params.size];
   }
 
   // Price filters
@@ -58,18 +43,9 @@ const buildProductsQueryParams = (params = {}) => {
     queryParams.search = params.search.trim();
   }
 
-  // ID/Slug filter (string)
+  // ID/Slug filter
   if (params.id) {
     queryParams.id = params.id;
-  }
-
-  // ProductId filter (array) - axios converts to ?productId=1&productId=3
-  if (params.productId) {
-    if (Array.isArray(params.productId)) {
-      queryParams.productId = params.productId;
-    } else {
-      queryParams.productId = [params.productId];
-    }
   }
 
   // Sorting
