@@ -61,11 +61,6 @@ export default function ShopByCategory() {
     );
   }
 
-  // Empty state
-  if (!categories || categories.length === 0) {
-    return null;
-  }
-
   return (
     <section className="py-20 bg-[var(--color-sky-light)]">
       <div className="max-w-7xl mx-auto px-6">
@@ -88,49 +83,82 @@ export default function ShopByCategory() {
             </ScrollReveal>
 
             {/* Desktop Navigation Buttons */}
-            <ScrollReveal
-              animation="slideLeft"
-              delay={200}
-            >
-              <ScrollNavigation
-                scrollRef={sliderRef}
-                onScrollLeft={handleScrollLeft}
-                onScrollRight={handleScrollRight}
-              />
-            </ScrollReveal>
+            {!isLoading && (
+              <ScrollReveal
+                animation="slideLeft"
+                delay={200}
+              >
+                <ScrollNavigation
+                  scrollRef={sliderRef}
+                  onScrollLeft={handleScrollLeft}
+                  onScrollRight={handleScrollRight}
+                />
+              </ScrollReveal>
+            )}
           </div>
         </ScrollReveal>
 
-        {/* Desktop Slider */}
-        <div className="hidden md:block">
-          <CategorySlider
-            ref={sliderRef}
-            categories={categories}
-          />
-        </div>
+        {/* Loading State */}
+        {isLoading ? (
+          <>
+            {/* Desktop Skeleton Slider */}
+            <div className="hidden md:block relative overflow-hidden">
+              <div className="flex gap-8 overflow-x-auto scrollbar-hide scroll-smooth pb-4">
+                {Array.from({ length: 4 }).map((_, index) => (
+                  <div
+                    key={`skeleton-${index}`}
+                    className="shrink-0 w-[calc(25%-18px)]"
+                  >
+                    <ShopCategoryCard isLoading={true} />
+                  </div>
+                ))}
+              </div>
+            </div>
 
-        {/* Mobile Grid */}
-        <div className="md:hidden grid grid-cols-1 gap-8">
-          {categories.map((category, index) => {
-            const animations = ["fadeUp", "slideLeft", "slideRight"];
-            const animation = animations[index % animations.length];
-
-            return (
-              <ScrollReveal
-                key={category.id}
-                animation={animation}
-                delay={index * 150}
-              >
+            {/* Mobile Skeleton Grid */}
+            <div className="md:hidden grid grid-cols-1 gap-8">
+              {Array.from({ length: 4 }).map((_, index) => (
                 <ShopCategoryCard
-                  href={category.href}
-                  image={category.image}
-                  alt={category.title}
-                  title={category.title}
+                  key={`skeleton-mobile-${index}`}
+                  isLoading={true}
                 />
-              </ScrollReveal>
-            );
-          })}
-        </div>
+              ))}
+            </div>
+          </>
+        ) : categories && categories.length > 0 ? (
+          <>
+            {/* Desktop Slider */}
+            <div className="hidden md:block">
+              <CategorySlider
+                ref={sliderRef}
+                categories={categories}
+              />
+            </div>
+
+            {/* Mobile Grid */}
+            <div className="md:hidden grid grid-cols-1 gap-8">
+              {categories.map((category, index) => {
+                const animations = ["fadeUp", "slideLeft", "slideRight"];
+                const animation = animations[index % animations.length];
+
+                return (
+                  <ScrollReveal
+                    key={category.id}
+                    animation={animation}
+                    delay={index * 150}
+                  >
+                    <ShopCategoryCard
+                      href={category.href}
+                      image={category.image}
+                      alt={category.title}
+                      title={category.title}
+                    />
+                  </ScrollReveal>
+                );
+              })}
+            </div>
+          </>
+        ) : null}
       </div>
     </section>
   );

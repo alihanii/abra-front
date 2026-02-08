@@ -354,14 +354,7 @@ export default function ProductsPage() {
         </div>
 
         {/* Products Grid */}
-        {isLoading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="text-center">
-              <i className="ri-loader-4-line text-6xl text-gray-400 animate-spin mb-4" />
-              <p className="text-gray-600">Loading products...</p>
-            </div>
-          </div>
-        ) : isError ? (
+        {isError ? (
           <div className="flex flex-col items-center justify-center py-20">
             <i className="ri-error-warning-line text-6xl text-red-400 mb-4" />
             <h3 className="text-xl font-semibold text-gray-700 mb-2">Error loading products</h3>
@@ -370,7 +363,7 @@ export default function ProductsPage() {
             </p>
           </div>
         ) : (
-          <ProductGrid products={products} />
+          <ProductGrid products={products} isLoading={isLoading} skeletonCount={12} />
         )}
       </div>
     </main>

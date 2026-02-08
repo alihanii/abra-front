@@ -10,8 +10,26 @@ import { cn } from "@/lib/utils";
  * @param {Object} props
  * @param {Array} props.products - Array of product objects
  * @param {string} props.className - Additional CSS classes
+ * @param {boolean} props.isLoading - Whether to show skeleton loading state
+ * @param {number} props.skeletonCount - Number of skeleton cards to show when loading (default: 8)
  */
-export default function ProductGrid({ products = [], className }) {
+export default function ProductGrid({ products = [], className, isLoading = false, skeletonCount = 8 }) {
+  // Show skeleton cards when loading
+  if (isLoading) {
+    return (
+      <div
+        className={cn(
+          "flex flex-col md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-0 md:gap-4 lg:gap-6",
+          className
+        )}
+      >
+        {Array.from({ length: skeletonCount }).map((_, index) => (
+          <ProductCard key={`skeleton-${index}`} isLoading={true} />
+        ))}
+      </div>
+    );
+  }
+
   if (products.length === 0) {
     return (
       <div className={cn("flex flex-col items-center justify-center py-20", className)}>

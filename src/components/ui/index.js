@@ -12,5 +12,6 @@ export { default as LoadingScreen } from "./LoadingScreen";
 export { default as LoadingSpinner } from "./LoadingSpinner";
 export { default as QuantityControl } from "./QuantityControl";
 export { default as BaseImage } from "./BaseImage";
+export { default as BaseSkeleton } from "./BaseSkeleton";
 export { default as ScrollReveal } from "./ScrollReveal";
 export { default as ScrollNavigation } from "./ScrollNavigation";

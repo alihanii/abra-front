@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import BaseImage from "@/components/ui/BaseImage";
 import BaseButton from "@/components/ui/BaseButton";
 import QuantityControl from "@/components/ui/QuantityControl";
+import { BaseSkeleton } from "@/components/ui";
 import { useProduct } from "@/hooks/useProduct";
 import { useCart } from "@/contexts/CartContext";
 import { ROUTES } from "@/config/routes";
@@ -25,6 +26,7 @@ import { cn } from "@/lib/utils";
  * @param {string} props.size - Size variant: 'sm' | 'md' (default: 'md')
  * @param {string} props.className - Additional CSS classes
  * @param {Object} props.product - Full product data object (optional, if provided, useProduct won't be called)
+ * @param {boolean} props.isLoading - Whether to show skeleton loading state
  */
 export default function ProductCard({
   id,
@@ -36,7 +38,8 @@ export default function ProductCard({
   href,
   size = "md",
   className,
-  product: productData // Full product data from API
+  product: productData, // Full product data from API
+  isLoading = false
 }) {
   const router = useRouter();
   const { items, addItem, updateQuantity, removeItem, openCart } = useCart();
@@ -125,6 +128,64 @@ export default function ProductCard({
 
   const maxQuantity =
     product && availableStock !== undefined ? cartItem?.quantity + availableStock : availableStock;
+
+  // Show skeleton loading state
+  if (isLoading) {
+    return (
+      <div
+        className={cn(
+          "bg-white overflow-hidden shadow-lg",
+          "flex flex-row md:flex-col",
+          "w-full md:w-auto",
+          "border-b md:border-b-0 border-gray-200 last:border-b-0",
+          "rounded-none md:rounded-2xl",
+          isMobile ? "p-3" : "p-5",
+          className
+        )}
+      >
+        {/* Image Container Skeleton */}
+        <div
+          className={cn(
+            "relative overflow-hidden rounded-lg shrink-0",
+            "w-24 h-24 md:w-full md:h-auto",
+            "md:aspect-5/6 md:mb-4"
+          )}
+        >
+          <BaseSkeleton isLoading={true} variant="rectangular" className="w-full h-full" />
+        </div>
+
+        {/* Product Info Skeleton */}
+        <div
+          className={cn("flex flex-col flex-1", "ml-3 md:ml-0", "justify-between md:justify-start")}
+        >
+          <div className="flex-1">
+            {/* Title Skeleton - 2 lines for mobile, 1 line for desktop */}
+            <BaseSkeleton isLoading={true} variant="text" className={cn(
+              "mb-1 md:mb-2",
+              "h-3 md:h-6 w-full"
+            )} />
+            <BaseSkeleton isLoading={true} variant="text" className={cn(
+              "mb-2 md:hidden",
+              "h-3 w-2/3"
+            )} />
+
+            {/* Price Skeleton */}
+            <BaseSkeleton isLoading={true} variant="text" className={cn(
+              "mb-2 md:mb-4",
+              "h-4 md:h-8 w-16 md:w-28"
+            )} />
+          </div>
+
+          {/* Button Skeleton */}
+          <div className="mt-auto md:mt-0">
+            <BaseSkeleton isLoading={true} variant="default" className={cn(
+              "h-8 md:h-12 w-full rounded-full"
+            )} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

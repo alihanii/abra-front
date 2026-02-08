@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import BaseImage from "@/components/ui/BaseImage";
+import { BaseSkeleton } from "@/components/ui";
 import { cn } from "@/lib/utils";
 
 /**
@@ -14,10 +15,30 @@ import { cn } from "@/lib/utils";
  * @param {string} props.alt - Image alt text
  * @param {string} props.title - Card title
  * @param {string} props.className - Additional CSS classes
+ * @param {boolean} props.isLoading - Whether to show skeleton loading state
  */
-export default function ShopCategoryCard({ href, image, alt, title, className }) {
+export default function ShopCategoryCard({ href, image, alt, title, className, isLoading = false }) {
   // Fallback href if not provided
   const linkHref = href || "#";
+
+  // Show skeleton loading state
+  if (isLoading) {
+    return (
+      <div className={cn("group cursor-pointer block", className)}>
+        <div className="bg-white rounded-3xl overflow-hidden">
+          {/* Image Container Skeleton */}
+          <div className="aspect-[6/7] overflow-hidden relative">
+            <BaseSkeleton isLoading={true} variant="rectangular" className="w-full h-full" />
+          </div>
+
+          {/* Title Skeleton */}
+          <div className="p-4 text-center">
+            <BaseSkeleton isLoading={true} variant="text" className="h-6 w-3/4 mx-auto" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Link

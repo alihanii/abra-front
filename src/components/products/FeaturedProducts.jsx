@@ -169,12 +169,32 @@ export default function FeaturedProducts() {
 
         {/* Desktop Slider */}
         {isLoading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="text-center">
-              <i className="ri-loader-4-line text-6xl text-gray-400 animate-spin mb-4" />
-              <p className="text-gray-600">Loading featured products...</p>
+          <>
+            {/* Desktop Skeleton Slider */}
+            <div className="hidden md:block relative overflow-hidden">
+              <div className="flex gap-6 overflow-x-auto scrollbar-hide">
+                {Array.from({ length: 4 }).map((_, index) => (
+                  <div
+                    key={`skeleton-${index}`}
+                    className="shrink-0 w-[calc(25%-18px)]"
+                  >
+                    <ProductCard isLoading={true} size="md" />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+
+            {/* Mobile Skeleton Grid */}
+            <div className="md:hidden grid grid-cols-1 gap-0.5">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <ProductCard
+                  key={`skeleton-mobile-${index}`}
+                  isLoading={true}
+                  size="sm"
+                />
+              ))}
+            </div>
+          </>
         ) : isError ? (
           <div className="flex flex-col items-center justify-center py-20">
             <i className="ri-error-warning-line text-6xl text-red-400 mb-4" />
