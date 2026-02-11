@@ -6,15 +6,7 @@
 export const API_ROUTES = {
   // Auth endpoints
   AUTH: {
-    LOGIN: "/auth/login",
-    REGISTER: "/auth/register",
-    LOGOUT: "/auth/logout",
-    REFRESH_TOKEN: "/auth/refresh",
-    VERIFY_OTP: "/auth/verify-otp",
-    RESEND_OTP: "/auth/resend-otp",
-    FORGOT_PASSWORD: "/auth/forgot-password",
-    RESET_PASSWORD: "/auth/reset-password",
-    ME: "/auth/me"
+    LOGIN: "/accounts/login/",
   },
 
   // Products endpoints

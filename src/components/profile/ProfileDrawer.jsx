@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/contexts/ProfileContext";
+import { useLogin } from "@/hooks/useApi";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import ProfileTabs from "./ProfileTabs";
 import PurchaseHistory from "./PurchaseHistory";
@@ -24,9 +25,26 @@ export default function ProfileDrawer() {
 
   // Auth form states
   const [authView, setAuthView] = useState("login"); // 'login' | 'register' | 'otp'
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [phone, setPhone] = useState("");
+
+  // Login mutation hook
+  const loginMutation = useLogin({
+    onSuccess: (data) => {
+      // Save tokens and user data
+      login(data.access, data.user, data.refresh);
+      setError(null);
+      // Don't close drawer, just show authenticated content
+    },
+    onError: (error) => {
+      // Extract error message from API response
+      const errorMessage = error?.response?.data?.detail || 
+                          error?.response?.data?.message ||
+                          error?.message ||
+                          "خطا در ورود. لطفاً دوباره تلاش کنید.";
+      setError(errorMessage);
+    }
+  });
 
   // Handle mount/unmount with animation delay
   useEffect(() => {
@@ -86,139 +104,63 @@ export default function ProfileDrawer() {
 
   // Handle login
   const handleLogin = async (formData) => {
-    setIsLoading(true);
     setError(null);
-
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Mock: Check if user exists (in real app, this would be an API call)
-      const mockUsers = JSON.parse(localStorage.getItem("mock_users") || "[]");
-      const foundUser = mockUsers.find((u) => u.phone === formData.phone);
-
-      if (!foundUser || foundUser.password !== formData.password) {
-        throw new Error("شماره تماس یا رمز عبور اشتباه است");
-      }
-
-      // Login successful
-      const token = `mock_token_${Date.now()}`;
-      login(token, {
-        id: foundUser.id,
-        name: foundUser.name || "",
-        phone: foundUser.phone
-      });
-    } catch (err) {
-      setError(err.message || "خطا در ورود. لطفاً دوباره تلاش کنید.");
-    } finally {
-      setIsLoading(false);
-    }
+    
+    // Call login mutation with phone_number format
+    loginMutation.mutate({
+      phone_number: formData.phone,
+      password: formData.password
+    });
   };
 
   // Handle SMS login
   const handleSMSLogin = async (phoneNumber) => {
     setPhone(phoneNumber);
-    setIsLoading(true);
     setError(null);
 
     try {
-      // Simulate sending OTP
+      // TODO: Implement SMS login API call
       await new Promise((resolve) => setTimeout(resolve, 500));
-
-      // Mock: Check if user exists
-      const mockUsers = JSON.parse(localStorage.getItem("mock_users") || "[]");
-      const userExists = mockUsers.some((u) => u.phone === phoneNumber);
-
-      if (!userExists) {
-        // User doesn't exist, go to register
-        setAuthView("register");
-        setError("حساب کاربری با این شماره تماس یافت نشد. لطفاً ثبت نام کنید.");
-      } else {
-        // User exists, go to OTP verification
-        setAuthView("otp");
-      }
+      
+      // For now, go to OTP verification
+      setAuthView("otp");
     } catch (err) {
       setError(err.message || "خطا در ارسال کد. لطفاً دوباره تلاش کنید.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
   // Handle register
   const handleRegister = async (formData) => {
-    setIsLoading(true);
     setError(null);
 
     try {
-      // Simulate API call
+      // TODO: Implement register API call
       await new Promise((resolve) => setTimeout(resolve, 500));
-
-      // Mock: Check if user already exists
-      const mockUsers = JSON.parse(localStorage.getItem("mock_users") || "[]");
-      const userExists = mockUsers.some((u) => u.phone === formData.phone);
-
-      if (userExists) {
-        throw new Error("حساب کاربری با این شماره تماس قبلاً ثبت شده است");
-      }
-
-      // Save user and go to OTP verification
-      const newUser = {
-        id: `user_${Date.now()}`,
-        phone: formData.phone,
-        password: formData.password,
-        name: ""
-      };
-      mockUsers.push(newUser);
-      localStorage.setItem("mock_users", JSON.stringify(mockUsers));
 
       setPhone(formData.phone);
       setAuthView("otp");
     } catch (err) {
       setError(err.message || "خطا در ثبت نام. لطفاً دوباره تلاش کنید.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
   // Handle OTP verification
   const handleOTPVerify = async (code) => {
-    setIsLoading(true);
     setError(null);
 
     try {
-      // Simulate API call
+      // TODO: Implement OTP verification API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Mock: Verify OTP (in real app, this would verify with backend)
-      if (code !== "12345") {
-        throw new Error("کد تأیید اشتباه است");
-      }
-
-      // Get user from mock storage
-      const mockUsers = JSON.parse(localStorage.getItem("mock_users") || "[]");
-      const foundUser = mockUsers.find((u) => u.phone === phone);
-
-      if (!foundUser) {
-        throw new Error("کاربر یافت نشد");
-      }
-
-      // Login successful
-      const token = `mock_token_${Date.now()}`;
-      login(token, {
-        id: foundUser.id,
-        name: foundUser.name || "",
-        phone: foundUser.phone
-      });
+      // TODO: Replace with actual API response handling
+      throw new Error("OTP verification API not implemented yet");
     } catch (err) {
       setError(err.message || "خطا در تأیید کد. لطفاً دوباره تلاش کنید.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
   // Handle resend OTP
   const handleResendOTP = async () => {
-    setIsLoading(true);
     setError(null);
 
     try {
@@ -227,8 +169,6 @@ export default function ProfileDrawer() {
       setError(null);
     } catch (err) {
       setError("خطا در ارسال مجدد کد. لطفاً دوباره تلاش کنید.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -297,7 +237,7 @@ export default function ProfileDrawer() {
                       setAuthView("register");
                       setError(null);
                     }}
-                    isLoading={isLoading}
+                    isLoading={loginMutation.isPending}
                     error={error}
                   />
                 )}
@@ -309,7 +249,7 @@ export default function ProfileDrawer() {
                       setAuthView("login");
                       setError(null);
                     }}
-                    isLoading={isLoading}
+                    isLoading={false}
                     error={error}
                   />
                 )}
@@ -323,7 +263,7 @@ export default function ProfileDrawer() {
                       setAuthView("login");
                       setError(null);
                     }}
-                    isLoading={isLoading}
+                    isLoading={false}
                     error={error}
                   />
                 )}

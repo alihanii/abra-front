@@ -4,6 +4,7 @@
  */
 
 import axios from "axios";
+import { getCookie, removeCookie } from "@/lib/utils/cookies";
 
 // Get base URL from environment variables
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api";
@@ -23,10 +24,9 @@ axiosInstance.interceptors.request.use(
     // Get requireAuth from config (default: true)
     const requireAuth = config._requireAuth !== false;
     
-    // Get token from localStorage or context
-    // You can modify this to get token from your auth context
+    // Get token from cookies
     if (typeof window !== "undefined" && requireAuth) {
-      const token = localStorage.getItem("token");
+      const token = getCookie("abra_auth_token");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -52,9 +52,10 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       // Token expired or invalid
       if (error.response.status === 401) {
-        // Clear token and redirect to login
+        // Clear token from cookies
         if (typeof window !== "undefined") {
-          localStorage.removeItem("token");
+          removeCookie("abra_auth_token");
+          removeCookie("abra_refresh_token");
           // You can add redirect logic here if needed
         }
       }

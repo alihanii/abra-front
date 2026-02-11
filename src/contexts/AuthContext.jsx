@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useCallback, useMemo, useEffect } from "react";
-import { initializeMockUsers } from "@/lib/mockData";
+import { getCookie, setCookie, removeCookie } from "@/lib/utils/cookies";
 
 /**
  * Auth Context
@@ -14,7 +14,7 @@ const AuthContext = createContext(undefined);
  * Token storage key
  */
 const TOKEN_KEY = "abra_auth_token";
-const USER_KEY = "abra_user_data";
+const REFRESH_TOKEN_KEY = "abra_refresh_token";
 
 /**
  * Auth Provider Component
@@ -25,25 +25,13 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Initialize mock users and load token/user from localStorage on mount
+  // Load token from cookies on mount
   useEffect(() => {
     try {
-      // Initialize mock users for development/testing
-      initializeMockUsers();
-
-      const storedToken = localStorage.getItem(TOKEN_KEY);
-      const storedUser = localStorage.getItem(USER_KEY);
+      const storedToken = getCookie(TOKEN_KEY);
 
       if (storedToken) {
         setToken(storedToken);
-      }
-
-      if (storedUser) {
-        try {
-          setUser(JSON.parse(storedUser));
-        } catch (e) {
-          console.error("Failed to parse user data:", e);
-        }
       }
     } catch (error) {
       console.error("Failed to load auth data:", error);
@@ -54,14 +42,19 @@ export function AuthProvider({ children }) {
 
   /**
    * Login user
-   * @param {string} authToken - Authentication token
+   * @param {string} accessToken - Access token
+   * @param {string} refreshToken - Refresh token (optional)
    * @param {Object} userData - User data object
    */
-  const login = useCallback((authToken, userData) => {
+  const login = useCallback((accessToken, userData, refreshToken = null) => {
     try {
-      localStorage.setItem(TOKEN_KEY, authToken);
-      localStorage.setItem(USER_KEY, JSON.stringify(userData));
-      setToken(authToken);
+      // Save tokens in cookies (7 days expiry)
+      setCookie(TOKEN_KEY, accessToken, { days: 7 });
+      if (refreshToken) {
+        setCookie(REFRESH_TOKEN_KEY, refreshToken, { days: 30 });
+      }
+      
+      setToken(accessToken);
       setUser(userData);
     } catch (error) {
       console.error("Failed to save auth data:", error);
@@ -73,8 +66,8 @@ export function AuthProvider({ children }) {
    */
   const logout = useCallback(() => {
     try {
-      localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem(USER_KEY);
+      removeCookie(TOKEN_KEY);
+      removeCookie(REFRESH_TOKEN_KEY);
       setToken(null);
       setUser(null);
     } catch (error) {
@@ -90,7 +83,6 @@ export function AuthProvider({ children }) {
     (userData) => {
       try {
         const updatedUser = { ...user, ...userData };
-        localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
         setUser(updatedUser);
       } catch (error) {
         console.error("Failed to update user data:", error);
