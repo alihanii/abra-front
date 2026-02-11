@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useState, useCallback, useMemo, useEffect } from "react";
 import { getCookie, setCookie, removeCookie } from "@/lib/utils/cookies";
+import { useProfile } from "@/hooks/useApi";
+import { useQueryClient } from "@tanstack/react-query";
 
 /**
  * Auth Context
@@ -24,6 +26,7 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
 
   // Load token from cookies on mount
   useEffect(() => {
@@ -40,13 +43,40 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  // Fetch user profile when token exists
+  const { data: profileData, isLoading: isProfileLoading, error: profileError } = useProfile({
+    enabled: !!token && !isLoading,
+    retry: false,
+  });
+
+  // Update user data when profile is fetched
+  useEffect(() => {
+    if (profileData) {
+      setUser(profileData);
+    }
+  }, [profileData]);
+
+  // Handle profile fetch errors
+  useEffect(() => {
+    if (profileError) {
+      console.error("Failed to fetch user profile:", profileError);
+      // If profile fetch fails (e.g., token expired), clear token
+      if (profileError?.response?.status === 401) {
+        removeCookie(TOKEN_KEY);
+        removeCookie(REFRESH_TOKEN_KEY);
+        setToken(null);
+        setUser(null);
+      }
+    }
+  }, [profileError]);
+
   /**
    * Login user
    * @param {string} accessToken - Access token
    * @param {string} refreshToken - Refresh token (optional)
-   * @param {Object} userData - User data object
+   * @param {Object} userData - User data object (optional, will be fetched from API)
    */
-  const login = useCallback((accessToken, userData, refreshToken = null) => {
+  const login = useCallback(async (accessToken, userData = null, refreshToken = null) => {
     try {
       // Save tokens in cookies (7 days expiry)
       setCookie(TOKEN_KEY, accessToken, { days: 7 });
@@ -55,11 +85,32 @@ export function AuthProvider({ children }) {
       }
       
       setToken(accessToken);
-      setUser(userData);
+      
+      // Invalidate and refetch profile query to get fresh user data
+      try {
+        await queryClient.invalidateQueries({ queryKey: ["auth", "profile"] });
+        const profileResponse = await queryClient.fetchQuery({
+          queryKey: ["auth", "profile"],
+          queryFn: async () => {
+            const { getProfile } = await import("@/lib/api/services/auth");
+            return await getProfile();
+          },
+        });
+        
+        if (profileResponse) {
+          setUser(profileResponse);
+        }
+      } catch (profileError) {
+        console.error("Failed to fetch user profile after login:", profileError);
+        // If profile fetch fails, use provided userData as fallback
+        if (userData) {
+          setUser(userData);
+        }
+      }
     } catch (error) {
       console.error("Failed to save auth data:", error);
     }
-  }, []);
+  }, [queryClient]);
 
   /**
    * Logout user
@@ -70,10 +121,11 @@ export function AuthProvider({ children }) {
       removeCookie(REFRESH_TOKEN_KEY);
       setToken(null);
       setUser(null);
+      queryClient.removeQueries({ queryKey: ["auth"] });
     } catch (error) {
       console.error("Failed to remove auth data:", error);
     }
-  }, []);
+  }, [queryClient]);
 
   /**
    * Update user data
@@ -97,6 +149,15 @@ export function AuthProvider({ children }) {
   const isAuthenticated = useMemo(() => {
     return !!token && !!user;
   }, [token, user]);
+
+  // Update loading state based on profile loading
+  useEffect(() => {
+    if (token && isProfileLoading && !isLoading) {
+      setIsLoading(true);
+    } else if (!isProfileLoading) {
+      setIsLoading(false);
+    }
+  }, [token, isProfileLoading, isLoading]);
 
   const value = {
     token,

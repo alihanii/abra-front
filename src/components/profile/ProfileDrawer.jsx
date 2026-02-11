@@ -283,10 +283,10 @@ export default function ProfileDrawer() {
                       </div>
                       <div className="flex-1">
                         <h3 className="font-bold text-gray-900 text-lg mb-1">
-                          {user?.name || "کاربر"}
+                          {user?.full_name || "کاربر"}
                         </h3>
                         <p className="text-sm text-gray-600">
-                          {user?.phone || "شماره تماس ثبت نشده"}
+                          {user?.phone_number || "شماره تماس ثبت نشده"}
                         </p>
                       </div>
                       <button

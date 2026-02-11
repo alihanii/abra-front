@@ -139,7 +139,7 @@ export default function ProductCard({
           "w-full md:w-auto",
           "border-b md:border-b-0 border-gray-200 last:border-b-0",
           "rounded-none md:rounded-2xl",
-          isMobile ? "p-3" : "p-5",
+          isMobile ? "p-3" : "p-5 gap-6",
           className
         )}
       >
@@ -196,7 +196,7 @@ export default function ProductCard({
         "w-full md:w-auto",
         "border-b md:border-b-0 border-gray-200 last:border-b-0",
         "rounded-none md:rounded-2xl",
-        isMobile ? "p-3" : "p-5",
+        isMobile ? "p-3" : "p-5 gap-6",
         className
       )}
     >

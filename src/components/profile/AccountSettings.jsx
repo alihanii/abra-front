@@ -5,7 +5,9 @@ import BaseInput from "@/components/ui/BaseInput";
 import BaseButton from "@/components/ui/BaseButton";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import LoadingScreen from "@/components/ui/LoadingScreen";
+import Alert from "@/components/ui/Alert";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUpdateProfile } from "@/hooks/useApi";
 import { cn } from "@/lib/utils";
 
 /**
@@ -20,12 +22,37 @@ export default function AccountSettings({ user, onUpdate, isLoading: externalLoa
   const { updateUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   // Form states
   const [formData, setFormData] = useState({
-    name: user?.name || "",
-    phone: user?.phone || ""
+    full_name: user?.full_name || "",
+    email: user?.email || ""
+  });
+
+  // Update profile mutation
+  const updateProfileMutation = useUpdateProfile({
+    onSuccess: (data) => {
+      // Update user in AuthContext
+      updateUser(data);
+      setIsEditing(false);
+      setSuccessMessage("اطلاعات با موفقیت به‌روزرسانی شد");
+      setError(null);
+      // Clear success message after 3 seconds
+      setTimeout(() => setSuccessMessage(null), 3000);
+      if (onUpdate) {
+        onUpdate(data);
+      }
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.detail || 
+                         error?.response?.data?.message ||
+                         error?.message ||
+                         "خطا در به‌روزرسانی اطلاعات. لطفاً دوباره تلاش کنید.";
+      setError(errorMessage);
+      setSuccessMessage(null);
+    }
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -34,15 +61,16 @@ export default function AccountSettings({ user, onUpdate, isLoading: externalLoa
     confirmPassword: ""
   });
 
-  // Update form data when user changes
+  // Update form data when user changes (only when not editing)
   useEffect(() => {
-    if (user) {
+    if (user && !isEditing) {
       setFormData({
-        name: user.name || "",
-        phone: user.phone || ""
+        full_name: user.full_name || "",
+        email: user.email || ""
       });
     }
-  }, [user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, isEditing]);
 
   // Show loading screen if user data is not available
   if (externalLoading || !user) {
@@ -61,6 +89,10 @@ export default function AccountSettings({ user, onUpdate, isLoading: externalLoa
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (error) {
+      setError(null);
+    }
   };
 
   const handlePasswordChange = (field, value) => {
@@ -68,21 +100,26 @@ export default function AccountSettings({ user, onUpdate, isLoading: externalLoa
   };
 
   const handleSave = async () => {
-    setIsLoading(true);
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      updateUser(formData);
-      setIsEditing(false);
-      if (onUpdate) {
-        onUpdate(formData);
-      }
-    } catch (error) {
-      console.error("Failed to update user:", error);
-    } finally {
-      setIsLoading(false);
+    setError(null);
+    setSuccessMessage(null);
+    
+    // Validate email format if provided
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setError("فرمت ایمیل معتبر نیست");
+      return;
     }
+
+    // Prepare data for API (only send fields that have values)
+    const updateData = {};
+    if (formData.full_name) {
+      updateData.full_name = formData.full_name;
+    }
+    if (formData.email) {
+      updateData.email = formData.email;
+    }
+
+    // Call mutation
+    updateProfileMutation.mutate(updateData);
   };
 
   const handlePasswordSave = async () => {
@@ -96,7 +133,7 @@ export default function AccountSettings({ user, onUpdate, isLoading: externalLoa
       return;
     }
 
-    setIsLoading(true);
+    // TODO: Implement password change API
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -111,8 +148,6 @@ export default function AccountSettings({ user, onUpdate, isLoading: externalLoa
     } catch (error) {
       console.error("Failed to change password:", error);
       alert("خطا در تغییر رمز عبور");
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -143,6 +178,24 @@ export default function AccountSettings({ user, onUpdate, isLoading: externalLoa
           </div>
 
           <div className="space-y-4">
+            {error && (
+              <Alert
+                variant="error"
+                size="md"
+                message={error}
+                className="mb-4"
+              />
+            )}
+
+            {successMessage && (
+              <Alert
+                variant="success"
+                size="md"
+                message={successMessage}
+                className="mb-4"
+              />
+            )}
+
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 نام و نام خانوادگی
@@ -150,25 +203,40 @@ export default function AccountSettings({ user, onUpdate, isLoading: externalLoa
               <BaseInput
                 variant="primary"
                 size="md"
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
+                value={formData.full_name || ""}
+                onChange={(e) => handleInputChange("full_name", e.target.value)}
                 disabled={!isEditing}
                 placeholder="نام و نام خانوادگی خود را وارد کنید"
               />
             </div>
 
             <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                ایمیل
+              </label>
+              <BaseInput
+                variant="primary"
+                size="md"
+                type="email"
+                value={formData.email || ""}
+                onChange={(e) => handleInputChange("email", e.target.value)}
+                disabled={!isEditing}
+                placeholder="ایمیل خود را وارد کنید"
+              />
+            </div>
+
+            {/* <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">شماره تماس</label>
               <BaseInput
                 variant="primary"
                 size="md"
                 type="tel"
-                value={formData.phone}
+                value={formData.phone_number}
                 onChange={(e) => handleInputChange("phone", e.target.value)}
                 disabled={!isEditing}
                 placeholder="شماره تماس خود را وارد کنید"
               />
-            </div>
+            </div> */}
 
             {isEditing && (
               <div className="flex gap-3 pt-2">
@@ -176,10 +244,10 @@ export default function AccountSettings({ user, onUpdate, isLoading: externalLoa
                   variant="primary"
                   size="md"
                   onClick={handleSave}
-                  disabled={isLoading}
+                  disabled={updateProfileMutation.isPending}
                   fullWidth
                 >
-                  {isLoading ? (
+                  {updateProfileMutation.isPending ? (
                     <>
                       <i className="ri-loader-4-line animate-spin ml-2"></i>
                       در حال ذخیره...
@@ -196,12 +264,14 @@ export default function AccountSettings({ user, onUpdate, isLoading: externalLoa
                   size="md"
                   onClick={() => {
                     setIsEditing(false);
+                    setError(null);
+                    setSuccessMessage(null);
                     setFormData({
-                      name: user?.name || "",
-                      phone: user?.phone || ""
+                      full_name: user?.full_name || "",
+                      email: user?.email || ""
                     });
                   }}
-                  disabled={isLoading}
+                  disabled={updateProfileMutation.isPending}
                   fullWidth
                 >
                   انصراف

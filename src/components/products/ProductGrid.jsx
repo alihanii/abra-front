@@ -53,6 +53,7 @@ export default function ProductGrid({ products = [], className, isLoading = fals
         <ProductCard
           key={product.id}
           {...product}
+          product={product}
         />
       ))}
     </div>

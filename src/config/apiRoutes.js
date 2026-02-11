@@ -7,6 +7,8 @@ export const API_ROUTES = {
   // Auth endpoints
   AUTH: {
     LOGIN: "/accounts/login/",
+    PROFILE: "/accounts/profile/",
+    UPDATE_PROFILE: "/accounts/profile/update/",
   },
 
   // Products endpoints

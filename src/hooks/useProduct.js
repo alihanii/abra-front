@@ -17,6 +17,8 @@ export function useProduct(slugOrProduct) {
   // Get product data - accept either slug (string) or product object
   const product = useMemo(() => {
     // If product object is provided, use it directly
+    console.log('123', slugOrProduct);
+
     if (slugOrProduct && typeof slugOrProduct === 'object') {
       return slugOrProduct;
     }

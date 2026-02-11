@@ -21,6 +21,7 @@ export const queryKeys = {
   },
   auth: {
     all: ["auth"],
+    profile: ["auth", "profile"],
   },
 };
 
@@ -58,6 +59,50 @@ export const useProductBySlug = (slug, options = {}) => {
 };
 
 /**
+ * Get user profile using TanStack Query
+ * @param {Object} options - Query options (enabled, onSuccess, onError)
+ * @returns {Object} Query result with profile data
+ */
+export const useProfile = (options = {}) => {
+  return useQuery({
+    queryKey: queryKeys.auth.profile,
+    queryFn: () => authService.getProfile(),
+    ...options
+  });
+};
+
+/**
+ * Update user profile mutation using TanStack Query
+ * @param {Object} options - Mutation options (onSuccess, onError)
+ * @returns {Object} Mutation object with mutate function
+ */
+export const useUpdateProfile = (options = {}) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (profileData) => authService.updateProfile(profileData),
+    onSuccess: (data, variables, context) => {
+      // Update profile query cache with new data
+      queryClient.setQueryData(queryKeys.auth.profile, data);
+      // Invalidate auth queries to ensure consistency
+      queryClient.invalidateQueries({ queryKey: queryKeys.auth.all });
+      
+      // Call custom onSuccess if provided
+      if (options.onSuccess) {
+        options.onSuccess(data, variables, context);
+      }
+    },
+    onError: (error, variables, context) => {
+      // Call custom onError if provided
+      if (options.onError) {
+        options.onError(error, variables, context);
+      }
+    },
+    ...options
+  });
+};
+
+/**
  * Login mutation using TanStack Query
  * @param {Object} options - Mutation options (onSuccess, onError)
  * @returns {Object} Mutation object with mutate function
@@ -68,7 +113,7 @@ export const useLogin = (options = {}) => {
   return useMutation({
     mutationFn: (credentials) => authService.login(credentials),
     onSuccess: (data, variables, context) => {
-      // Invalidate auth queries
+      // Invalidate auth queries to refetch profile
       queryClient.invalidateQueries({ queryKey: queryKeys.auth.all });
       
       // Call custom onSuccess if provided
