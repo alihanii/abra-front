@@ -6,6 +6,7 @@ import { NAVIGATION_ITEMS, ROUTES } from "@/config/routes";
 import { useNavigation } from "@/hooks/useNavigation";
 import { useCart } from "@/contexts/CartContext";
 import { useProfile } from "@/contexts/ProfileContext";
+import AbraLogo from "@/components/ui/AbraLogo";
 
 /**
  * Header Component
@@ -79,12 +80,9 @@ export default function Header({ onUserClick }) {
             className="flex items-center cursor-pointer group"
             aria-label="Abra Home"
           >
-            <h1
+            <AbraLogo
               className="text-2xl sm:text-3xl font-bold text-gray-900 transition-transform group-hover:scale-105"
-              style={{ fontFamily: "var(--font-pacifico), serif" }}
-            >
-              Abra
-            </h1>
+            />
           </Link>
 
           {/* Desktop Navigation */}

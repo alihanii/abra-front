@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
+import AbraLogo from "@/components/ui/AbraLogo";
 
 /**
  * Loading Screen Component
@@ -153,7 +154,7 @@ export default function LoadingScreen({
       <div className="flex flex-col items-center justify-center">
         {/* Logo Text with Typewriter Effect */}
         <div className="flex items-center gap-2 mb-4">
-          <h1
+          <AbraLogo
             className={cn(
               "font-bold text-gray-900",
               size === "sm" && "text-md sm:text-md",
@@ -163,7 +164,6 @@ export default function LoadingScreen({
               size === "xl" && "text-5xl sm:text-6xl md:text-7xl",
               !size && "text-6xl sm:text-7xl md:text-8xl" // default lg
             )}
-            style={{ fontFamily: "var(--font-pacifico), serif" }}
           >
             {displayedText}
             {showCursor && (
@@ -178,7 +178,7 @@ export default function LoadingScreen({
                 )}
               />
             )}
-          </h1>
+          </AbraLogo>
         </div>
 
         {/* Loading Indicator (shows after typing is complete, only if not looping) */}

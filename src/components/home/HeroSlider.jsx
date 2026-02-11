@@ -82,7 +82,7 @@ export default function HeroSlider() {
 
   return (
     <section className="relative overflow-hidden bg-white">
-      <div className="relative h-[400px] md:h-[500px]">
+      <div className="relative h-[400px] md:h-[500px] font-maneli" >
         {SLIDES.map((slide, index) => (
           <HeroSlide
             key={slide.id}

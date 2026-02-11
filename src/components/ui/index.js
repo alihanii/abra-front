@@ -15,3 +15,4 @@ export { default as BaseImage } from "./BaseImage";
 export { default as BaseSkeleton } from "./BaseSkeleton";
 export { default as ScrollReveal } from "./ScrollReveal";
 export { default as ScrollNavigation } from "./ScrollNavigation";
+export { default as AbraLogo } from "./AbraLogo";

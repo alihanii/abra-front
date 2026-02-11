@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SHOP_LINKS, SUPPORT_LINKS, COMPANY_LINKS, SOCIAL_LINKS, ROUTES } from "@/config/routes";
+import AbraLogo from "@/components/ui/AbraLogo";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -10,12 +11,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
           <div>
-            <h3
+            <AbraLogo
+              as="h3"
               className="text-2xl font-bold text-gray-900 mb-4"
-              style={{ fontFamily: "var(--font-pacifico), serif" }}
-            >
-              Abra
-            </h3>
+            />
             <p className="text-gray-600 mb-4">
               Premium custom clothing with professional printing quality.
             </p>

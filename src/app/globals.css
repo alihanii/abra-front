@@ -18,6 +18,8 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-pacifico: var(--font-pacifico);
+  --font-estedad: var(--font-estedad);
+  --font-maneli: var(--font-maneli);
   
   /* Custom Color Variables for Tailwind */
   --color-white: var(--color-white);
@@ -35,7 +37,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-estedad), Arial, Helvetica, sans-serif;
 }
 
 /* Cart Drawer Animations */
