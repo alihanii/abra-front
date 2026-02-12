@@ -59,16 +59,19 @@ export default function ProductCard({
     finalPrice
   } = useProduct(productData || slug);
 
-  // Check if product is in cart using the same ID format as page.js
-  const cartItemId = useMemo(() => {
-    if (!product || !selectedColor || !selectedSize) return null;
-    return `${product.id}-${selectedColor}-${selectedSize}`;
-  }, [product, selectedColor, selectedSize]);
+  // Check if product is in cart by matching (id, color, size)
+  const cartItemColor = selectedColorData?.name || selectedColor;
+  const cartItemSize = selectedSizeData?.name || selectedSize;
 
   const cartItem = useMemo(() => {
-    if (!cartItemId) return null;
-    return items.find((item) => item.id === cartItemId);
-  }, [items, cartItemId]);
+    if (!product || !cartItemColor || !cartItemSize) return null;
+    return items.find(
+      (item) =>
+        String(item.id) === String(product.id) &&
+        item.color === cartItemColor &&
+        item.size === cartItemSize
+    );
+  }, [items, product, cartItemColor, cartItemSize]);
 
   const handleCardClick = (e) => {
     // Don't navigate if clicking on button or quantity control
@@ -94,7 +97,7 @@ export default function ProductCard({
     }
 
     addItem({
-      id: `${product.id}-${selectedColor}-${selectedSize}`,
+      id: `${product.id}`,
       slug: product.slug,
       name: product.name,
       price: finalPrice,
@@ -109,12 +112,12 @@ export default function ProductCard({
   };
 
   const handleQuantityChange = (newQuantity) => {
-    if (!cartItemId) return;
+    if (!product || !cartItemColor || !cartItemSize) return;
 
     if (newQuantity === 0) {
-      removeItem(cartItemId);
+      removeItem(String(product.id), cartItemColor, cartItemSize);
     } else {
-      updateQuantity(cartItemId, newQuantity);
+      updateQuantity(String(product.id), cartItemColor, cartItemSize, newQuantity);
     }
   };
 

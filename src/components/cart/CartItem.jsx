@@ -17,17 +17,12 @@ import { container } from "@/lib/styles";
 export default function CartItem({ item }) {
   const { updateQuantity, removeItem } = useCart();
 
-  // Extract product slug from item.id (format: `${product.id}-${selectedColor}-${selectedSize}`)
-  // Or use item.slug if available
-  const productSlug = useMemo(() => {
-    if (item.slug) return item.slug;
-    // Extract product id from item.id (before first dash)
-    const productId = item.id?.split("-")[0];
-    // In this mock data, product.id === product.slug
-    return productId || null;
-  }, [item.id, item.slug]);
+  // Pass full product data if available (from API hydration), otherwise slug
+  const productInput = useMemo(() => {
+    return item._product || item.slug || item.id || null;
+  }, [item._product, item.id, item.slug]);
 
-  // Use useProduct hook similar to page.js
+  // Use useProduct hook - accepts product object or slug string
   const {
     product,
     selectedColor,
@@ -39,7 +34,7 @@ export default function CartItem({ item }) {
     finalPrice,
     selectColor,
     selectSize
-  } = useProduct(productSlug);
+  } = useProduct(productInput);
 
   // Find color and size keys from item.color and item.size (display names)
   // and set them in useProduct hook
@@ -66,22 +61,22 @@ export default function CartItem({ item }) {
   }, [product, item.color, item.size, selectedColor, selectedSize, selectColor, selectSize]);
 
   const handleDecrease = () => {
-    updateQuantity(item.id, item.quantity - 1);
+    updateQuantity(item.id, item.color, item.size, item.quantity - 1);
   };
 
   const handleIncrease = () => {
     // Limit increase based on available stock
     const maxQuantity =
       product && availableStock !== undefined ? item.quantity + availableStock : item.quantity + 1;
-    updateQuantity(item.id, Math.min(item.quantity + 1, maxQuantity));
+    updateQuantity(item.id, item.color, item.size, Math.min(item.quantity + 1, maxQuantity));
   };
 
   const handleRemove = () => {
-    removeItem(item.id);
+    removeItem(item.id, item.color, item.size);
   };
 
-  // Use product data if available, otherwise fallback to item data
-  const displayPrice = product ? finalPrice : item.price;
+  // Use finalPrice from useProduct (includes color/size modifiers), fallback to item.price
+  const displayPrice = product && finalPrice > 0 ? finalPrice : item.price;
   const maxQuantity = product && availableStock !== undefined ? item.quantity + availableStock : 99;
 
   return (

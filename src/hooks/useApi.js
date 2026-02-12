@@ -19,6 +19,10 @@ export const queryKeys = {
     list: (params) => ["products", "list", params],
     detail: (slug) => ["products", "detail", slug],
   },
+  cart: {
+    all: ["cart"],
+    products: (ids) => ["cart", "products", ids],
+  },
   auth: {
     all: ["auth"],
     profile: ["auth", "profile"],
@@ -54,6 +58,23 @@ export const useProductBySlug = (slug, options = {}) => {
     queryKey: queryKeys.products.detail(slug),
     queryFn: () => productService.getProductBySlug(slug),
     enabled: !!slug,
+    ...options
+  });
+};
+
+/**
+ * Fetch cart products by array of IDs
+ * Used to hydrate cart items from localStorage on page refresh
+ * @param {Array<string>} ids - Array of product IDs
+ * @param {Object} options - Query options
+ * @returns {Object} Query result with products data
+ */
+export const useCartProductsList = (ids = [], options = {}) => {
+  return useQuery({
+    queryKey: queryKeys.cart.products(ids),
+    queryFn: () => productService.getProducts({ id: ids }),
+    enabled: ids.length > 0,
+    staleTime: 5 * 60 * 1000, // 5 minutes
     ...options
   });
 };

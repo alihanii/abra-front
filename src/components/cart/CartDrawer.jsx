@@ -18,11 +18,15 @@ export default function CartDrawer() {
   // Handle mount/unmount with animation delay
   useEffect(() => {
     if (isOpen) {
-      setIsMounted(true);
-      // Small delay to trigger animation
-      setTimeout(() => setIsAnimating(true), 10);
+      // Use setTimeout to avoid synchronous setState in effect
+      setTimeout(() => {
+        setIsMounted(true);
+        // Small delay to trigger animation
+        setTimeout(() => setIsAnimating(true), 10);
+      }, 0);
     } else {
-      setIsAnimating(false);
+      // Use setTimeout to avoid synchronous setState in effect
+      setTimeout(() => setIsAnimating(false), 0);
       // Wait for animation to complete before unmounting
       const timer = setTimeout(() => setIsMounted(false), 300);
       return () => clearTimeout(timer);
@@ -109,7 +113,7 @@ export default function CartDrawer() {
               <div className="space-y-4">
                 {items.map((item, index) => (
                   <div
-                    key={item.id}
+                    key={item.id+ "-" + item.size + "-" + item.color}
                     className={`
                       transition-all duration-300 ease-out
                       ${isAnimating ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}

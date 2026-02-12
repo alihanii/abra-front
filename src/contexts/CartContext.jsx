@@ -1,97 +1,224 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useMemo } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  useEffect
+} from "react";
+import {
+  getCartFromStorage,
+  saveCartToStorage,
+  clearCartStorage,
+  getUniqueProductIds,
+  generateCartItemKey
+} from "@/lib/utils/cartStorage";
+import { useCartProductsList } from "@/hooks/useApi";
 
 /**
  * Cart Context
- * Manages shopping cart state and operations
+ * Manages shopping cart state with localStorage persistence and API hydration
  */
-
 const CartContext = createContext(undefined);
 
 /**
- * Mock initial cart items for development/testing
+ * Check if two cart entries match by (id, color, size)
  */
-const MOCK_CART_ITEMS = [
-  {
-    id: "cart-item-1",
-    name: "Classic Black Hoodie",
-    price: 45.99,
-    image:
-      "https://readdy.ai/api/search-image?query=Premium%20black%20hoodie%20front%20view%20mockup%20on%20clean%20white%20background%2C%20minimalist%20product%20photography%2C%20soft%20natural%20lighting%2C%20professional%20e-commerce%20style%2C%20centered%20composition%2C%20high%20resolution%2C%20modern%20casual%20wear%2C%20cotton%20fabric%20texture%20visible%2C%20no%20wrinkles%2C%20studio%20shot%2C%20commercial%20photography&width=400&height=500&seq=cart1&orientation=portrait",
-    size: "L",
-    color: "Black",
-    quantity: 1
-  },
-  {
-    id: "cart-item-2",
-    name: "Couple Hoodies Set",
-    price: 79.99,
-    image:
-      "httarch-image?query=Two%20matching%20navy%20blue%20hoodies%20side%20by%20side%20on%20clean%20white%20background%2C%20couple%20matching%20set%2C%20minimalist%20product%20photography%2C%20soft%20natural%20lighting%2C%20professional%20e-commerce%20style%2C%20centered%20composition%2C%20high%20resolution%2C%20modern%20casual%20wear&width=400&height=500&seq=cart2&orientation=portrait",
-    size: "M/L",
-    color: "Navy",
-    quantity: 1
+const isSameEntry = (a, b) => {
+  return (
+    String(a.id) === String(b.id) &&
+    a.color === b.color &&
+    a.size === b.size
+  );
+};
+
+/**
+ * Calculate final price for a product based on selected color and size
+ * Mirrors the logic in useProduct hook's finalPrice calculation
+ * @param {Object} product - Full product object from API
+ * @param {string} colorName - Selected color display name
+ * @param {string} sizeName - Selected size display name
+ * @returns {number} Final calculated price
+ */
+const calculateFinalPrice = (product, colorName, sizeName) => {
+  if (!product) return 0;
+
+  let basePrice = product.price || 0;
+
+  // Find color key by display name and apply color-specific price
+  const colorKey = Object.keys(product.colors || {}).find(
+    (key) => product.colors[key]?.name === colorName
+  );
+  if (colorKey && product.colors[colorKey]?.price !== undefined) {
+    basePrice = product.colors[colorKey].price;
   }
-];
+
+  // Find size key by display name and apply size modifier
+  const sizeKey = Object.keys(product.sizes || {}).find(
+    (key) => product.sizes[key]?.name === sizeName
+  );
+  if (sizeKey && product.sizes[sizeKey]?.priceModifier !== undefined) {
+    basePrice += product.sizes[sizeKey].priceModifier || 0;
+  }
+
+  return Math.max(0, basePrice);
+};
 
 /**
  * Cart Provider Component
- * Provides cart state and methods to children
- *
- * Note: MOCK_CART_ITEMS are initialized for development/testing purposes.
- * Remove MOCK_CART_ITEMS and use empty array [] in production.
+ * Persists minimal cart data (id, color, size, quantity) to localStorage.
+ * On mount, fetches full product details from API and derives display items.
  */
 export function CartProvider({ children }) {
-  // Initialize with mock items for development/testing
-  // TODO: Change to useState([]) for production
-  const [items, setItems] = useState(MOCK_CART_ITEMS);
+  // Source of truth: minimal cart entries (synced with localStorage)
+  const [cartEntries, setCartEntries] = useState(() => getCartFromStorage());
+
+  // Local cache for full item data (populated when user adds items during session)
+  const [itemsCache, setItemsCache] = useState({});
+
   const [isOpen, setIsOpen] = useState(false);
+
+  // Extract unique product IDs for API call
+  const productIds = useMemo(
+    () => getUniqueProductIds(cartEntries),
+    [cartEntries]
+  );
+
+  // Fetch full product details from API (enabled only when there are items)
+  const { data: productsResponse, isLoading } = useCartProductsList(productIds);
+
+  // Derive full cart items from cartEntries + API data + local cache
+  const items = useMemo(() => {
+    if (cartEntries.length === 0) return [];
+
+    // Build products map from API response
+    const apiProducts = productsResponse
+      ? Array.isArray(productsResponse)
+        ? productsResponse
+        : productsResponse?.results || []
+      : [];
+
+    const productsMap = new Map();
+    apiProducts.forEach((product) => {
+      productsMap.set(String(product.id), product);
+    });
+
+    return cartEntries
+      .map((entry) => {
+        const key = generateCartItemKey(entry.id, entry.color, entry.size);
+
+        // Prefer API data (always up-to-date)
+        const product = productsMap.get(String(entry.id));
+        if (product) {
+          return {
+            id: String(product.id),
+            slug: product.slug,
+            name: product.name,
+            price: calculateFinalPrice(product, entry.color, entry.size),
+            image: product.images?.[0]?.url || "",
+            color: entry.color,
+            size: entry.size,
+            quantity: entry.quantity,
+            _product: product // Full product data for price calculations
+          };
+        }
+
+        // Fallback to locally cached data (from addItem during this session)
+        const cached = itemsCache[key];
+        if (cached) {
+          return { ...cached, quantity: entry.quantity };
+        }
+
+        // No data yet (API still loading)
+        return null;
+      })
+      .filter(Boolean);
+  }, [cartEntries, productsResponse, itemsCache]);
+
+  // Hydration is complete when there are no stored items or API data has arrived
+  const isHydrated = cartEntries.length === 0 || !!productsResponse;
+
+  // Sync cartEntries to localStorage on change
+  useEffect(() => {
+    saveCartToStorage(cartEntries);
+  }, [cartEntries]);
 
   /**
    * Add item to cart
-   * @param {Object} item - Cart item object
+   * If item with same (id, color, size) exists, increase its quantity
+   * @param {Object} item - Full cart item {id, slug, name, price, image, color, size, quantity}
    */
   const addItem = useCallback((item) => {
-    setItems((prevItems) => {
-      const existingItem = prevItems.find(
-        (i) => i.id === item.id && i.size === item.size && i.color === item.color
-      );
+    // Cache full item data for immediate display (before API refetch)
+    const key = generateCartItemKey(item.id, item.color, item.size);
+    setItemsCache((prev) => ({ ...prev, [key]: item }));
 
-      if (existingItem) {
-        return prevItems.map((i) =>
-          i.id === item.id && i.size === item.size && i.color === item.color
-            ? { ...i, quantity: i.quantity + (item.quantity || 1) }
-            : i
+    // Update minimal cart entries
+    setCartEntries((prev) => {
+      const existingIdx = prev.findIndex((e) => isSameEntry(e, item));
+
+      if (existingIdx !== -1) {
+        return prev.map((e, idx) =>
+          idx === existingIdx
+            ? { ...e, quantity: e.quantity + (item.quantity || 1) }
+            : e
         );
       }
 
-      return [...prevItems, { ...item, quantity: item.quantity || 1 }];
+      return [
+        ...prev,
+        {
+          id: String(item.id),
+          color: item.color,
+          size: item.size,
+          quantity: item.quantity || 1
+        }
+      ];
     });
   }, []);
 
   /**
-   * Remove item from cart
-   * @param {string} itemId - Item ID to remove
+   * Remove item from cart by (id, color, size)
+   * @param {string} itemId - Product ID
+   * @param {string} color - Item color
+   * @param {string} size - Item size
    */
-  const removeItem = useCallback((itemId) => {
-    setItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+  const removeItem = useCallback((itemId, color, size) => {
+    setCartEntries((prev) =>
+      prev.filter((e) => !isSameEntry(e, { id: itemId, color, size }))
+    );
+
+    // Clean up cache
+    const key = generateCartItemKey(itemId, color, size);
+    setItemsCache((prev) => {
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
   }, []);
 
   /**
-   * Update item quantity
-   * @param {string} itemId - Item ID
+   * Update item quantity by (id, color, size)
+   * @param {string} itemId - Product ID
+   * @param {string} color - Item color
+   * @param {string} size - Item size
    * @param {number} quantity - New quantity
    */
   const updateQuantity = useCallback(
-    (itemId, quantity) => {
+    (itemId, color, size, quantity) => {
       if (quantity <= 0) {
-        removeItem(itemId);
+        removeItem(itemId, color, size);
         return;
       }
 
-      setItems((prevItems) =>
-        prevItems.map((item) => (item.id === itemId ? { ...item, quantity } : item))
+      setCartEntries((prev) =>
+        prev.map((e) =>
+          isSameEntry(e, { id: itemId, color, size })
+            ? { ...e, quantity }
+            : e
+        )
       );
     },
     [removeItem]
@@ -101,7 +228,9 @@ export function CartProvider({ children }) {
    * Clear all items from cart
    */
   const clearCart = useCallback(() => {
-    setItems([]);
+    setCartEntries([]);
+    setItemsCache({});
+    clearCartStorage();
   }, []);
 
   /**
@@ -127,8 +256,11 @@ export function CartProvider({ children }) {
 
   // Calculate totals
   const totals = useMemo(() => {
-    const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const shipping = subtotal > 0 ? 0 : 0; // Free shipping
+    const subtotal = items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+    const shipping = 0; // Free shipping
     const total = subtotal + shipping;
 
     return {
@@ -146,6 +278,8 @@ export function CartProvider({ children }) {
   const value = {
     items,
     isOpen,
+    isLoading: !isHydrated && isLoading,
+    isHydrated,
     totals,
     totalItems,
     addItem,

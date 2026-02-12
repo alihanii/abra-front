@@ -43,9 +43,9 @@ const buildProductsQueryParams = (params = {}) => {
     queryParams.search = params.search.trim();
   }
 
-  // ID/Slug filter
+  // ID/Slug filter (single or array)
   if (params.id) {
-    queryParams.id = params.id;
+    queryParams.id = Array.isArray(params.id) ? params.id : [params.id];
   }
 
   // Sorting
@@ -76,7 +76,7 @@ const buildProductsQueryParams = (params = {}) => {
  * @param {number} params.min_price - Minimum price
  * @param {number} params.max_price - Maximum price
  * @param {string} params.search - Search query
- * @param {string} params.id - Product ID/slug filter
+ * @param {string|Array<string>} params.id - Product ID/slug filter(s)
  * @param {string} params.order_by - Sort field (price, name, created_at)
  * @param {string} params.order - Sort direction (asc, desc)
  * @param {number} params.page - Page number
