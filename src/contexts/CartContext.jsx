@@ -13,7 +13,9 @@ import {
   saveCartToStorage,
   clearCartStorage,
   getUniqueProductIds,
-  generateCartItemKey
+  generateCartItemKey,
+  decodeSharedCart,
+  buildShareCartUrl
 } from "@/lib/utils/cartStorage";
 import { useCartProductsList } from "@/hooks/useApi";
 
@@ -67,13 +69,60 @@ const calculateFinalPrice = (product, colorName, sizeName) => {
 };
 
 /**
+ * Get available stock for a specific color-size combination
+ * @param {Object} product - Full product object from API
+ * @param {string} colorName - Selected color display name
+ * @param {string} sizeName - Selected size display name
+ * @returns {number} Available stock quantity
+ */
+const getAvailableStock = (product, colorName, sizeName) => {
+  if (!product) return 0;
+
+  // Find color key by display name
+  const colorKey = Object.keys(product.colors || {}).find(
+    (key) => product.colors[key]?.name === colorName
+  );
+
+  // Find size key by display name
+  const sizeKey = Object.keys(product.sizes || {}).find(
+    (key) => product.sizes[key]?.name === sizeName
+  );
+
+  if (!colorKey || !sizeKey) return 0;
+
+  const stockKey = `${colorKey}-${sizeKey}`;
+  return product.stock?.[stockKey] || 0;
+};
+
+/**
  * Cart Provider Component
  * Persists minimal cart data (id, color, size, quantity) to localStorage.
  * On mount, fetches full product details from API and derives display items.
  */
 export function CartProvider({ children }) {
-  // Source of truth: minimal cart entries (synced with localStorage)
-  const [cartEntries, setCartEntries] = useState(() => getCartFromStorage());
+  // On mount, check URL for shared cart data and use it if present
+  const [cartEntries, setCartEntries] = useState(() => {
+    if (typeof window === "undefined") return getCartFromStorage();
+
+    const params = new URLSearchParams(window.location.search);
+    const sharedCart = params.get("shared_cart");
+
+    if (sharedCart) {
+      const decoded = decodeSharedCart(sharedCart);
+      if (decoded.length > 0) {
+        // Clean the URL (remove shared_cart param) without reload
+        const url = new URL(window.location.href);
+        url.searchParams.delete("shared_cart");
+        window.history.replaceState({}, "", url.pathname + url.search);
+
+        // Save shared cart to localStorage and use it
+        saveCartToStorage(decoded);
+        return decoded;
+      }
+    }
+
+    return getCartFromStorage();
+  });
 
   // Local cache for full item data (populated when user adds items during session)
   const [itemsCache, setItemsCache] = useState({});
@@ -139,6 +188,63 @@ export function CartProvider({ children }) {
 
   // Hydration is complete when there are no stored items or API data has arrived
   const isHydrated = cartEntries.length === 0 || !!productsResponse;
+
+  // Validate stock when API data arrives: adjust quantities or remove out-of-stock items
+  useEffect(() => {
+    if (!productsResponse) return;
+
+    const apiProducts = Array.isArray(productsResponse)
+      ? productsResponse
+      : productsResponse?.results || [];
+
+    if (apiProducts.length === 0) return;
+
+    const productsMap = new Map();
+    apiProducts.forEach((product) => {
+      productsMap.set(String(product.id), product);
+    });
+
+    // Defer state update to next tick to avoid synchronous cascading renders
+    const timer = setTimeout(() => {
+      setCartEntries((prev) => {
+        if (prev.length === 0) return prev;
+
+        let hasChanges = false;
+
+        const adjusted = prev
+          .map((entry) => {
+            const product = productsMap.get(String(entry.id));
+
+            // Product no longer exists in API — remove from cart
+            if (!product) {
+              hasChanges = true;
+              return null;
+            }
+
+            const stock = getAvailableStock(product, entry.color, entry.size);
+
+            // Out of stock — remove from cart
+            if (stock <= 0) {
+              hasChanges = true;
+              return null;
+            }
+
+            // Quantity exceeds available stock — reduce to max available
+            if (entry.quantity > stock) {
+              hasChanges = true;
+              return { ...entry, quantity: stock };
+            }
+
+            return entry;
+          })
+          .filter(Boolean);
+
+        return hasChanges ? adjusted : prev;
+      });
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [productsResponse]); // Only run when API data changes
 
   // Sync cartEntries to localStorage on change
   useEffect(() => {
@@ -254,6 +360,31 @@ export function CartProvider({ children }) {
     setIsOpen((prev) => !prev);
   }, []);
 
+  /**
+   * Generate a shareable cart link and copy to clipboard
+   * @returns {Promise<string>} The shareable URL
+   */
+  const shareCart = useCallback(async () => {
+    const url = buildShareCartUrl(cartEntries);
+    if (!url) return "";
+
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      // Fallback for older browsers
+      const textarea = document.createElement("textarea");
+      textarea.value = url;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+    }
+
+    return url;
+  }, [cartEntries]);
+
   // Calculate totals
   const totals = useMemo(() => {
     const subtotal = items.reduce(
@@ -288,7 +419,8 @@ export function CartProvider({ children }) {
     clearCart,
     openCart,
     closeCart,
-    toggleCart
+    toggleCart,
+    shareCart
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

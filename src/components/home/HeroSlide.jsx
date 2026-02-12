@@ -56,6 +56,7 @@ export default function HeroSlide({
                 src={image.sm}
                 alt={title}
                 fill
+                unoptimized
                 className="object-cover md:hidden"
                 priority={isActive}
                 sizes="100vw"
@@ -68,6 +69,7 @@ export default function HeroSlide({
                 src={image.md}
                 alt={title}
                 fill
+                unoptimized
                 className="hidden object-cover md:block lg:hidden"
                 priority={isActive}
                 sizes="100vw"
@@ -80,6 +82,7 @@ export default function HeroSlide({
                 src={image.lg}
                 alt={title}
                 fill
+                unoptimized
                 className="hidden object-cover lg:block"
                 priority={isActive}
                 sizes="100vw"

@@ -7,6 +7,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import * as categoryService from "@/lib/api/services/categories";
 import * as productService from "@/lib/api/services/products";
 import * as authService from "@/lib/api/services/auth";
+import * as bannerService from "@/lib/api/services/banners";
 
 // Query Keys - Centralized query key factory
 export const queryKeys = {
@@ -27,6 +28,19 @@ export const queryKeys = {
     all: ["auth"],
     profile: ["auth", "profile"],
   },
+  banners: {
+    all: ["banners"],
+    list: ["banners", "list"],
+  },
+};
+
+// Banner Hooks
+export const useBanners = (options = {}) => {
+  return useQuery({
+    queryKey: queryKeys.banners.list,
+    queryFn: () => bannerService.getBanners(),
+    ...options
+  });
 };
 
 // Category Hooks

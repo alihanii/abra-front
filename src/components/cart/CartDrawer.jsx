@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useCart } from "@/contexts/CartContext";
 import CartItem from "./CartItem";
 import EmptyCart from "./EmptyCart";
@@ -11,9 +11,18 @@ import CartSummary from "./CartSummary";
  * Side drawer for shopping cart with backdrop and smooth animations
  */
 export default function CartDrawer() {
-  const { isOpen, closeCart, items } = useCart();
+  const { isOpen, closeCart, items, shareCart } = useCart();
   const [isMounted, setIsMounted] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleShareCart = useCallback(async () => {
+    const url = await shareCart();
+    if (url) {
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    }
+  }, [shareCart]);
 
   // Handle mount/unmount with animation delay
   useEffect(() => {
@@ -96,13 +105,28 @@ export default function CartDrawer() {
               <h2 className="text-2xl font-bold text-gray-900">Shopping Cart</h2>
             </div>
 
-            <button
-              onClick={closeCart}
-              className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all cursor-pointer"
-              aria-label="Close cart"
-            >
-              <i className="ri-close-line text-2xl"></i>
-            </button>
+            <div className="flex items-center gap-1">
+              {/* Share Cart Button */}
+              {items.length > 0 && (
+                <button
+                  onClick={handleShareCart}
+                  className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all cursor-pointer"
+                  aria-label="Share cart"
+                  title={isCopied ? "Link copied!" : "Copy cart link"}
+                >
+                  <i className={`${isCopied ? "ri-check-line text-green-600" : "ri-link"} text-xl`}></i>
+                </button>
+              )}
+
+              {/* Close Button */}
+              <button
+                onClick={closeCart}
+                className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all cursor-pointer"
+                aria-label="Close cart"
+              >
+                <i className="ri-close-line text-2xl"></i>
+              </button>
+            </div>
           </div>
 
           {/* Cart Content */}

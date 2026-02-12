@@ -4,6 +4,11 @@
  */
 
 export const API_ROUTES = {
+  // Banners endpoints
+  BANNERS: {
+    LIST: "/banners/",
+  },
+
   // Auth endpoints
   AUTH: {
     LOGIN: "/accounts/login/",
