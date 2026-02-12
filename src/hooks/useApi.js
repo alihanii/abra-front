@@ -130,3 +130,27 @@ export const useLogin = (options = {}) => {
     ...options
   });
 };
+
+/**
+ * Change password mutation using TanStack Query
+ * @param {Object} options - Mutation options (onSuccess, onError)
+ * @returns {Object} Mutation object with mutate function
+ */
+export const useChangePassword = (options = {}) => {
+  return useMutation({
+    mutationFn: (passwordData) => authService.changePassword(passwordData),
+    onSuccess: (data, variables, context) => {
+      // Call custom onSuccess if provided
+      if (options.onSuccess) {
+        options.onSuccess(data, variables, context);
+      }
+    },
+    onError: (error, variables, context) => {
+      // Call custom onError if provided
+      if (options.onError) {
+        options.onError(error, variables, context);
+      }
+    },
+    ...options
+  });
+};

@@ -7,7 +7,7 @@ import ScrollReveal from "@/components/ui/ScrollReveal";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import Alert from "@/components/ui/Alert";
 import { useAuth } from "@/contexts/AuthContext";
-import { useUpdateProfile } from "@/hooks/useApi";
+import { useUpdateProfile, useChangePassword } from "@/hooks/useApi";
 import { cn } from "@/lib/utils";
 
 /**
@@ -50,6 +50,30 @@ export default function AccountSettings({ user, onUpdate, isLoading: externalLoa
                          error?.response?.data?.message ||
                          error?.message ||
                          "خطا در به‌روزرسانی اطلاعات. لطفاً دوباره تلاش کنید.";
+      setError(errorMessage);
+      setSuccessMessage(null);
+    }
+  });
+
+  // Change password mutation
+  const changePasswordMutation = useChangePassword({
+    onSuccess: (data) => {
+      setIsChangingPassword(false);
+      setPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: ""
+      });
+      setSuccessMessage(data?.message || "رمز عبور با موفقیت تغییر کرد");
+      setError(null);
+      // Clear success message after 3 seconds
+      setTimeout(() => setSuccessMessage(null), 3000);
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.detail || 
+                         error?.response?.data?.message ||
+                         error?.message ||
+                         "خطا در تغییر رمز عبور. لطفاً دوباره تلاش کنید.";
       setError(errorMessage);
       setSuccessMessage(null);
     }
@@ -123,32 +147,43 @@ export default function AccountSettings({ user, onUpdate, isLoading: externalLoa
   };
 
   const handlePasswordSave = async () => {
+    setError(null);
+    setSuccessMessage(null);
+
+    // Validation
+    if (!passwordData.currentPassword) {
+      setError("لطفاً رمز عبور فعلی را وارد کنید");
+      return;
+    }
+
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      alert("رمز عبور جدید و تأیید آن مطابقت ندارند");
+      setError("رمز عبور جدید و تأیید آن مطابقت ندارند");
       return;
     }
 
-    if (passwordData.newPassword.length < 6) {
-      alert("رمز عبور باید حداقل ۶ کاراکتر باشد");
+    if (passwordData.newPassword.length < 8) {
+      setError("رمز عبور باید حداقل ۸ کاراکتر باشد");
       return;
     }
 
-    // TODO: Implement password change API
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      setIsChangingPassword(false);
-      setPasswordData({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: ""
-      });
-      alert("رمز عبور با موفقیت تغییر کرد");
-    } catch (error) {
-      console.error("Failed to change password:", error);
-      alert("خطا در تغییر رمز عبور");
+    // Check for at least one English letter
+    if (!/[a-zA-Z]/.test(passwordData.newPassword)) {
+      setError("رمز عبور باید شامل حداقل یک حرف انگلیسی باشد");
+      return;
     }
+
+    // Check for at least one number
+    if (!/[0-9]/.test(passwordData.newPassword)) {
+      setError("رمز عبور باید شامل حداقل یک عدد باشد");
+      return;
+    }
+
+    // Call mutation
+    changePasswordMutation.mutate({
+      old_password: passwordData.currentPassword,
+      new_password: passwordData.newPassword,
+      new_password2: passwordData.confirmPassword
+    });
   };
 
   return (
@@ -308,6 +343,24 @@ export default function AccountSettings({ user, onUpdate, isLoading: externalLoa
 
           {isChangingPassword && (
             <div className="space-y-4">
+              {error && (
+                <Alert
+                  variant="error"
+                  size="md"
+                  message={error}
+                  className="mb-4"
+                />
+              )}
+
+              {successMessage && (
+                <Alert
+                  variant="success"
+                  size="md"
+                  message={successMessage}
+                  className="mb-4"
+                />
+              )}
+
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   رمز عبور فعلی
@@ -355,10 +408,10 @@ export default function AccountSettings({ user, onUpdate, isLoading: externalLoa
                   variant="primary"
                   size="md"
                   onClick={handlePasswordSave}
-                  disabled={isLoading}
+                  disabled={changePasswordMutation.isPending}
                   fullWidth
                 >
-                  {isLoading ? (
+                  {changePasswordMutation.isPending ? (
                     <>
                       <i className="ri-loader-4-line animate-spin ml-2"></i>
                       در حال تغییر...
@@ -380,8 +433,10 @@ export default function AccountSettings({ user, onUpdate, isLoading: externalLoa
                       newPassword: "",
                       confirmPassword: ""
                     });
+                    setError(null);
+                    setSuccessMessage(null);
                   }}
-                  disabled={isLoading}
+                  disabled={changePasswordMutation.isPending}
                   fullWidth
                 >
                   انصراف
@@ -392,7 +447,7 @@ export default function AccountSettings({ user, onUpdate, isLoading: externalLoa
 
           {!isChangingPassword && (
             <p className="text-sm text-gray-600">
-              برای امنیت بیشتر حساب کاربری خود، رمز عبور قوی انتخاب کنید.
+              برای امنیت بیشتر حساب کاربری خود، رمز عبور قوی انتخاب کنید. رمز عبور باید حداقل ۸ کاراکتر و شامل حداقل یک حرف انگلیسی و یک عدد باشد.
             </p>
           )}
         </div>

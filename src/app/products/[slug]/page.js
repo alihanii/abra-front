@@ -220,7 +220,7 @@ export default function ProductDetailPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[var(--color-sky-light)]">
+    <main className="min-h-screen bg-[var(--color-sky-light)] " dir="ltr">
       <div className="max-w-7xl mx-auto px-6 py-2 pb-32 lg:pb-8">
         {/* Breadcrumbs */}
         <Breadcrumbs items={breadcrumbItems} />

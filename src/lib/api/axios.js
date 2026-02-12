@@ -56,7 +56,11 @@ axiosInstance.interceptors.response.use(
         if (typeof window !== "undefined") {
           removeCookie("abra_auth_token");
           removeCookie("abra_refresh_token");
-          // You can add redirect logic here if needed
+          
+          // Dispatch logout event to trigger logout in AuthContext
+          window.dispatchEvent(new CustomEvent("auth:logout", { 
+            detail: { reason: "unauthorized" } 
+          }));
         }
       }
     }

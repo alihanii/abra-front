@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useMemo, useEffect } from "react";
+import { createContext, useContext, useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { getCookie, setCookie, removeCookie } from "@/lib/utils/cookies";
 import { useProfile } from "@/hooks/useApi";
 import { useQueryClient } from "@tanstack/react-query";
@@ -42,6 +42,20 @@ export function AuthProvider({ children }) {
       setIsLoading(false);
     }
   }, []);
+
+  // Listen for logout events from axios interceptor (401 errors)
+  useEffect(() => {
+    const handleLogout = () => {
+      logoutRef.current();
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("auth:logout", handleLogout);
+      return () => {
+        window.removeEventListener("auth:logout", handleLogout);
+      };
+    }
+  }, []); // Empty dependency array - event listener only added once
 
   // Fetch user profile when token exists
   const { data: profileData, isLoading: isProfileLoading, error: profileError } = useProfile({
@@ -126,6 +140,12 @@ export function AuthProvider({ children }) {
       console.error("Failed to remove auth data:", error);
     }
   }, [queryClient]);
+
+  // Keep logout function reference for event listener
+  const logoutRef = useRef(logout);
+  useEffect(() => {
+    logoutRef.current = logout;
+  }, [logout]);
 
   /**
    * Update user data

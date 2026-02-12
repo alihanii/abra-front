@@ -9,6 +9,7 @@ export const API_ROUTES = {
     LOGIN: "/accounts/login/",
     PROFILE: "/accounts/profile/",
     UPDATE_PROFILE: "/accounts/profile/update/",
+    CHANGE_PASSWORD: "/accounts/change-password/",
   },
 
   // Products endpoints

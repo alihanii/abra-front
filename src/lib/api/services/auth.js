@@ -71,3 +71,31 @@ export const updateProfile = async (profileData, options = {}) => {
   return response.data;
 };
 
+/**
+ * Change user password
+ * @param {Object} passwordData - Password change data
+ * @param {string} passwordData.old_password - Current password
+ * @param {string} passwordData.new_password - New password
+ * @param {string} passwordData.new_password2 - Confirm new password
+ * @param {Object} options - Request options
+ * @returns {Promise} Response with success message
+ */
+export const changePassword = async (passwordData, options = {}) => {
+  const { old_password, new_password, new_password2 } = passwordData;
+  
+  const response = await post(
+    API_ROUTES.AUTH.CHANGE_PASSWORD,
+    {
+      old_password,
+      new_password,
+      new_password2
+    },
+    {
+      requireAuth: true,
+      ...options
+    }
+  );
+  
+  return response.data;
+};
+
