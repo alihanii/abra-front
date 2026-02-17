@@ -170,19 +170,31 @@ export function AuthProvider({ children }) {
     return !!token && !!user;
   }, [token, user]);
 
-  // Update loading state based on profile loading
-  useEffect(() => {
-    if (token && isProfileLoading && !isLoading) {
-      setIsLoading(true);
-    } else if (!isProfileLoading) {
-      setIsLoading(false);
-    }
-  }, [token, isProfileLoading, isLoading]);
+  /**
+   * Calculate final loading state
+   * Loading is true if:
+   * - Initial token check is in progress, OR
+   * - We have a token but profile is still loading, OR
+   * - We have a token but no user yet (and no error) - profile is being fetched
+   */
+  const finalIsLoading = useMemo(() => {
+    const result = (() => {
+      if (isLoading) return { loading: true, reason: 'initial token check' };
+
+      if (token && !user && !profileError) return { loading: true, reason: 'waiting for profile (token exists, no user yet)' };
+
+      if (token && isProfileLoading) return { loading: true, reason: 'profile actively loading' };
+
+      return { loading: false, reason: 'auth check complete' };
+    })();
+
+    return result.loading;
+  }, [isLoading, token, user, profileError, isProfileLoading]);
 
   const value = {
     token,
     user,
-    isLoading,
+    isLoading: finalIsLoading,
     isAuthenticated,
     login,
     logout,

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { NAVIGATION_ITEMS, ROUTES } from "@/config/routes";
 import { useNavigation } from "@/hooks/useNavigation";
 import { useCart } from "@/contexts/CartContext";
@@ -16,11 +17,12 @@ import AbraLogo from "@/components/ui/AbraLogo";
  * @param {Function} props.onUserClick - Callback when user button is clicked
  */
 export default function Header({ onUserClick }) {
+  const router = useRouter();
   const { totalItems, openCart } = useCart();
   const { openProfile } = useProfile();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { getRouteClassName, checkActiveRoute } = useNavigation();
+  const { getRouteClassName, checkActiveRoute, pathname } = useNavigation();
 
   // Handle scroll effect
   useEffect(() => {
@@ -34,8 +36,25 @@ export default function Header({ onUserClick }) {
 
   // Close mobile menu when route changes
   useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [checkActiveRoute]);
+    // Defer state update to avoid synchronous cascading renders
+    const timer = setTimeout(() => setIsMobileMenuOpen(false), 0);
+    return () => clearTimeout(timer);
+  }, [pathname]);
+
+  // Open profile drawer when redirected from payment (then clean URL)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const shouldOpenProfile = params.get("open_profile") === "1";
+    if (!shouldOpenProfile) return;
+
+    openProfile();
+
+    // Remove query flag to avoid reopening on refresh/back
+    params.delete("open_profile");
+    const next = params.toString();
+    router.replace(next ? `${pathname}?${next}` : pathname, { scroll: false });
+  }, [openProfile, router, pathname]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {

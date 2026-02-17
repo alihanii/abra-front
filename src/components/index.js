@@ -6,3 +6,6 @@
 export { default as Header } from "./Header";
 export { default as Footer } from "./Footer";
 export { default as NavLink } from "./NavLink";
+
+// Payment
+export * from "./payment";

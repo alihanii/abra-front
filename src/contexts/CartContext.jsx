@@ -17,6 +17,7 @@ import {
   decodeSharedCart,
   buildShareCartUrl
 } from "@/lib/utils/cartStorage";
+import { calculateFinalPrice } from "@/lib/utils/cartPricing";
 import { useCartProductsList } from "@/hooks/useApi";
 
 /**
@@ -34,38 +35,6 @@ const isSameEntry = (a, b) => {
     a.color === b.color &&
     a.size === b.size
   );
-};
-
-/**
- * Calculate final price for a product based on selected color and size
- * Mirrors the logic in useProduct hook's finalPrice calculation
- * @param {Object} product - Full product object from API
- * @param {string} colorName - Selected color display name
- * @param {string} sizeName - Selected size display name
- * @returns {number} Final calculated price
- */
-const calculateFinalPrice = (product, colorName, sizeName) => {
-  if (!product) return 0;
-
-  let basePrice = product.price || 0;
-
-  // Find color key by display name and apply color-specific price
-  const colorKey = Object.keys(product.colors || {}).find(
-    (key) => product.colors[key]?.name === colorName
-  );
-  if (colorKey && product.colors[colorKey]?.price !== undefined) {
-    basePrice = product.colors[colorKey].price;
-  }
-
-  // Find size key by display name and apply size modifier
-  const sizeKey = Object.keys(product.sizes || {}).find(
-    (key) => product.sizes[key]?.name === sizeName
-  );
-  if (sizeKey && product.sizes[sizeKey]?.priceModifier !== undefined) {
-    basePrice += product.sizes[sizeKey].priceModifier || 0;
-  }
-
-  return Math.max(0, basePrice);
 };
 
 /**

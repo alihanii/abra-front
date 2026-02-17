@@ -76,7 +76,7 @@ export default function Alert({
     >
       {showIcon && <i className={cn("text-lg shrink-0 mt-0.5", iconClass)}></i>}
       <div className="flex-1 min-w-0">
-        {typeof content === "string" ? <p className="leading-relaxed">{content}</p> : content}
+        {typeof content === "string" ? <p className="leading-relaxed mt-1">{content}</p> : content}
       </div>
     </div>
   );

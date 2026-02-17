@@ -34,7 +34,7 @@ export default function CartSummary() {
       {/* Action Buttons */}
       <div className="space-y-3">
         <BaseButton
-          href={ROUTES.CHECKOUT || "/checkout"}
+          href={ROUTES.PAYMENT || "/payment"}
           onClick={closeCart}
           variant="primary"
           size="lg"

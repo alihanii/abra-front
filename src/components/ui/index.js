@@ -16,3 +16,4 @@ export { default as BaseSkeleton } from "./BaseSkeleton";
 export { default as ScrollReveal } from "./ScrollReveal";
 export { default as ScrollNavigation } from "./ScrollNavigation";
 export { default as AbraLogo } from "./AbraLogo";
+export { default as Toast } from "./Toast";

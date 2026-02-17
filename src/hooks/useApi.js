@@ -8,6 +8,7 @@ import * as categoryService from "@/lib/api/services/categories";
 import * as productService from "@/lib/api/services/products";
 import * as authService from "@/lib/api/services/auth";
 import * as bannerService from "@/lib/api/services/banners";
+import * as cartService from "@/lib/api/services/cart";
 
 // Query Keys - Centralized query key factory
 export const queryKeys = {
@@ -23,6 +24,7 @@ export const queryKeys = {
   cart: {
     all: ["cart"],
     products: (ids) => ["cart", "products", ids],
+    pricing: ["cart", "pricing"],
   },
   auth: {
     all: ["auth"],
@@ -174,6 +176,30 @@ export const useLogin = (options = {}) => {
 export const useChangePassword = (options = {}) => {
   return useMutation({
     mutationFn: (passwordData) => authService.changePassword(passwordData),
+    onSuccess: (data, variables, context) => {
+      // Call custom onSuccess if provided
+      if (options.onSuccess) {
+        options.onSuccess(data, variables, context);
+      }
+    },
+    onError: (error, variables, context) => {
+      // Call custom onError if provided
+      if (options.onError) {
+        options.onError(error, variables, context);
+      }
+    },
+    ...options
+  });
+};
+
+/**
+ * Calculate cart pricing mutation using TanStack Query
+ * @param {Object} options - Mutation options (onSuccess, onError)
+ * @returns {Object} Mutation object with mutate function
+ */
+export const useCalculateCartPricing = (options = {}) => {
+  return useMutation({
+    mutationFn: (cartData) => cartService.calculateCartPricing(cartData),
     onSuccess: (data, variables, context) => {
       // Call custom onSuccess if provided
       if (options.onSuccess) {

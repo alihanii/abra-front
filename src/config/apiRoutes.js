@@ -42,7 +42,8 @@ export const API_ROUTES = {
     UPDATE_ITEM: (itemId) => `/cart/items/${itemId}`,
     REMOVE_ITEM: (itemId) => `/cart/items/${itemId}`,
     CLEAR: "/cart/clear",
-    APPLY_COUPON: "/cart/coupon"
+    APPLY_COUPON: "/cart/coupon",
+    CALCULATE: "/cart/calculate/"
   },
 
   // Orders endpoints

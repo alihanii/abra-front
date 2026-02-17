@@ -233,9 +233,9 @@ export default function ProductCard({
 
       {/* Product Info */}
       <div
-        className={cn("flex flex-col flex-1", "ml-3 md:ml-0", "justify-between md:justify-start")}
+        className={cn("flex flex-col flex-1", "mr-3 md:ml-0", "justify-between md:justify-start")}
       >
-        <div className="flex-1">
+        <div className="flex-1 items-end flex flex-col ml-2">
           <h3
             className={cn(
               "font-bold text-gray-900 mb-1 md:mb-2",
@@ -268,7 +268,7 @@ export default function ProductCard({
                 min={1}
                 max={maxQuantity || 99}
                 size={"md"}
-                className="w-full justify-center mb-3"
+                className="w-full justify-end md:mb-2 mb-0"
               />
             </div>
           ) : (

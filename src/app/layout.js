@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono, Pacifico } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import "../styles/toast.scss";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { CartProvider } from "@/contexts/CartContext";
@@ -9,6 +10,7 @@ import { ProfileProvider } from "@/contexts/ProfileContext";
 import { QueryProvider } from "@/providers/QueryProvider";
 import { CartDrawer } from "@/components/cart";
 import { ProfileDrawer } from "@/components/profile";
+import { Toast } from "@/components/ui";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -79,11 +81,12 @@ export default function RootLayout({ children }) {
               <CartProvider>
                 <div className="flex flex-col min-h-screen">
                   <Header />
-                  <main className="grow">{children}</main>
+                  <main className="grow bg-white">{children}</main>
                   <Footer />
                 </div>
                 <CartDrawer />
                 <ProfileDrawer />
+                <Toast />
               </CartProvider>
             </ProfileProvider>
           </AuthProvider>
