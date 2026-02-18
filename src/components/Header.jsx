@@ -18,8 +18,8 @@ import AbraLogo from "@/components/ui/AbraLogo";
  */
 export default function Header({ onUserClick }) {
   const router = useRouter();
-  const { totalItems, openCart } = useCart();
-  const { openProfile } = useProfile();
+  const { totalItems, isOpen: isCartOpen, openCart, closeCart } = useCart();
+  const { isOpen: isProfileOpen, openProfile, closeProfile } = useProfile();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { getRouteClassName, checkActiveRoute, pathname } = useNavigation();
@@ -73,15 +73,32 @@ export default function Header({ onUserClick }) {
   };
 
   const handleCartClick = () => {
-    openCart();
+    // Close profile drawer if open
+    if (isProfileOpen) {
+      closeProfile();
+    }
+    // Toggle cart drawer
+    if (isCartOpen) {
+      closeCart();
+    } else {
+      openCart();
+    }
   };
 
   const handleUserClick = () => {
     if (onUserClick) {
       onUserClick();
     } else {
-      // Open profile drawer
-      openProfile();
+      // Close cart drawer if open
+      if (isCartOpen) {
+        closeCart();
+      }
+      // Toggle profile drawer
+      if (isProfileOpen) {
+        closeProfile();
+      } else {
+        openProfile();
+      }
     }
   };
 
