@@ -72,7 +72,7 @@ export default function ShopByCategory() {
         >
           <div className="flex items-center justify-between mb-12">
             <ScrollReveal
-              animation="slideRight"
+              animation="fadeUp"
               delay={100}
             >
               <div className="text-start md:text-left flex-1">
@@ -139,7 +139,7 @@ export default function ShopByCategory() {
             {/* Mobile Grid */}
             <div className="md:hidden grid grid-cols-1 gap-8">
               {categories.map((category, index) => {
-                const animations = ["fadeUp", "slideLeft", "slideRight"];
+                const animations = ["fadeUp", "fadeUp", "fadeUp"];
                 const animation = animations[index % animations.length];
 
                 return (
