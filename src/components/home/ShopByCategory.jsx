@@ -22,7 +22,6 @@ export default function ShopByCategory() {
   // Fetch categories from API
   const { data: categoriesResponse, isLoading, error } = useCategories({
     page: 1,
-    page_size: 100
   });
 
   // Transform API data to component format
@@ -76,11 +75,11 @@ export default function ShopByCategory() {
               animation="slideRight"
               delay={100}
             >
-              <div className="text-center md:text-left flex-1">
+              <div className="text-start md:text-left flex-1">
                 <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
                   {t('shopByCategory.title')}
                 </h2>
-                <p className="text-lg sm:text-xl text-gray-700">{t('shopByCategory.subtitle')}</p>
+                <p className="text-lg sm:text-xl text-gray-700 text-start ">{t('shopByCategory.subtitle')}</p>
               </div>
             </ScrollReveal>
 

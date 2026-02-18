@@ -51,32 +51,6 @@ export const NAVIGATION_ITEMS = [
 ];
 
 /**
- * Shop links for footer
- */
-export const SHOP_LINKS = [
-  {
-    id: "hoodies",
-    label: "Hoodies",
-    href: `${ROUTES.PRODUCTS}?category=hoodies`
-  },
-  {
-    id: "tshirts",
-    label: "T-Shirts",
-    href: `${ROUTES.PRODUCTS}?category=tshirts`
-  },
-  {
-    id: "sweatshirts",
-    label: "Sweatshirts",
-    href: `${ROUTES.PRODUCTS}?category=sweatshirts`
-  },
-  {
-    id: "customDesign",
-    label: "Custom Design",
-    href: ROUTES.DESIGN_STUDIO
-  }
-];
-
-/**
  * Support links for footer
  */
 export const SUPPORT_LINKS = [

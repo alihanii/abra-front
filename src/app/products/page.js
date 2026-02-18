@@ -1,149 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { useTranslations } from 'next-intl';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { ProductFilters, ProductGrid } from "@/components/products";
 import { ROUTES } from "@/config/routes";
 import { useProducts } from "@/hooks/useApi";
 
-/**
- * Mock Products Data
- * Extended list for products page
- */
-// const MOCK_PRODUCTS = [
-//   {
-//     id: 'prod-1',
-//     name: 'Classic Black Hoodie',
-//     price: 34.99,
-//     image:
-//       'https://readdy.ai/api/search-image?query=Premium%20black%20hoodie%20mockup%20on%20clean%20white%20background%2C%20minimalist%20product%20photography%2C%20soft%20natural%20lighting%2C%20professional%20e-commerce%20style%2C%20centered%20composition%2C%20high%20resolution%2C%20modern%20casual%20wear%2C%20cotton%20fabric%20texture%20visible%2C%20front%20view%2C%20no%20wrinkles%2C%20studio%20shot%2C%20commercial%20photography&width=500&height=600&seq=prod1&orientation=portrait',
-//     badge: 'Bestseller',
-//     href: `${ROUTES.PRODUCTS}/classic-black-hoodie`,
-//     category: 'hoodies',
-//     color: 'black',
-//   },
-//   {
-//     id: 'prod-2',
-//     name: 'White Cotton T-Shirt',
-//     price: 19.99,
-//     image:
-//       'https://readdy.ai/api/search-image?query=Premium%20white%20t-shirt%20mockup%20on%20clean%20white%20background%2C%20minimalist%20product%20photography%2C%20soft%20natural%20lighting%2C%20professional%20e-commerce%20style%2C%20centered%20composition%2C%20high%20resolution%2C%20modern%20casual%20wear%2C%20cotton%20fabric%20texture%20visible%2C%20front%20view%2C%20no%20wrinkles%2C%20studio%20shot%2C%20commercial%20photography&width=500&height=600&seq=prod2&orientation=portrait',
-//     badge: 'Popular',
-//     href: `${ROUTES.PRODUCTS}/white-cotton-tshirt`,
-//     category: 'tshirts',
-//     color: 'white',
-//   },
-//   {
-//     id: 'prod-3',
-//     name: 'Navy Blue Sweatshirt',
-//     price: 29.99,
-//     image:
-//       'https://readdy.ai/api/search-image?query=Premium%20navy%20blue%20sweatshirt%20mockup%20on%20clean%20white%20background%2C%20minimalist%20product%20photography%2C%20soft%20natural%20lighting%2C%20professional%20e-commerce%20style%2C%20centered%20composition%2C%20high%20resolution%2C%20modern%20casual%20wear%2C%20cotton%20fabric%20texture%20visible%2C%20front%20view%2C%20no%20wrinkles%2C%20studio%20shot%2C%20commercial%20photography&width=500&height=600&seq=prod3&orientation=portrait',
-//     badge: 'New',
-//     href: `${ROUTES.PRODUCTS}/navy-blue-sweatshirt`,
-//     category: 'sweatshirts',
-//     color: 'navy',
-//   },
-//   {
-//     id: 'prod-4',
-//     name: 'Gray Hoodie Premium',
-//     price: 39.99,
-//     image:
-//       'https://readdy.ai/api/search-image?query=Premium%20gray%20hoodie%20mockup%20on%20clean%20white%20background%2C%20minimalist%20product%20photography%2C%20soft%20natural%20lighting%2C%20professional%20e-commerce%20style%2C%20centered%20composition%2C%20high%20resolution%2C%20modern%20casual%20wear%2C%20cotton%20fabric%20texture%20visible%2C%20front%20view%2C%20no%20wrinkles%2C%20studio%20shot%2C%20commercial%20photography&width=500&height=600&seq=prod4&orientation=portrait',
-//     badge: 'Trending',
-//     href: `${ROUTES.PRODUCTS}/gray-hoodie-premium`,
-//     category: 'hoodies',
-//     color: 'gray',
-//   },
-//   {
-//     id: 'prod-5',
-//     name: 'Olive Green T-Shirt',
-//     price: 22.99,
-//     image:
-//       'https://readdy.ai/api/search-image?query=Premium%20olive%20green%20t-shirt%20mockup%20on%20clean%20white%20background%2C%20minimalist%20product%20photography%2C%20soft%20natural%20lighting%2C%20professional%20e-commerce%20style%2C%20centered%20composition%2C%20high%20resolution%2C%20modern%20casual%20wear%2C%20cotton%20fabric%20texture%20visible%2C%20front%20view%2C%20no%20wrinkles%2C%20studio%20shot%2C%20commercial%20photography&width=500&height=600&seq=prod5&orientation=portrait',
-//     badge: 'New',
-//     href: `${ROUTES.PRODUCTS}/olive-green-tshirt`,
-//     category: 'tshirts',
-//     color: 'olive',
-//   },
-//   {
-//     id: 'prod-6',
-//     name: 'Burgundy Sweatshirt',
-//     price: 32.99,
-//     image:
-//       'https://readdy.ai/api/search-image?query=Premium%20burgundy%20sweatshirt%20mockup%20on%20clean%20white%20background%2C%20minimalist%20product%20photography%2C%20soft%20natural%20lighting%2C%20professional%20e-commerce%20style%2C%20centered%20composition%2C%20high%20resolution%2C%20modern%20casual%20wear%2C%20cotton%20fabric%20texture%20visible%2C%20front%20view%2C%20no%20wrinkles%2C%20studio%20shot%2C%20commercial%20photography&width=500&height=600&seq=prod6&orientation=portrait',
-//     badge: 'Popular',
-//     href: `${ROUTES.PRODUCTS}/burgundy-sweatshirt`,
-//     category: 'sweatshirts',
-//     color: 'burgundy',
-//   },
-//   {
-//     id: 'prod-7',
-//     name: 'Black Premium T-Shirt',
-//     price: 24.99,
-//     image:
-//       'https://readdy.ai/api/search-image?query=Premium%20black%20t-shirt%20mockup%20on%20clean%20white%20background%2C%20minimalist%20product%20photography%2C%20soft%20natural%20lighting%2C%20professional%20e-commerce%20style%2C%20centered%20composition%2C%20high%20resolution%2C%20modern%20casual%20wear%2C%20cotton%20fabric%20texture%20visible%2C%20front%20view%2C%20no%20wrinkles%2C%20studio%20shot%2C%20commercial%20photography&width=500&height=600&seq=prod7&orientation=portrait',
-//     badge: 'Bestseller',
-//     href: `${ROUTES.PRODUCTS}/black-premium-tshirt`,
-//     category: 'tshirts',
-//     color: 'black',
-//   },
-//   {
-//     id: 'prod-8',
-//     name: 'White Comfort Hoodie',
-//     price: 36.99,
-//     image:
-//       'https://readdy.ai/api/search-image?query=Premium%20white%20hoodie%20mockup%20on%20clean%20white%20background%2C%20minimalist%20product%20photography%2C%20soft%20natural%20lighting%2C%20professional%20e-commerce%20style%2C%20centered%20composition%2C%20high%20resolution%2C%20modern%20casual%20wear%2C%20cotton%20fabric%20texture%20visible%2C%20front%20view%2C%20no%20wrinkles%2C%20studio%20shot%2C%20commercial%20photography&width=500&height=600&seq=prod8&orientation=portrait',
-//     badge: 'New',
-//     href: `${ROUTES.PRODUCTS}/white-comfort-hoodie`,
-//     category: 'hoodies',
-//     color: 'white',
-//   },
-//   {
-//     id: 'prod-9',
-//     name: 'Navy Classic Hoodie',
-//     price: 35.99,
-//     image:
-//       'https://readdy.ai/api/search-image?query=Premium%20navy%20hoodie%20mockup%20on%20clean%20white%20background%2C%20minimalist%20product%20photography%2C%20soft%20natural%20lighting%2C%20professional%20e-commerce%20style%2C%20centered%20composition%2C%20high%20resolution%2C%20modern%20casual%20wear%2C%20cotton%20fabric%20texture%20visible%2C%20front%20view%2C%20no%20wrinkles%2C%20studio%20shot%2C%20commercial%20photography&width=500&height=600&seq=prod9&orientation=portrait',
-//     badge: 'Popular',
-//     href: `${ROUTES.PRODUCTS}/navy-classic-hoodie`,
-//     category: 'hoodies',
-//     color: 'navy',
-//   },
-//   {
-//     id: 'prod-10',
-//     name: 'Gray Premium Sweatshirt',
-//     price: 31.99,
-//     image:
-//       'https://readdy.ai/api/search-image?query=Premium%20gray%20sweatshirt%20mockup%20on%20clean%20white%20background%2C%20minimalist%20product%20photography%2C%20soft%20natural%20lighting%2C%20professional%20e-commerce%20style%2C%20centered%20composition%2C%20high%20resolution%2C%20modern%20casual%20wear%2C%20cotton%20fabric%20texture%20visible%2C%20front%20view%2C%20no%20wrinkles%2C%20studio%20shot%2C%20commercial%20photography&width=500&height=600&seq=prod10&orientation=portrait',
-//     badge: 'Trending',
-//     href: `${ROUTES.PRODUCTS}/gray-premium-sweatshirt`,
-//     category: 'sweatshirts',
-//     color: 'gray',
-//   },
-//   {
-//     id: 'prod-11',
-//     name: 'Black Classic Sweatshirt',
-//     price: 28.99,
-//     image:
-//       'https://readdy.ai/api/search-image?query=Premium%20black%20sweatshirt%20mockup%20on%20clean%20white%20background%2C%20minimalist%20product%20photography%2C%20soft%20natural%20lighting%2C%20professional%20e-commerce%20style%2C%20centered%20composition%2C%20high%20resolution%2C%20modern%20casual%20wear%2C%20cotton%20fabric%20texture%20visible%2C%20front%20view%2C%20no%20wrinkles%2C%20studio%20shot%2C%20commercial%20photography&width=500&height=600&seq=prod11&orientation=portrait',
-//     badge: 'Bestseller',
-//     href: `${ROUTES.PRODUCTS}/black-classic-sweatshirt`,
-//     category: 'sweatshirts',
-//     color: 'black',
-//   },
-//   {
-//     id: 'prod-12',
-//     name: 'White Premium T-Shirt',
-//     price: 21.99,
-//     image:
-//       'https://readdy.ai/api/search-image?query=Premium%20white%20t-shirt%20mockup%20on%20clean%20white%20background%2C%20minimalist%20product%20photography%2C%20soft%20natural%20lighting%2C%20professional%20e-commerce%20style%2C%20centered%20composition%2C%20high%20resolution%2C%20modern%20casual%20wear%2C%20cotton%20fabric%20texture%20visible%2C%20front%20view%2C%20no%20wrinkles%2C%20studio%20shot%2C%20commercial%20photography&width=500&height=600&seq=prod12&orientation=portrait',
-//     badge: 'New',
-//     href: `${ROUTES.PRODUCTS}/white-premium-tshirt`,
-//     category: 'tshirts',
-//     color: 'white',
-//   },
-// ];
 
 /**
  * Map API product response to component format
@@ -298,12 +161,128 @@ const convertFiltersToApiParams = (filters) => {
 };
 
 /**
+ * Filter configuration for URL sync
+ * Defines how each filter should be handled when converting between URL and state
+ */
+const FILTER_CONFIG = {
+  category: { 
+    multiple: false, 
+    defaultValue: 'all',
+    transform: (val) => val 
+  },
+  color: { 
+    multiple: true, 
+    defaultValue: 'all',
+    transform: (val) => val 
+  },
+  size: { 
+    multiple: true, 
+    defaultValue: 'all',
+    transform: (val) => val 
+  },
+  price: { 
+    multiple: false, 
+    defaultValue: 'all',
+    transform: (val) => val 
+  },
+  search: { 
+    multiple: false, 
+    defaultValue: '',
+    transform: (val) => val?.trim() || '',
+    skipIfEmpty: true
+  },
+  sort: { 
+    multiple: false, 
+    defaultValue: 'default',
+    transform: (val) => val 
+  },
+  page: { 
+    multiple: false, 
+    defaultValue: 1,
+    transform: (val) => parseInt(val, 10),
+    skipIf: (val) => !val || val <= 1
+  }
+};
+
+/**
+ * Convert URL search params to filters object
+ * @param {URLSearchParams} searchParams - URL search parameters
+ * @returns {Object} Filters object
+ */
+const urlParamsToFilters = (searchParams) => {
+  const filters = {};
+  
+  Object.entries(FILTER_CONFIG).forEach(([key, config]) => {
+    if (config.multiple) {
+      const values = searchParams.getAll(key);
+      if (values.length > 0) {
+        filters[key] = values.length === 1 ? config.transform(values[0]) : values.map(config.transform);
+      }
+    } else {
+      const value = searchParams.get(key);
+      if (value) {
+        filters[key] = config.transform(value);
+      }
+    }
+  });
+  
+  return filters;
+};
+
+/**
+ * Convert filters object to URL search params
+ * @param {Object} filters - Filters object
+ * @returns {URLSearchParams} URL search parameters
+ */
+const filtersToUrlParams = (filters) => {
+  const params = new URLSearchParams();
+  
+  Object.entries(FILTER_CONFIG).forEach(([key, config]) => {
+    const value = filters[key];
+    
+    // Skip if value is default or empty
+    if (value === undefined || value === null) return;
+    if (value === config.defaultValue) return;
+    if (config.skipIfEmpty && (!value || value === '')) return;
+    if (config.skipIf && config.skipIf(value)) return;
+    
+    // Handle multiple values
+    if (config.multiple && Array.isArray(value)) {
+      value.forEach(v => {
+        if (v && v !== 'all') {
+          params.append(key, v);
+        }
+      });
+    } else if (config.multiple && value !== 'all') {
+      params.append(key, value);
+    } else if (!config.multiple && value !== 'all') {
+      params.set(key, value);
+    }
+  });
+  
+  return params;
+};
+
+/**
  * Products Page
  * Displays products with filtering and sorting capabilities
  */
 export default function ProductsPage() {
   const t = useTranslations();
-  const [filters, setFilters] = useState({});
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  
+  // Derive filters directly from URL params (single source of truth)
+  const filters = useMemo(() => urlParamsToFilters(searchParams), [searchParams]);
+  
+  // Update URL when filters change (user interaction)
+  const handleFiltersChange = (newFilters) => {
+    const params = filtersToUrlParams(newFilters);
+    const queryString = params.toString();
+    const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+    router.replace(newUrl, { scroll: false });
+  };
 
   // Convert filters to API parameters
   const apiParams = useMemo(() => {
@@ -333,7 +312,7 @@ export default function ProductsPage() {
   return (
     <main className="min-h-screen bg-[var(--color-sky-light)]">
       {/* Filters Section */}
-      <ProductFilters filters={filters} onFiltersChange={setFilters} />
+      <ProductFilters filters={filters} onFiltersChange={handleFiltersChange} />
 
       {/* Products Grid Section */}
       <div className="max-w-7xl mx-auto px-1 sm:px-6 pt-2 sm:py-8">

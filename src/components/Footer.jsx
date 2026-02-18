@@ -1,13 +1,46 @@
 "use client";
 
+import { useMemo } from "react";
 import { useTranslations } from 'next-intl';
 import Link from "next/link";
-import { SHOP_LINKS, SUPPORT_LINKS, COMPANY_LINKS, SOCIAL_LINKS, ROUTES } from "@/config/routes";
+import { SUPPORT_LINKS, COMPANY_LINKS, SOCIAL_LINKS, ROUTES } from "@/config/routes";
+import { useCategories } from "@/hooks/useApi";
 import AbraLogo from "@/components/ui/AbraLogo";
 
 export default function Footer() {
   const t = useTranslations();
   const currentYear = new Date().getFullYear();
+  
+  // Fetch categories from API
+  const { data: categoriesResponse } = useCategories({
+    page: 1,
+    page_size: 4,
+  });
+  
+  // Transform categories to shop links format
+  const shopLinks = useMemo(() => {
+    const links = [];
+    
+    // Add categories from API
+    if (categoriesResponse?.results) {
+      categoriesResponse.results.forEach((category) => {
+        links.push({
+          id: category.slug || category.id,
+          label: category.label || category.name,
+          href: `${ROUTES.PRODUCTS}?category=${category.slug || category.id}`
+        });
+      });
+    }
+    
+    // Add Custom Design link (static)
+    links.push({
+      id: "customDesign",
+      label: "Custom Design",
+      href: ROUTES.DESIGN_STUDIO
+    });
+    
+    return links;
+  }, [categoriesResponse]);
 
   return (
     <footer className="bg-white border-t border-[#F5F5F5]">
@@ -44,13 +77,14 @@ export default function Footer() {
           <div>
             <h4 className="font-bold text-gray-900 mb-4">{t('footer.shop')}</h4>
             <ul className="space-y-2">
-              {SHOP_LINKS.map((link) => (
+              {shopLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
                     className="text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer inline-block hover:translate-x-1"
                   >
-                    {t(`shopLinks.${link.id}`)}
+                    {/* {t(`shopLinks.${link.id}`, { defaultValue: link.label })} */}
+                    {link.label}
                   </Link>
                 </li>
               ))}
