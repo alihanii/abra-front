@@ -101,13 +101,13 @@ export default function CartItem({ item }) {
 
           {/* Product Variants */}
           <div className="flex flex-wrap gap-2 text-sm text-gray-600 mb-2">
-            {item.size && <span>Size: {item.size}</span>}
-            {item.size && item.color && <span>•</span>}
-            {item.color && <span>Color: {item.color}</span>}
+            {item.size && <span>{t('cart.size')}: {item.size}</span>}
+            {item.size && item.color && <span>{t('cart.separator')}</span>}
+            {item.color && <span>{t('cart.color')}: {item.color}</span>}
           </div>
 
           {/* Price and Quantity Controls */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-end gap-2 justify-between flex-col">
             <span className="text-lg font-bold text-gray-900">${displayPrice.toFixed(2)}</span>
 
             {/* Quantity Controls */}

@@ -22,10 +22,10 @@ export default function CartSummary() {
           <span className="font-semibold">${totals.subtotal}</span>
         </div>
 
-        <div className="flex justify-between text-gray-700">
+        {/* <div className="flex justify-between text-gray-700">
           <span>{t('cartSummary.shipping')}</span>
           <span className="font-semibold">{t('cartSummary.free')}</span>
-        </div>
+        </div> */}
 
         <div className="border-t border-gray-300 pt-3 flex justify-between text-lg font-bold text-gray-900">
           <span>{t('cartSummary.total')}</span>
