@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useTranslations } from 'next-intl';
 import { ProductFilters, ProductGrid } from "@/components/products";
 import { ROUTES } from "@/config/routes";
 import { useProducts } from "@/hooks/useApi";
@@ -301,6 +302,7 @@ const convertFiltersToApiParams = (filters) => {
  * Displays products with filtering and sorting capabilities
  */
 export default function ProductsPage() {
+  const t = useTranslations();
   const [filters, setFilters] = useState({});
 
   // Convert filters to API parameters
@@ -337,18 +339,16 @@ export default function ProductsPage() {
       <div className="max-w-7xl mx-auto px-1 sm:px-6 pt-2 sm:py-8">
         {/* Results Count */}
         <div className="mb-6 md:px-0 px-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 mt-4">Products</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 mt-4">{t('products.title')}</h1>
           {isLoading ? (
-            <p className="text-gray-700">Loading products...</p>
+            <p className="text-gray-700">{t('products.loading')}</p>
           ) : isError ? (
             <p className="text-red-600">
-              Error loading products: {error?.message || "Unknown error"}
+              {t('products.errorMessage', { message: error?.message || t('products.unknownError') })}
             </p>
           ) : (
             <p className="text-gray-700">
-              Showing <span className="font-semibold">{products.length}</span> of{" "}
-              <span className="font-semibold">{totalCount}</span>{" "}
-              {totalCount === 1 ? "product" : "products"}
+              {t('products.showing', { count: products.length, total: totalCount })}
             </p>
           )}
         </div>
@@ -357,9 +357,9 @@ export default function ProductsPage() {
         {isError ? (
           <div className="flex flex-col items-center justify-center py-20">
             <i className="ri-error-warning-line text-6xl text-red-400 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">Error loading products</h3>
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">{t('products.errorTitle')}</h3>
             <p className="text-gray-500 text-center">
-              {error?.message || "Please try again later."}
+              {error?.message || t('products.tryAgain')}
             </p>
           </div>
         ) : (

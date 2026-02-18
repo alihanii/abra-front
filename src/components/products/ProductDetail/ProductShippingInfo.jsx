@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from 'next-intl';
 import { cn } from "@/lib/utils";
 
 /**
@@ -10,21 +11,22 @@ import { cn } from "@/lib/utils";
  * @param {string} props.className - Additional CSS classes
  */
 export default function ProductShippingInfo({ className }) {
+  const t = useTranslations();
   const features = [
     {
       icon: "ri-truck-line",
-      title: "Fast Delivery",
-      description: "Free shipping on orders over $50"
+      title: t('product.fastDelivery'),
+      description: t('product.freeShippingOver')
     },
     {
       icon: "ri-shield-check-line",
-      title: "Quality Guarantee",
-      description: "Premium materials and printing"
+      title: t('product.qualityGuarantee'),
+      description: t('product.premiumMaterials')
     },
     {
       icon: "ri-arrow-go-back-line",
-      title: "Easy Returns",
-      description: "30-day return policy"
+      title: t('product.easyReturns'),
+      description: t('product.thirtyDayReturn')
     }
   ];
 

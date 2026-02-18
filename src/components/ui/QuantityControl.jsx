@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from 'next-intl';
 import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
@@ -71,6 +72,7 @@ export default function QuantityControl({
   className,
   disabled = false
 }) {
+  const t = useTranslations();
   const isMinReached = value <= min;
   const isMaxReached = value >= max;
 
@@ -97,7 +99,7 @@ export default function QuantityControl({
           quantityButtonVariants({ size, variant }),
           (disabled || isMinReached) && "opacity-50 cursor-not-allowed"
         )}
-        aria-label="Decrease quantity"
+        aria-label={t('ui.decreaseQuantity')}
         aria-disabled={disabled || isMinReached}
       >
         <i className="ri-subtract-line text-gray-700"></i>
@@ -115,7 +117,7 @@ export default function QuantityControl({
           quantityButtonVariants({ size, variant }),
           (disabled || isMaxReached) && "opacity-50 cursor-not-allowed"
         )}
-        aria-label="Increase quantity"
+        aria-label={t('ui.increaseQuantity')}
         aria-disabled={disabled || isMaxReached}
       >
         <i className="ri-add-line text-gray-700"></i>

@@ -1,5 +1,7 @@
 import { Geist, Geist_Mono, Pacifico } from "next/font/google";
 import localFont from "next/font/local";
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 import "./globals.css";
 import "../styles/toast.scss";
 import Header from "@/components/Header";
@@ -69,28 +71,32 @@ export const metadata = {
   description: "Premium custom clothing with professional printing quality."
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const messages = await getMessages();
+
   return (
-    <html lang="en" dir="rtl">
+    <html lang="fa" dir="rtl">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${pacifico.variable} ${estedad.variable} ${maneli.variable} antialiased`}
       >
-        <QueryProvider>
-          <AuthProvider>
-            <ProfileProvider>
-              <CartProvider>
-                <div className="flex flex-col min-h-screen">
-                  <Header />
-                  <main className="grow bg-white">{children}</main>
-                  <Footer />
-                </div>
-                <CartDrawer />
-                <ProfileDrawer />
-                <Toast />
-              </CartProvider>
-            </ProfileProvider>
-          </AuthProvider>
-        </QueryProvider>
+        <NextIntlClientProvider messages={messages}>
+          <QueryProvider>
+            <AuthProvider>
+              <ProfileProvider>
+                <CartProvider>
+                  <div className="flex flex-col min-h-screen">
+                    <Header />
+                    <main className="grow bg-white">{children}</main>
+                    <Footer />
+                  </div>
+                  <CartDrawer />
+                  <ProfileDrawer />
+                  <Toast />
+                </CartProvider>
+              </ProfileProvider>
+            </AuthProvider>
+          </QueryProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

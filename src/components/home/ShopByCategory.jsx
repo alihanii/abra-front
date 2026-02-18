@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useMemo } from "react";
+import { useTranslations } from 'next-intl';
 import CategorySlider from "./CategorySlider";
 import ShopCategoryCard from "./ShopCategoryCard";
 import ScrollNavigation from "@/components/ui/ScrollNavigation";
@@ -15,6 +16,7 @@ import { decodeImageUrl } from "@/lib/utils";
  * Displays categories with horizontal scroll on desktop and vertical grid on mobile
  */
 export default function ShopByCategory() {
+  const t = useTranslations();
   const sliderRef = useRef(null);
 
   // Fetch categories from API
@@ -54,7 +56,7 @@ export default function ShopByCategory() {
       <section className="py-20 bg-[var(--color-sky-light)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">
-            <p className="text-red-600">Failed to load categories. Please try again later.</p>
+            <p className="text-red-600">{t('shopByCategory.loadError')}</p>
           </div>
         </div>
       </section>
@@ -76,9 +78,9 @@ export default function ShopByCategory() {
             >
               <div className="text-center md:text-left flex-1">
                 <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-                  Shop by Category
+                  {t('shopByCategory.title')}
                 </h2>
-                <p className="text-lg sm:text-xl text-gray-700">Choose your perfect canvas</p>
+                <p className="text-lg sm:text-xl text-gray-700">{t('shopByCategory.subtitle')}</p>
               </div>
             </ScrollReveal>
 

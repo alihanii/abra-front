@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from 'next-intl';
 import { cn } from "@/lib/utils";
 
 /**
@@ -20,6 +21,7 @@ export default function BaseSkeleton({
   skeletonClassName,
   variant = "default"
 }) {
+  const t = useTranslations();
   // If not loading, render children directly
   if (!isLoading) {
     return <div className={className}>{children}</div>;
@@ -50,7 +52,7 @@ export default function BaseSkeleton({
         style={{
           minHeight: "1rem"
         }}
-        aria-label="Loading..."
+        aria-label={t('ui.loading')}
       >
         {/* Shimmer effect overlay */}
         <div

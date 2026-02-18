@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from 'next-intl';
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/contexts/ProfileContext";
 import { useLogin } from "@/hooks/useApi";
@@ -17,6 +18,7 @@ import OTPVerification from "@/components/auth/OTPVerification";
  * Side drawer for user profile with tabs for purchase history and account settings
  */
 export default function ProfileDrawer() {
+  const t = useTranslations();
   const { isAuthenticated, user, logout, login, isLoading: authLoading } = useAuth();
   const { isOpen, closeProfile } = useProfile();
   const [isMounted, setIsMounted] = useState(false);
@@ -201,7 +203,7 @@ export default function ProfileDrawer() {
         `}
         role="dialog"
         aria-modal="true"
-        aria-label="User profile"
+        aria-label={t('profile.userProfile')}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
@@ -214,7 +216,7 @@ export default function ProfileDrawer() {
             <button
               onClick={closeProfile}
               className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all cursor-pointer"
-              aria-label="Close profile"
+              aria-label={t('profile.closeProfile')}
             >
               <i className="ri-close-line text-2xl"></i>
             </button>
@@ -292,7 +294,7 @@ export default function ProfileDrawer() {
                       <button
                         onClick={handleLogout}
                         className="px-4 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-full transition-all cursor-pointer"
-                        aria-label="Logout"
+                        aria-label={t('profile.logout')}
                       >
                         <i className="ri-logout-box-line ml-2"></i>
                         خروج

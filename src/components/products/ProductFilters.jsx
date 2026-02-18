@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import { useTranslations } from 'next-intl';
 import FilterDropdown from "./FilterDropdown";
 import BaseInput from "@/components/ui/BaseInput";
 import { useCategories } from "@/hooks/useApi";
@@ -16,6 +17,7 @@ import { cn } from "@/lib/utils";
  * @param {string} props.className - Additional CSS classes
  */
 export default function ProductFilters({ filters = {}, onFiltersChange, className }) {
+  const t = useTranslations();
   const [isOpen, setIsOpen] = useState(false);
   
   // Fetch categories from API
@@ -62,7 +64,7 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
 
   // Build category options from API response
   const categoryOptions = useMemo(() => {
-    const options = [{ value: "all", label: "All Categories" }];
+    const options = [{ value: "all", label: t('filters.allCategories') }];
     
     if (categoriesResponse?.results) {
       categoriesResponse.results.forEach((category) => {
@@ -74,10 +76,10 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
     }
     
     return options;
-  }, [categoriesResponse]);
+  }, [categoriesResponse, t]);
 
   const priceOptions = [
-    { value: "all", label: "All Prices" },
+    { value: "all", label: t('filters.allPrices') },
     { value: "0-20", label: "$0 - $20" },
     { value: "20-30", label: "$20 - $30" },
     { value: "30-40", label: "$30 - $40" },
@@ -85,7 +87,7 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
   ];
 
   const sizeOptions = [
-    { value: "all", label: "All Sizes" },
+    { value: "all", label: t('filters.allSizes') },
     { value: "xs", label: "XS" },
     { value: "s", label: "S" },
     { value: "m", label: "M" },
@@ -95,7 +97,7 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
   ];
 
   const colorOptions = [
-    { value: "all", label: "All Colors" },
+    { value: "all", label: t('filters.allColors') },
     { value: "black", label: "Black" },
     { value: "white", label: "White" },
     { value: "gray", label: "Gray" },
@@ -105,12 +107,12 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
   ];
 
   const sortOptions = [
-    { value: "default", label: "Default" },
-    { value: "price-low", label: "Price: Low to High" },
-    { value: "price-high", label: "Price: High to Low" },
-    { value: "name-asc", label: "Name: A to Z" },
-    { value: "name-desc", label: "Name: Z to A" },
-    { value: "newest", label: "Newest First" }
+    { value: "default", label: t('filters.default') },
+    { value: "price-low", label: t('filters.priceLowToHigh') },
+    { value: "price-high", label: t('filters.priceHighToLow') },
+    { value: "name-asc", label: t('filters.nameAToZ') },
+    { value: "name-desc", label: t('filters.nameZToA') },
+    { value: "newest", label: t('filters.newestFirst') }
   ];
 
   // Map sort value to API format
@@ -155,10 +157,10 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
               "md:hidden"
             )}
             aria-expanded={isOpen}
-            aria-label="Toggle filters"
+            aria-label={t('filters.toggleFilters')}
           >
             <i className="ri-filter-3-line text-base" />
-            <span>Filters</span>
+            <span>{t('filters.toggleFilters')}</span>
             <i
               className={cn(
                 "ri-arrow-down-s-line text-base transition-transform duration-200",
@@ -173,7 +175,7 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
             <div className="min-w-[200px] max-w-[300px]">
               <BaseInput
                 type="text"
-                placeholder="Search products..."
+                placeholder={t('filters.searchProducts')}
                 value={searchValue}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 variant="primary"
@@ -185,7 +187,7 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
 
             <div className="flex flex-wrap items-center gap-3 flex-1 overflow-visible relative">
               <FilterDropdown
-                label="Category"
+                label={t('filters.category')}
                 options={categoryOptions}
                 value={filters.category || "all"}
                 onChange={(value) => handleFilterChange("category", value)}
@@ -193,7 +195,7 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
               />
 
               <FilterDropdown
-                label="Price"
+                label={t('filters.price')}
                 options={priceOptions}
                 value={filters.price || "all"}
                 onChange={(value) => handleFilterChange("price", value)}
@@ -201,7 +203,7 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
               />
 
               <FilterDropdown
-                label="Size"
+                label={t('filters.size')}
                 options={sizeOptions}
                 value={filters.size || "all"}
                 onChange={(value) => handleFilterChange("size", value)}
@@ -209,7 +211,7 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
               />
 
               <FilterDropdown
-                label="Color"
+                label={t('filters.color')}
                 options={colorOptions}
                 value={filters.color || "all"}
                 onChange={(value) => handleFilterChange("color", value)}
@@ -217,7 +219,7 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
               />
 
               <FilterDropdown
-                label="Sort By"
+                label={t('filters.sortBy')}
                 options={sortOptions}
                 value={filters.sort || "default"}
                 onChange={(value) => handleFilterChange("sort", value)}
@@ -240,7 +242,7 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
                 )}
               >
                 <i className="ri-close-line mr-1 text-xs" />
-                Clear Filters
+                {t('filters.clearFilters')}
               </button>
             )}
           </div>
@@ -261,7 +263,7 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
               )}
             >
               <i className="ri-close-line mr-1 text-xs" />
-              Clear
+              {t('filters.clear')}
             </button>
           )}
         </div>
@@ -277,7 +279,7 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
             {/* Search Input */}
             <BaseInput
               type="text"
-              placeholder="Search products..."
+              placeholder={t('filters.searchProducts')}
               value={searchValue}
               onChange={(e) => handleSearchChange(e.target.value)}
               variant="primary"
@@ -287,35 +289,35 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
             />
 
             <FilterDropdown
-              label="Category"
+              label={t('filters.category')}
               options={categoryOptions}
               value={filters.category || "all"}
               onChange={(value) => handleFilterChange("category", value)}
             />
 
             <FilterDropdown
-              label="Price"
+              label={t('filters.price')}
               options={priceOptions}
               value={filters.price || "all"}
               onChange={(value) => handleFilterChange("price", value)}
             />
 
             <FilterDropdown
-              label="Size"
+              label={t('filters.size')}
               options={sizeOptions}
               value={filters.size || "all"}
               onChange={(value) => handleFilterChange("size", value)}
             />
 
             <FilterDropdown
-              label="Color"
+              label={t('filters.color')}
               options={colorOptions}
               value={filters.color || "all"}
               onChange={(value) => handleFilterChange("color", value)}
             />
 
             <FilterDropdown
-              label="Sort By"
+              label={t('filters.sortBy')}
               options={sortOptions}
               value={filters.sort || "default"}
               onChange={(value) => handleFilterChange("sort", value)}

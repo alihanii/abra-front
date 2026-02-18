@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { useTranslations } from 'next-intl';
 import { useCart } from "@/contexts/CartContext";
 import CartItem from "./CartItem";
 import EmptyCart from "./EmptyCart";
@@ -11,6 +12,7 @@ import CartSummary from "./CartSummary";
  * Side drawer for shopping cart with backdrop and smooth animations
  */
 export default function CartDrawer() {
+  const t = useTranslations();
   const { isOpen, closeCart, items, shareCart } = useCart();
   const [isMounted, setIsMounted] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -95,14 +97,14 @@ export default function CartDrawer() {
         `}
         role="dialog"
         aria-modal="true"
-        aria-label="Shopping cart"
+        aria-label={t('cart.shoppingCart')}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200">
             <div className="flex items-center gap-3">
               <i className="ri-shopping-cart-line text-2xl text-gray-900"></i>
-              <h2 className="text-2xl font-bold text-gray-900">Shopping Cart</h2>
+              <h2 className="text-2xl font-bold text-gray-900">{t('cart.shoppingCart')}</h2>
             </div>
 
             <div className="flex items-center gap-1">
@@ -111,8 +113,8 @@ export default function CartDrawer() {
                 <button
                   onClick={handleShareCart}
                   className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all cursor-pointer"
-                  aria-label="Share cart"
-                  title={isCopied ? "Link copied!" : "Copy cart link"}
+                  aria-label={t('cart.shareCart')}
+                  title={isCopied ? t('cart.linkCopied') : t('cart.copyCartLink')}
                 >
                   <i className={`${isCopied ? "ri-check-line text-green-600" : "ri-link"} text-xl`}></i>
                 </button>
@@ -122,7 +124,7 @@ export default function CartDrawer() {
               <button
                 onClick={closeCart}
                 className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all cursor-pointer"
-                aria-label="Close cart"
+                aria-label={t('cart.closeCart')}
               >
                 <i className="ri-close-line text-2xl"></i>
               </button>

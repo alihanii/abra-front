@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from 'next-intl';
 import BaseInput from "@/components/ui/BaseInput";
 import BaseButton from "@/components/ui/BaseButton";
 import Alert from "@/components/ui/Alert";
@@ -24,6 +25,7 @@ export default function LoginForm({
   isLoading = false,
   error = null
 }) {
+  const t = useTranslations();
   const [formData, setFormData] = useState({
     phone: "",
     password: ""
@@ -98,7 +100,7 @@ export default function LoginForm({
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             className="absolute left-5 top-10 text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
-            aria-label={showPassword ? "Hide password" : "Show password"}
+            aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
           >
             <i className={cn("text-xl", showPassword ? "ri-eye-off-line" : "ri-eye-line")}></i>
           </button>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from 'next-intl';
 import CTACard from "./CTACard";
 import { ROUTES } from "@/config/routes";
 
@@ -17,21 +18,26 @@ import { ROUTES } from "@/config/routes";
  * @param {string} props.className - Additional CSS classes
  */
 export default function CTASection({
-  title = "Ready to Create?",
-  description = "Start designing your custom clothing today and wear your creativity",
-  buttonText = "Launch Design Studio",
+  title,
+  description,
+  buttonText,
   buttonHref = ROUTES.DESIGN_STUDIO,
   onButtonClick,
   variant = "primary",
   className
 }) {
+  const t = useTranslations();
+  
+  const defaultTitle = title || t('cta.readyToCreate');
+  const defaultDescription = description || t('cta.readyToCreateDesc');
+  const defaultButtonText = buttonText || t('cta.launchDesignStudio');
   return (
     <section className="py-20 bg-[var(--color-sky-light)]">
       <div className="max-w-4xl mx-auto px-6">
         <CTACard
-          title={title}
-          description={description}
-          buttonText={buttonText}
+          title={defaultTitle}
+          description={defaultDescription}
+          buttonText={defaultButtonText}
           buttonHref={buttonHref}
           onButtonClick={onButtonClick}
           variant={variant}

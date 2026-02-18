@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from 'next-intl';
 
 /**
  * ScrollNavigation Component
@@ -22,6 +23,7 @@ export default function ScrollNavigation({
   size = "md",
   showOnMobile = false
 }) {
+  const t = useTranslations();
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
@@ -84,7 +86,7 @@ export default function ScrollNavigation({
           hover:shadow-lg transition-all cursor-pointer
           ${!canScrollLeft ? "opacity-50 cursor-not-allowed" : ""}
         `}
-        aria-label="Scroll left"
+        aria-label={t('ui.scrollLeft')}
       >
         <i className="ri-arrow-left-s-line text-gray-900"></i>
       </button>
@@ -96,7 +98,7 @@ export default function ScrollNavigation({
           hover:shadow-lg transition-all cursor-pointer
           ${!canScrollRight ? "opacity-50 cursor-not-allowed" : ""}
         `}
-        aria-label="Scroll right"
+        aria-label={t('ui.scrollRight')}
       >
         <i className="ri-arrow-right-s-line text-gray-900"></i>
       </button>

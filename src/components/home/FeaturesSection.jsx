@@ -1,37 +1,37 @@
 "use client";
 
+import { useTranslations } from 'next-intl';
 import FeatureCard from "./FeatureCard";
 import ScrollReveal from "@/components/ui/ScrollReveal";
-
-/**
- * Features Data Configuration
- */
-const FEATURES = [
-  {
-    id: "print-guarantee",
-    icon: "ri-shield-check-line",
-    title: "Print Guarantee",
-    description: "High-quality printing that lasts"
-  },
-  {
-    id: "cotton-fabric",
-    icon: "ri-t-shirt-line",
-    title: "Cotton Fabric",
-    description: "100% premium cotton material"
-  },
-  {
-    id: "fast-delivery",
-    icon: "ri-truck-line",
-    title: "Fast Delivery",
-    description: "Quick shipping to your door"
-  }
-];
 
 /**
  * Features Section Component
  * Displays key features/benefits of the service
  */
 export default function FeaturesSection() {
+  const t = useTranslations();
+  
+  const FEATURES = [
+    {
+      id: "print-guarantee",
+      icon: "ri-shield-check-line",
+      title: t('features.printGuarantee'),
+      description: t('features.printGuaranteeDesc')
+    },
+    {
+      id: "cotton-fabric",
+      icon: "ri-t-shirt-line",
+      title: t('features.cottonFabric'),
+      description: t('features.cottonFabricDesc')
+    },
+    {
+      id: "fast-delivery",
+      icon: "ri-truck-line",
+      title: t('features.fastDelivery'),
+      description: t('features.fastDeliveryDesc')
+    }
+  ];
+  
   return (
     <section className="bg-white py-12 shadow-sm">
       <div className="max-w-7xl mx-auto px-6">

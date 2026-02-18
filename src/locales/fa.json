@@ -1,0 +1,189 @@
+{
+  "header": {
+    "abraHome": "خانه ابرا",
+    "shoppingCart": "سبد خرید",
+    "shoppingCartWithItems": "سبد خرید با {count} محصول",
+    "userAccount": "حساب کاربری",
+    "openMenu": "باز کردن منو",
+    "closeMenu": "بستن منو"
+  },
+  "hero": {
+    "title": "لباس رویایی خود را طراحی کنید",
+    "description": "طراحی سفارشی بسازید یا از مجموعه آماده ما انتخاب کنید. لباس‌های پنبه‌ای با کیفیت عالی و چاپ حرفه‌ای.",
+    "startCustomDesign": "شروع طراحی سفارشی",
+    "buyReadyDesigns": "خرید طرح‌های آماده"
+  },
+  "categories": {
+    "thirtyOffHoodies": "۳۰٪ تخفیف هودی‌ها",
+    "limitedTimeOffer": "پیشنهاد محدود",
+    "coupleMatchingSets": "ست‌های هماهنگ زوجی",
+    "perfectForPartners": "مناسب برای زوج‌ها",
+    "designYourOwn": "خودتان طراحی کنید",
+    "unleashCreativity": "خلاقیت خود را آزاد کنید"
+  },
+  "features": {
+    "printGuarantee": "ضمانت چاپ",
+    "printGuaranteeDesc": "چاپ با کیفیت بالا و ماندگار",
+    "cottonFabric": "پارچه پنبه‌ای",
+    "cottonFabricDesc": "۱۰۰٪ پنبه مرغوب",
+    "fastDelivery": "ارسال سریع",
+    "fastDeliveryDesc": "ارسال سریع به درب منزل شما"
+  },
+  "cart": {
+    "shoppingCart": "سبد خرید",
+    "shareCart": "اشتراک‌گذاری سبد خرید",
+    "closeCart": "بستن سبد خرید",
+    "linkCopied": "لینک کپی شد!",
+    "copyCartLink": "کپی لینک سبد خرید",
+    "removeItem": "حذف آیتم"
+  },
+  "filters": {
+    "toggleFilters": "فیلترها",
+    "searchProducts": "جستجوی محصولات...",
+    "category": "دسته‌بندی",
+    "price": "قیمت",
+    "size": "سایز",
+    "color": "رنگ",
+    "sortBy": "مرتب‌سازی",
+    "clearFilters": "پاک کردن فیلترها",
+    "clear": "پاک کردن",
+    "allCategories": "همه دسته‌بندی‌ها",
+    "allPrices": "همه قیمت‌ها",
+    "allSizes": "همه سایزها",
+    "allColors": "همه رنگ‌ها",
+    "default": "پیش‌فرض",
+    "priceLowToHigh": "قیمت: کم به زیاد",
+    "priceHighToLow": "قیمت: زیاد به کم",
+    "nameAToZ": "نام: الف تا ی",
+    "nameZToA": "نام: ی تا الف",
+    "newestFirst": "جدیدترین اول"
+  },
+  "common": {
+    "loading": "در حال بارگذاری...",
+    "error": "خطا",
+    "success": "موفق",
+    "cancel": "لغو",
+    "save": "ذخیره",
+    "delete": "حذف",
+    "edit": "ویرایش",
+    "close": "بستن"
+  },
+  "auth": {
+    "showPassword": "نمایش رمز عبور",
+    "hidePassword": "مخفی کردن رمز عبور"
+  },
+  "profile": {
+    "userProfile": "پروفایل کاربر",
+    "closeProfile": "بستن پروفایل",
+    "logout": "خروج از حساب کاربری"
+  },
+  "product": {
+    "zoomImage": "بزرگنمایی تصویر",
+    "fastDelivery": "ارسال سریع",
+    "qualityGuarantee": "ضمانت کیفیت",
+    "easyReturns": "بازگشت آسان",
+    "freeShippingOver": "ارسال رایگان برای سفارش‌های بالای ۵۰ دلار",
+    "premiumMaterials": "مواد اولیه و چاپ مرغوب",
+    "thirtyDayReturn": "سی روز ضمانت بازگشت"
+  },
+  "ui": {
+    "scrollLeft": "اسکرول به چپ",
+    "scrollRight": "اسکرول به راست",
+    "decreaseQuantity": "کاهش تعداد",
+    "increaseQuantity": "افزایش تعداد",
+    "loading": "در حال بارگذاری..."
+  },
+  "shopByCategory": {
+    "title": "خرید بر اساس دسته‌بندی",
+    "subtitle": "بوم مناسب خود را انتخاب کنید",
+    "loadError": "خطا در بارگذاری دسته‌بندی‌ها. لطفاً دوباره تلاش کنید."
+  },
+  "whyChoose": {
+    "title": "چرا ابرا را انتخاب کنیم؟",
+    "description": "ما مواد اولیه مرغوب را با فناوری چاپ پیشرفته ترکیب می‌کنیم تا طرح‌های شما را زنده کنیم",
+    "customDesigns": "طراحی سفارشی",
+    "customDesignsDesc": "آپلود آثار هنری خودتان",
+    "premiumQuality": "کیفیت مرغوب",
+    "premiumQualityDesc": "پارچه ۱۰۰٪ پنبه",
+    "fairPricing": "قیمت‌گذاری منصفانه",
+    "fairPricingDesc": "تجزیه هزینه شفاف",
+    "support": "پشتیبانی ۲۴/۷",
+    "supportDesc": "همیشه در خدمت شما هستیم"
+  },
+  "cta": {
+    "readyToCreate": "آماده برای خلق؟",
+    "readyToCreateDesc": "امروز شروع به طراحی لباس سفارشی خود کنید و خلاقیت خود را بپوشید",
+    "launchDesignStudio": "شروع استودیو طراحی"
+  },
+  "footer": {
+    "description": "لباس سفارشی مرغوب با کیفیت چاپ حرفه‌ای.",
+    "shop": "فروشگاه",
+    "support": "پشتیبانی",
+    "company": "شرکت",
+    "allRightsReserved": "© {year} ابرا. تمامی حقوق محفوظ است.",
+    "poweredBy": "قدرت گرفته از AliHaNi"
+  },
+  "navigation": {
+    "home": "خانه",
+    "products": "محصولات",
+    "matchingSets": "ست‌های هماهنگ",
+    "designStudio": "استودیو طراحی"
+  },
+  "shopLinks": {
+    "hoodies": "هودی",
+    "tshirts": "تی‌شرت",
+    "sweatshirts": "سوییشرت",
+    "customDesign": "طراحی سفارشی"
+  },
+  "supportLinks": {
+    "contactUs": "تماس با ما",
+    "shippingInfo": "اطلاعات ارسال",
+    "returns": "بازگشت کالا",
+    "sizeGuide": "راهنمای سایز"
+  },
+  "companyLinks": {
+    "aboutUs": "درباره ما",
+    "privacyPolicy": "حریم خصوصی",
+    "termsOfService": "شرایط استفاده",
+    "faq": "سوالات متداول"
+  },
+  "social": {
+    "facebook": "فیسبوک",
+    "instagram": "اینستاگرام",
+    "twitter": "توییتر"
+  },
+  "featuredProducts": {
+    "title": "محصولات ویژه",
+    "subtitle": "پرفروش‌ترین‌ها و جدیدترین‌ها",
+    "errorTitle": "خطا در بارگذاری محصولات",
+    "errorMessage": "لطفاً دوباره تلاش کنید.",
+    "emptyTitle": "محصول ویژه‌ای وجود ندارد",
+    "emptyMessage": "بعداً برای محصولات ویژه بررسی کنید.",
+    "viewAll": "مشاهده همه محصولات"
+  },
+  "products": {
+    "title": "محصولات",
+    "loading": "در حال بارگذاری محصولات...",
+    "errorTitle": "خطا در بارگذاری محصولات",
+    "errorMessage": "خطا در بارگذاری محصولات: {message}",
+    "unknownError": "خطای نامشخص",
+    "showing": "نمایش {count} از {total} محصول",
+    "tryAgain": "لطفاً دوباره تلاش کنید.",
+    "notFound": "محصولی یافت نشد",
+    "adjustFilters": "فیلترهای خود را تنظیم کنید تا محصولات بیشتری ببینید."
+  },
+  "emptyCart": {
+    "title": "سبد خرید شما خالی است",
+    "message": "برای شروع، چند محصول اضافه کنید!",
+    "browseProducts": "مشاهده محصولات"
+  },
+  "cartSummary": {
+    "subtotal": "جمع جزء",
+    "shipping": "ارسال",
+    "free": "رایگان",
+    "total": "جمع کل",
+    "proceedToCheckout": "ادامه به پرداخت",
+    "continueShopping": "ادامه خرید"
+  }
+}
+

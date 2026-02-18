@@ -37,13 +37,13 @@ export const NAVIGATION_ITEMS = [
     icon: "ri-shopping-bag-line"
   },
   {
-    id: "matching-sets",
+    id: "matchingSets",
     label: "Matching Sets",
     href: ROUTES.MATCHING_SETS,
     icon: "ri-t-shirt-line"
   },
   {
-    id: "design-studio",
+    id: "designStudio",
     label: "Design Studio",
     href: ROUTES.DESIGN_STUDIO,
     icon: "ri-palette-line"
@@ -55,18 +55,22 @@ export const NAVIGATION_ITEMS = [
  */
 export const SHOP_LINKS = [
   {
+    id: "hoodies",
     label: "Hoodies",
     href: `${ROUTES.PRODUCTS}?category=hoodies`
   },
   {
+    id: "tshirts",
     label: "T-Shirts",
     href: `${ROUTES.PRODUCTS}?category=tshirts`
   },
   {
+    id: "sweatshirts",
     label: "Sweatshirts",
     href: `${ROUTES.PRODUCTS}?category=sweatshirts`
   },
   {
+    id: "customDesign",
     label: "Custom Design",
     href: ROUTES.DESIGN_STUDIO
   }
@@ -77,18 +81,22 @@ export const SHOP_LINKS = [
  */
 export const SUPPORT_LINKS = [
   {
+    id: "contactUs",
     label: "Contact Us",
     href: ROUTES.CONTACT
   },
   {
+    id: "shippingInfo",
     label: "Shipping Info",
     href: ROUTES.SHIPPING
   },
   {
+    id: "returns",
     label: "Returns",
     href: ROUTES.RETURNS
   },
   {
+    id: "sizeGuide",
     label: "Size Guide",
     href: ROUTES.SIZE_GUIDE
   }
@@ -99,18 +107,22 @@ export const SUPPORT_LINKS = [
  */
 export const COMPANY_LINKS = [
   {
+    id: "aboutUs",
     label: "About Us",
     href: ROUTES.ABOUT
   },
   {
+    id: "privacyPolicy",
     label: "Privacy Policy",
     href: ROUTES.PRIVACY
   },
   {
+    id: "termsOfService",
     label: "Terms of Service",
     href: ROUTES.TERMS
   },
   {
+    id: "faq",
     label: "FAQ",
     href: ROUTES.FAQ
   }

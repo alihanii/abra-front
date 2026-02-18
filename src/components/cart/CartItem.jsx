@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useEffect } from "react";
+import { useTranslations } from 'next-intl';
 import { useCart } from "@/contexts/CartContext";
 import { useProduct } from "@/hooks/useProduct";
 import QuantityControl from "@/components/ui/QuantityControl";
@@ -15,6 +16,7 @@ import { container } from "@/lib/styles";
  * @param {Object} props.item - Cart item object
  */
 export default function CartItem({ item }) {
+  const t = useTranslations();
   const { updateQuantity, removeItem } = useCart();
 
   // Pass full product data if available (from API hydration), otherwise slug
@@ -124,7 +126,7 @@ export default function CartItem({ item }) {
         <button
           onClick={handleRemove}
           className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-all cursor-pointer shrink-0"
-          aria-label="Remove item"
+          aria-label={t('cart.removeItem')}
         >
           <i className="ri-delete-bin-line text-lg"></i>
         </button>

@@ -1,52 +1,51 @@
 "use client";
 
+import { useTranslations } from 'next-intl';
 import WhyChooseCard from "./WhyChooseCard";
 import ScrollReveal from "@/components/ui/ScrollReveal";
-
-/**
- * Why Choose Data Configuration
- */
-const WHY_CHOOSE_ITEMS = [
-  {
-    id: "custom-designs",
-    icon: "ri-palette-line",
-    title: "Custom Designs",
-    description: "Upload your own artwork"
-  },
-  {
-    id: "premium-quality",
-    icon: "ri-star-line",
-    title: "Premium Quality",
-    description: "100% cotton fabric"
-  },
-  {
-    id: "fair-pricing",
-    icon: "ri-price-tag-3-line",
-    title: "Fair Pricing",
-    description: "Transparent cost breakdown"
-  },
-  {
-    id: "support",
-    icon: "ri-customer-service-2-line",
-    title: "24/7 Support",
-    description: "Always here to help"
-  }
-];
 
 /**
  * Why Choose Section Component
  * Displays reasons to choose Abra
  */
 export default function WhyChooseSection() {
+  const t = useTranslations();
+  
+  const WHY_CHOOSE_ITEMS = [
+    {
+      id: "custom-designs",
+      icon: "ri-palette-line",
+      title: t('whyChoose.customDesigns'),
+      description: t('whyChoose.customDesignsDesc')
+    },
+    {
+      id: "premium-quality",
+      icon: "ri-star-line",
+      title: t('whyChoose.premiumQuality'),
+      description: t('whyChoose.premiumQualityDesc')
+    },
+    {
+      id: "fair-pricing",
+      icon: "ri-price-tag-3-line",
+      title: t('whyChoose.fairPricing'),
+      description: t('whyChoose.fairPricingDesc')
+    },
+    {
+      id: "support",
+      icon: "ri-customer-service-2-line",
+      title: t('whyChoose.support'),
+      description: t('whyChoose.supportDesc')
+    }
+  ];
+  
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Why Choose Abra?</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">{t('whyChoose.title')}</h2>
           <p className="text-base sm:text-lg md:text-xl text-gray-700 max-w-2xl mx-auto">
-            We combine premium quality materials with cutting-edge printing technology to bring your
-            designs to life
+            {t('whyChoose.description')}
           </p>
         </div>
 

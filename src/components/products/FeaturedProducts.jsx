@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useMemo } from "react";
+import { useTranslations } from 'next-intl';
 import ProductSlider from "./ProductSlider";
 import ProductCard from "./ProductCard";
 import BaseButton from "@/components/ui/BaseButton";
@@ -95,6 +96,7 @@ const mapApiProductToComponent = (apiProduct) => {
  * Displays featured products with slider on desktop and grid on mobile
  */
 export default function FeaturedProducts() {
+  const t = useTranslations();
   const sliderRef = useRef(null);
 
   // Fetch featured products from API
@@ -148,8 +150,8 @@ export default function FeaturedProducts() {
               delay={100}
             >
               <div>
-                <h2 className="text-4xl font-bold text-gray-900 mb-2">Featured Products</h2>
-                <p className="text-lg text-gray-700">Bestsellers & new arrivals</p>
+                <h2 className="text-4xl font-bold text-gray-900 mb-2">{t('featuredProducts.title')}</h2>
+                <p className="text-lg text-gray-700">{t('featuredProducts.subtitle')}</p>
               </div>
             </ScrollReveal>
 
@@ -198,8 +200,8 @@ export default function FeaturedProducts() {
         ) : isError ? (
           <div className="flex flex-col items-center justify-center py-20">
             <i className="ri-error-warning-line text-6xl text-red-400 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">Error loading products</h3>
-            <p className="text-gray-500 text-center">Please try again later.</p>
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">{t('featuredProducts.errorTitle')}</h3>
+            <p className="text-gray-500 text-center">{t('featuredProducts.errorMessage')}</p>
           </div>
         ) : products.length > 0 ? (
           <>
@@ -222,8 +224,8 @@ export default function FeaturedProducts() {
         ) : (
           <div className="flex flex-col items-center justify-center py-20">
             <i className="ri-shopping-bag-line text-6xl text-gray-300 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">No featured products</h3>
-            <p className="text-gray-500 text-center">Check back later for featured products.</p>
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">{t('featuredProducts.emptyTitle')}</h3>
+            <p className="text-gray-500 text-center">{t('featuredProducts.emptyMessage')}</p>
           </div>
         )}
 
@@ -235,7 +237,7 @@ export default function FeaturedProducts() {
             size="md"
             className="shadow-md hover:shadow-lg"
           >
-            View All Products
+            {t('featuredProducts.viewAll')}
           </BaseButton>
         </div>
       </div>

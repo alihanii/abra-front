@@ -1,8 +1,12 @@
+"use client";
+
+import { useTranslations } from 'next-intl';
 import Link from "next/link";
 import { SHOP_LINKS, SUPPORT_LINKS, COMPANY_LINKS, SOCIAL_LINKS, ROUTES } from "@/config/routes";
 import AbraLogo from "@/components/ui/AbraLogo";
 
 export default function Footer() {
+  const t = useTranslations();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -16,7 +20,7 @@ export default function Footer() {
               className="text-2xl font-bold text-gray-900 mb-4"
             />
             <p className="text-gray-600 mb-4">
-              Premium custom clothing with professional printing quality.
+              {t('footer.description')}
             </p>
             <div className="flex gap-3">
               {SOCIAL_LINKS.map((social) => (
@@ -24,7 +28,7 @@ export default function Footer() {
                   key={social.id}
                   href={social.href}
                   className="w-10 h-10 flex items-center justify-center bg-[var(--color-sky-light)] rounded-full hover:bg-gray-900 hover:text-white transition-all duration-200 cursor-pointer group"
-                  aria-label={social.label}
+                  aria-label={t(`social.${social.id}`)}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -38,7 +42,7 @@ export default function Footer() {
 
           {/* Shop Links */}
           <div>
-            <h4 className="font-bold text-gray-900 mb-4">Shop</h4>
+            <h4 className="font-bold text-gray-900 mb-4">{t('footer.shop')}</h4>
             <ul className="space-y-2">
               {SHOP_LINKS.map((link) => (
                 <li key={link.href}>
@@ -46,7 +50,7 @@ export default function Footer() {
                     href={link.href}
                     className="text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer inline-block hover:translate-x-1"
                   >
-                    {link.label}
+                    {t(`shopLinks.${link.id}`)}
                   </Link>
                 </li>
               ))}
@@ -55,7 +59,7 @@ export default function Footer() {
 
           {/* Support Links */}
           <div>
-            <h4 className="font-bold text-gray-900 mb-4">Support</h4>
+            <h4 className="font-bold text-gray-900 mb-4">{t('footer.support')}</h4>
             <ul className="space-y-2">
               {SUPPORT_LINKS.map((link) => (
                 <li key={link.href}>
@@ -63,7 +67,7 @@ export default function Footer() {
                     href={link.href}
                     className="text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer inline-block hover:translate-x-1"
                   >
-                    {link.label}
+                    {t(`supportLinks.${link.id}`)}
                   </Link>
                 </li>
               ))}
@@ -72,7 +76,7 @@ export default function Footer() {
 
           {/* Company Links */}
           <div>
-            <h4 className="font-bold text-gray-900 mb-4">Company</h4>
+            <h4 className="font-bold text-gray-900 mb-4">{t('footer.company')}</h4>
             <ul className="space-y-2">
               {COMPANY_LINKS.map((link) => (
                 <li key={link.href}>
@@ -80,7 +84,7 @@ export default function Footer() {
                     href={link.href}
                     className="text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer inline-block hover:translate-x-1"
                   >
-                    {link.label}
+                    {t(`companyLinks.${link.id}`)}
                   </Link>
                 </li>
               ))}
@@ -90,14 +94,14 @@ export default function Footer() {
 
         {/* Copyright Section */}
         <div className="border-t border-[#F5F5F5] pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-600 text-sm">© {currentYear} Abra. All rights reserved.</p>
+          <p className="text-gray-600 text-sm">{t('footer.allRightsReserved', { year: currentYear })}</p>
           <a
             href="https://readdy.ai/?origin=logo"
             className="text-gray-600 text-sm hover:text-gray-900 transition-colors cursor-pointer"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Powered by AliHaNi
+            {t('footer.poweredBy')}
           </a>
         </div>
       </div>

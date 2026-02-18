@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from 'next-intl';
 import ProductCard from "./ProductCard";
 import { cn } from "@/lib/utils";
 
@@ -14,6 +15,8 @@ import { cn } from "@/lib/utils";
  * @param {number} props.skeletonCount - Number of skeleton cards to show when loading (default: 8)
  */
 export default function ProductGrid({ products = [], className, isLoading = false, skeletonCount = 8 }) {
+  const t = useTranslations();
+  
   // Show skeleton cards when loading
   if (isLoading) {
     return (
@@ -34,9 +37,9 @@ export default function ProductGrid({ products = [], className, isLoading = fals
     return (
       <div className={cn("flex flex-col items-center justify-center py-20", className)}>
         <i className="ri-shopping-bag-line text-6xl text-gray-300 mb-4" />
-        <h3 className="text-xl font-semibold text-gray-700 mb-2">No products found</h3>
+        <h3 className="text-xl font-semibold text-gray-700 mb-2">{t('products.notFound')}</h3>
         <p className="text-gray-500 text-center">
-          Try adjusting your filters to see more products.
+          {t('products.adjustFilters')}
         </p>
       </div>
     );

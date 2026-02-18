@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from 'next-intl';
 import BaseInput from "@/components/ui/BaseInput";
 import BaseButton from "@/components/ui/BaseButton";
 import Alert from "@/components/ui/Alert";
@@ -17,6 +18,7 @@ import { cn } from "@/lib/utils";
  * @param {string} props.error - Error message to display
  */
 export default function RegisterForm({ onRegister, onLogin, isLoading = false, error = null }) {
+  const t = useTranslations();
   const [formData, setFormData] = useState({
     phone: "",
     password: "",
@@ -101,7 +103,7 @@ export default function RegisterForm({ onRegister, onLogin, isLoading = false, e
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             className="absolute left-3 top-9 text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
-            aria-label={showPassword ? "Hide password" : "Show password"}
+            aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
           >
             <i className={cn("text-xl", showPassword ? "ri-eye-off-line" : "ri-eye-line")}></i>
           </button>
@@ -124,7 +126,7 @@ export default function RegisterForm({ onRegister, onLogin, isLoading = false, e
             type="button"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             className="absolute left-3 top-9 text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
-            aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+            aria-label={showConfirmPassword ? t('auth.hidePassword') : t('auth.showPassword')}
           >
             <i
               className={cn("text-xl", showConfirmPassword ? "ri-eye-off-line" : "ri-eye-line")}

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslations } from 'next-intl';
 import { NAVIGATION_ITEMS, ROUTES } from "@/config/routes";
 import { useNavigation } from "@/hooks/useNavigation";
 import { useCart } from "@/contexts/CartContext";
@@ -17,6 +18,7 @@ import AbraLogo from "@/components/ui/AbraLogo";
  * @param {Function} props.onUserClick - Callback when user button is clicked
  */
 export default function Header({ onUserClick }) {
+  const t = useTranslations();
   const router = useRouter();
   const { totalItems, isOpen: isCartOpen, openCart, closeCart } = useCart();
   const { isOpen: isProfileOpen, openProfile, closeProfile } = useProfile();
@@ -114,7 +116,7 @@ export default function Header({ onUserClick }) {
           <Link
             href={ROUTES.HOME}
             className="flex items-center cursor-pointer group"
-            aria-label="Abra Home"
+            aria-label={t('header.abraHome')}
           >
             <AbraLogo
               className="text-2xl sm:text-3xl font-bold text-gray-900 transition-transform group-hover:scale-105"
@@ -136,7 +138,7 @@ export default function Header({ onUserClick }) {
                     }
                   `}
                 >
-                  {item.label}
+                  {t(`navigation.${item.id}`)}
                   {isActive && (
                     <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900 rounded-full" />
                   )}
@@ -151,7 +153,7 @@ export default function Header({ onUserClick }) {
             <button
               onClick={handleCartClick}
               className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-gray-900 transition-colors cursor-pointer relative group"
-              aria-label={`Shopping cart${totalItems > 0 ? ` with ${totalItems} items` : ""}`}
+              aria-label={totalItems > 0 ? t('header.shoppingCartWithItems', { count: totalItems }) : t('header.shoppingCart')}
             >
               <i className="ri-shopping-cart-line text-2xl transition-transform group-hover:scale-110"></i>
               {totalItems > 0 && (
@@ -165,7 +167,7 @@ export default function Header({ onUserClick }) {
             <button
               onClick={handleUserClick}
               className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-gray-900 transition-colors cursor-pointer group"
-              aria-label="User account"
+              aria-label={t('header.userAccount')}
             >
               <i className="ri-user-line text-2xl transition-transform group-hover:scale-110"></i>
             </button>
@@ -174,7 +176,7 @@ export default function Header({ onUserClick }) {
             <button
               className="md:hidden w-10 h-10 flex items-center justify-center text-gray-700 hover:text-gray-900 transition-colors cursor-pointer"
               onClick={toggleMobileMenu}
-              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-label={isMobileMenuOpen ? t('header.closeMenu') : t('header.openMenu')}
               aria-expanded={isMobileMenuOpen}
             >
               <i
@@ -219,7 +221,7 @@ export default function Header({ onUserClick }) {
                 >
                   <div className="flex items-center gap-3">
                     {item.icon && <i className={`${item.icon} text-xl`}></i>}
-                    <span>{item.label}</span>
+                    <span>{t(`navigation.${item.id}`)}</span>
                   </div>
                 </Link>
               );

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from 'next-intl';
 import BaseButton from "@/components/ui/BaseButton";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import { ROUTES } from "@/config/routes";
@@ -9,6 +10,8 @@ import { ROUTES } from "@/config/routes";
  * Large hero section with background image and call-to-action buttons
  */
 export default function HeroSection() {
+  const t = useTranslations();
+  
   return (
     <section
       className="relative min-h-[400px] sm:min-h-[500px] md:min-h-[600px] flex items-center justify-center bg-cover bg-center"
@@ -23,7 +26,7 @@ export default function HeroSection() {
             delay={0}
           >
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
-              Design Your Dream Clothing
+              {t('hero.title')}
             </h1>
           </ScrollReveal>
           <ScrollReveal
@@ -31,8 +34,7 @@ export default function HeroSection() {
             delay={50}
           >
             <p className="text-base sm:text-lg md:text-xl text-gray-700 mb-6 sm:mb-8 md:mb-10 leading-relaxed">
-              Create custom designs or choose from our ready-made collection. Premium quality cotton
-              clothing with professional printing.
+              {t('hero.description')}
             </p>
           </ScrollReveal>
           <ScrollReveal
@@ -46,7 +48,7 @@ export default function HeroSection() {
                 size="lg"
                 className="shadow-lg hover:shadow-xl"
               >
-                Start Custom Design
+                {t('hero.startCustomDesign')}
               </BaseButton>
               <BaseButton
                 href={ROUTES.PRODUCTS}
@@ -54,7 +56,7 @@ export default function HeroSection() {
                 size="lg"
                 className="shadow-lg hover:shadow-xl"
               >
-                Buy Ready Designs
+                {t('hero.buyReadyDesigns')}
               </BaseButton>
             </div>
           </ScrollReveal>

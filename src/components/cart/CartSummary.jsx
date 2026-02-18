@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from 'next-intl';
 import { useCart } from "@/contexts/CartContext";
 import { ROUTES } from "@/config/routes";
 import BaseButton from "@/components/ui/BaseButton";
@@ -9,6 +10,7 @@ import BaseButton from "@/components/ui/BaseButton";
  * Displays cart totals and checkout actions
  */
 export default function CartSummary() {
+  const t = useTranslations();
   const { totals, closeCart } = useCart();
 
   return (
@@ -16,17 +18,17 @@ export default function CartSummary() {
       {/* Totals */}
       <div className="space-y-3 mb-4">
         <div className="flex justify-between text-gray-700">
-          <span>Subtotal</span>
+          <span>{t('cartSummary.subtotal')}</span>
           <span className="font-semibold">${totals.subtotal}</span>
         </div>
 
         <div className="flex justify-between text-gray-700">
-          <span>Shipping</span>
-          <span className="font-semibold">FREE</span>
+          <span>{t('cartSummary.shipping')}</span>
+          <span className="font-semibold">{t('cartSummary.free')}</span>
         </div>
 
         <div className="border-t border-gray-300 pt-3 flex justify-between text-lg font-bold text-gray-900">
-          <span>Total</span>
+          <span>{t('cartSummary.total')}</span>
           <span>${totals.total}</span>
         </div>
       </div>
@@ -40,7 +42,7 @@ export default function CartSummary() {
           size="lg"
           fullWidth
         >
-          Proceed to Checkout
+          {t('cartSummary.proceedToCheckout')}
         </BaseButton>
 
         <BaseButton
@@ -49,7 +51,7 @@ export default function CartSummary() {
           size="md"
           fullWidth
         >
-          Continue Shopping
+          {t('cartSummary.continueShopping')}
         </BaseButton>
       </div>
     </div>
