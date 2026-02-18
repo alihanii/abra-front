@@ -7,6 +7,7 @@ export const ROUTES = {
   HOME: "/",
   PRODUCTS: "/products",
   MATCHING_SETS: "/matching-sets",
+  CATEGORIES: "/categories",
   DESIGN_STUDIO: "/design-studio",
   CONTACT: "/contact",
   SHIPPING: "/shipping",
@@ -37,9 +38,9 @@ export const NAVIGATION_ITEMS = [
     icon: "ri-shopping-bag-line"
   },
   {
-    id: "matchingSets",
-    label: "Matching Sets",
-    href: ROUTES.MATCHING_SETS,
+    id: "categories",
+    label: "Categories",
+    href: ROUTES.CATEGORIES,
     icon: "ri-t-shirt-line"
   },
   {

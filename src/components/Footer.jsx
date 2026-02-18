@@ -14,7 +14,7 @@ export default function Footer() {
   // Fetch categories from API
   const { data: categoriesResponse } = useCategories({
     page: 1,
-    page_size: 4,
+    page_size: 100,
   });
   
   // Transform categories to shop links format
@@ -23,7 +23,7 @@ export default function Footer() {
     
     // Add categories from API
     if (categoriesResponse?.results) {
-      categoriesResponse.results.forEach((category) => {
+      categoriesResponse.results.slice(0, 5).forEach((category) => {
         links.push({
           id: category.slug || category.id,
           label: category.label || category.name,

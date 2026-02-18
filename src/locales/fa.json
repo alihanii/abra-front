@@ -13,13 +13,21 @@
     "startCustomDesign": "شروع طراحی سفارشی",
     "buyReadyDesigns": "خرید طرح‌های آماده"
   },
-  "categories": {
+  "homeCategories": {
     "thirtyOffHoodies": "۳۰٪ تخفیف هودی‌ها",
     "limitedTimeOffer": "پیشنهاد محدود",
     "coupleMatchingSets": "ست‌های هماهنگ زوجی",
     "perfectForPartners": "مناسب برای زوج‌ها",
     "designYourOwn": "خودتان طراحی کنید",
     "unleashCreativity": "خلاقیت خود را آزاد کنید"
+  },
+  "categories": {
+    "title": "دسته‌بندی‌ها",
+    "subtitle": "تمام دسته‌بندی‌های محصولات ما",
+    "errorTitle": "خطا در بارگذاری دسته‌بندی‌ها",
+    "errorMessage": "لطفاً دوباره تلاش کنید.",
+    "emptyTitle": "دسته‌بندی‌ای وجود ندارد",
+    "emptyMessage": "در حال حاضر دسته‌بندی‌ای برای نمایش وجود ندارد."
   },
   "features": {
     "printGuarantee": "ضمانت چاپ",
@@ -130,7 +138,8 @@
     "home": "خانه",
     "products": "محصولات",
     "matchingSets": "ست‌های هماهنگ",
-    "designStudio": "استودیو طراحی"
+    "designStudio": "استودیو طراحی",
+    "categories": "دسته‌بندی‌ها"
   },
   "shopLinks": {
     "hoodies": "هودی",
