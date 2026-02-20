@@ -100,6 +100,18 @@ export const API_ROUTES = {
     ADD: "/wishlist",
     REMOVE: (productId) => `/wishlist/${productId}`,
     CLEAR: "/wishlist/clear"
+  },
+
+  // Product Templates endpoints
+  PRODUCT_TEMPLATES: {
+    BASE: "/product-templates",
+    LIST: "/product-templates/"
+  },
+
+  // Custom Products endpoints
+  CUSTOM_PRODUCTS: {
+    BASE: "/custom-products",
+    CREATE: "/custom-products/create/"
   }
 };
 

@@ -18,7 +18,8 @@ export const ROUTES = {
   TERMS: "/terms",
   FAQ: "/faq",
   CHECKOUT: "/checkout",
-  PAYMENT: "/payment"
+  PAYMENT: "/payment",
+  PRODUCT_TEMPLATES: "/product-templates"
 };
 
 /**

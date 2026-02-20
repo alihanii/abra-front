@@ -9,6 +9,8 @@ import * as productService from "@/lib/api/services/products";
 import * as authService from "@/lib/api/services/auth";
 import * as bannerService from "@/lib/api/services/banners";
 import * as cartService from "@/lib/api/services/cart";
+import * as productTemplateService from "@/lib/api/services/productTemplates";
+import * as customProductService from "@/lib/api/services/customProducts";
 
 // Query Keys - Centralized query key factory
 export const queryKeys = {
@@ -33,6 +35,14 @@ export const queryKeys = {
   banners: {
     all: ["banners"],
     list: ["banners", "list"],
+  },
+  productTemplates: {
+    all: ["productTemplates"],
+    list: (params) => ["productTemplates", "list", params],
+  },
+  customProducts: {
+    all: ["customProducts"],
+    create: ["customProducts", "create"],
   },
 };
 
@@ -200,6 +210,44 @@ export const useChangePassword = (options = {}) => {
 export const useCalculateCartPricing = (options = {}) => {
   return useMutation({
     mutationFn: (cartData) => cartService.calculateCartPricing(cartData),
+    onSuccess: (data, variables, context) => {
+      // Call custom onSuccess if provided
+      if (options.onSuccess) {
+        options.onSuccess(data, variables, context);
+      }
+    },
+    onError: (error, variables, context) => {
+      // Call custom onError if provided
+      if (options.onError) {
+        options.onError(error, variables, context);
+      }
+    },
+    ...options
+  });
+};
+
+/**
+ * Get product templates using TanStack Query
+ * @param {Object} params - Query parameters
+ * @param {Object} options - Query options
+ * @returns {Object} Query result with product templates data
+ */
+export const useProductTemplates = (params = {}, options = {}) => {
+  return useQuery({
+    queryKey: queryKeys.productTemplates.list(params),
+    queryFn: () => productTemplateService.getProductTemplates(params),
+    ...options
+  });
+};
+
+/**
+ * Create custom product mutation using TanStack Query
+ * @param {Object} options - Mutation options (onSuccess, onError)
+ * @returns {Object} Mutation object with mutate function
+ */
+export const useCreateCustomProduct = (options = {}) => {
+  return useMutation({
+    mutationFn: (formData) => customProductService.createCustomProduct(formData),
     onSuccess: (data, variables, context) => {
       // Call custom onSuccess if provided
       if (options.onSuccess) {
