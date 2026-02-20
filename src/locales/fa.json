@@ -95,7 +95,18 @@
     "easyReturns": "بازگشت آسان",
     "freeShippingOver": "ارسال رایگان برای سفارش‌های بالای ۵۰ دلار",
     "premiumMaterials": "مواد اولیه و چاپ مرغوب",
-    "thirtyDayReturn": "سی روز ضمانت بازگشت"
+    "thirtyDayReturn": "سی روز ضمانت بازگشت",
+    "selectColor": "انتخاب رنگ",
+    "color": "رنگ",
+    "size": "سایز",
+    "outOfStock": "ناموجود",
+    "saveAmount": "صرفه‌جویی {amount}",
+    "addToCart": "افزودن به سبد خرید",
+    "combinationOutOfStock": "این ترکیب ناموجود است",
+    "whatsIncluded": "شامل چیست؟",
+    "totalPrice": "قیمت کل",
+    "notAvailable": "—",
+    "quantity": "تعداد"
   },
   "ui": {
     "scrollLeft": "اسکرول به چپ",

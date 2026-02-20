@@ -50,15 +50,27 @@ export default function ProductDetailPage() {
   // Show loading state with skeletons
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-[var(--color-sky-light)]">
+      <main
+        className="min-h-screen bg-[var(--color-sky-light)]"
+        dir="ltr"
+      >
         <div className="max-w-7xl mx-auto px-6 py-2 pb-32 lg:pb-8">
           {/* Breadcrumbs Skeleton */}
           <div className="flex items-center gap-2 mb-6">
-            <BaseSkeleton isLoading={true} className="h-4 w-12" />
+            <BaseSkeleton
+              isLoading={true}
+              className="h-4 w-12"
+            />
             <i className="ri-arrow-right-s-line text-gray-400"></i>
-            <BaseSkeleton isLoading={true} className="h-4 w-16" />
+            <BaseSkeleton
+              isLoading={true}
+              className="h-4 w-16"
+            />
             <i className="ri-arrow-right-s-line text-gray-400"></i>
-            <BaseSkeleton isLoading={true} className="h-4 w-24" />
+            <BaseSkeleton
+              isLoading={true}
+              className="h-4 w-24"
+            />
           </div>
 
           {/* Product Content Skeleton */}
@@ -69,66 +81,132 @@ export default function ProductDetailPage() {
                 {/* Thumbnails */}
                 <div className="flex flex-col gap-2 order-2 lg:order-1 max-h-[240px] lg:max-h-[400px]">
                   {[1, 2, 3, 4].map((i) => (
-                    <BaseSkeleton key={i} isLoading={true} variant="default" className="w-16 h-16 lg:w-20 lg:h-20 shrink-0" />
+                    <BaseSkeleton
+                      key={i}
+                      isLoading={true}
+                      variant="default"
+                      className="w-16 h-16 lg:w-20 lg:h-20 shrink-0"
+                    />
                   ))}
                 </div>
                 {/* Main Image */}
                 <div className="bg-white rounded-2xl overflow-hidden shadow-lg flex-1 order-1 lg:order-2">
-                  <BaseSkeleton isLoading={true} variant="rectangular" className="aspect-square w-full" />
+                  <BaseSkeleton
+                    isLoading={true}
+                    variant="rectangular"
+                    className="aspect-square w-full"
+                  />
                 </div>
               </div>
             </div>
 
             {/* Product Info Skeleton */}
-            <div>
+            <div dir="rtl">
               <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-sm">
                 {/* Title */}
-                <BaseSkeleton isLoading={true} variant="text" className="h-10 lg:h-12 mb-3 w-3/4" />
-                
+                <BaseSkeleton
+                  isLoading={true}
+                  variant="text"
+                  className="h-10 lg:h-12 mb-3 w-3/4"
+                />
+
                 {/* Price */}
                 <div className="flex items-baseline gap-3 mb-4">
-                  <BaseSkeleton isLoading={true} variant="text" className="h-9 w-32" />
-                  <BaseSkeleton isLoading={true} variant="text" className="h-7 w-24" />
+                  <BaseSkeleton
+                    isLoading={true}
+                    variant="text"
+                    className="h-9 w-32"
+                  />
+                  <BaseSkeleton
+                    isLoading={true}
+                    variant="text"
+                    className="h-7 w-24"
+                  />
                 </div>
 
                 {/* Description */}
                 <div className="space-y-2 mb-6">
-                  <BaseSkeleton isLoading={true} variant="text" className="h-4 w-full" />
+                  <BaseSkeleton
+                    isLoading={true}
+                    variant="text"
+                    className="h-4 w-full"
+                  />
                   {/* <BaseSkeleton isLoading={true} variant="text" className="h-4 w-full" /> */}
-                  <BaseSkeleton isLoading={true} variant="text" className="h-4 w-3/4" />
+                  <BaseSkeleton
+                    isLoading={true}
+                    variant="text"
+                    className="h-4 w-3/4"
+                  />
                 </div>
 
                 {/* Color Selection */}
                 <div className="mb-6">
-                  <BaseSkeleton isLoading={true} variant="text" className="h-5 w-24 mb-3" />
+                  <BaseSkeleton
+                    isLoading={true}
+                    variant="text"
+                    className="h-5 w-24 mb-3"
+                  />
                   <div className="flex gap-3">
                     {[1, 2, 3, 4].map((i) => (
-                      <BaseSkeleton key={i} isLoading={true} variant="default" className="w-12 h-12" />
+                      <BaseSkeleton
+                        key={i}
+                        isLoading={true}
+                        variant="default"
+                        className="w-12 h-12"
+                      />
                     ))}
                   </div>
                 </div>
 
                 {/* Size Selection */}
                 <div className="mb-6">
-                  <BaseSkeleton isLoading={true} variant="text" className="h-5 w-16 mb-3" />
+                  <BaseSkeleton
+                    isLoading={true}
+                    variant="text"
+                    className="h-5 w-16 mb-3"
+                  />
                   <div className="flex flex-wrap gap-2">
                     {[1, 2, 3, 4, 5].map((i) => (
-                      <BaseSkeleton key={i} isLoading={true} variant="default" className="h-10 w-16" />
+                      <BaseSkeleton
+                        key={i}
+                        isLoading={true}
+                        variant="default"
+                        className="h-10 w-16"
+                      />
                     ))}
                   </div>
                 </div>
 
                 {/* Add to Cart Button */}
-                <BaseSkeleton isLoading={true} variant="default" className="h-14 w-full rounded-full mb-8" />
+                <BaseSkeleton
+                  isLoading={true}
+                  variant="default"
+                  className="h-14 w-full rounded-full mb-8"
+                />
 
                 {/* Features List */}
                 <div className="pt-8 border-t border-gray-200">
-                  <BaseSkeleton isLoading={true} variant="text" className="h-6 w-40 mb-4" />
+                  <BaseSkeleton
+                    isLoading={true}
+                    variant="text"
+                    className="h-6 w-40 mb-4"
+                  />
                   <div className="space-y-3">
                     {[1, 2, 3].map((i) => (
-                      <div key={i} className="flex items-start gap-3">
-                        <BaseSkeleton isLoading={true} variant="circular" className="w-5 h-5 shrink-0 mt-0.5" />
-                        <BaseSkeleton isLoading={true} variant="text" className="h-4 flex-1" />
+                      <div
+                        key={i}
+                        className="flex items-start gap-3"
+                      >
+                        <BaseSkeleton
+                          isLoading={true}
+                          variant="circular"
+                          className="w-5 h-5 shrink-0 mt-0.5"
+                        />
+                        <BaseSkeleton
+                          isLoading={true}
+                          variant="text"
+                          className="h-4 flex-1"
+                        />
                       </div>
                     ))}
                   </div>
@@ -140,10 +218,25 @@ export default function ProductDetailPage() {
           {/* Shipping Info Skeleton */}
           <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 shadow-sm">
-                <BaseSkeleton isLoading={true} variant="circular" className="w-12 h-12 mb-4" />
-                <BaseSkeleton isLoading={true} variant="text" className="h-6 w-32 mb-2" />
-                <BaseSkeleton isLoading={true} variant="text" className="h-4 w-full" />
+              <div
+                key={i}
+                className="bg-white rounded-2xl p-6 shadow-sm"
+              >
+                <BaseSkeleton
+                  isLoading={true}
+                  variant="circular"
+                  className="w-12 h-12 mb-4"
+                />
+                <BaseSkeleton
+                  isLoading={true}
+                  variant="text"
+                  className="h-6 w-32 mb-2"
+                />
+                <BaseSkeleton
+                  isLoading={true}
+                  variant="text"
+                  className="h-4 w-full"
+                />
               </div>
             ))}
           </div>
@@ -154,15 +247,35 @@ export default function ProductDetailPage() {
           <div className="px-6 py-4">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <BaseSkeleton isLoading={true} variant="text" className="h-3 w-20 mb-2" />
-                <BaseSkeleton isLoading={true} variant="text" className="h-8 w-24" />
+                <BaseSkeleton
+                  isLoading={true}
+                  variant="text"
+                  className="h-3 w-20 mb-2"
+                />
+                <BaseSkeleton
+                  isLoading={true}
+                  variant="text"
+                  className="h-8 w-24"
+                />
               </div>
               <div className="text-right">
-                <BaseSkeleton isLoading={true} variant="text" className="h-3 w-16 mb-2 ml-auto" />
-                <BaseSkeleton isLoading={true} variant="text" className="h-4 w-12 ml-auto" />
+                <BaseSkeleton
+                  isLoading={true}
+                  variant="text"
+                  className="h-3 w-16 mb-2 ml-auto"
+                />
+                <BaseSkeleton
+                  isLoading={true}
+                  variant="text"
+                  className="h-4 w-12 ml-auto"
+                />
               </div>
             </div>
-            <BaseSkeleton isLoading={true} variant="default" className="h-14 w-full rounded-full" />
+            <BaseSkeleton
+              isLoading={true}
+              variant="default"
+              className="h-14 w-full rounded-full"
+            />
             <div className="h-2" />
           </div>
         </div>
@@ -220,7 +333,10 @@ export default function ProductDetailPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[var(--color-sky-light)] " dir="ltr">
+    <main
+      className="min-h-screen bg-[var(--color-sky-light)] "
+      dir="ltr"
+    >
       <div className="max-w-7xl mx-auto px-6 py-2 pb-32 lg:pb-8">
         {/* Breadcrumbs */}
         <Breadcrumbs items={breadcrumbItems} />
@@ -237,7 +353,7 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Product Info */}
-          <div>
+          <div dir="rtl">
             <ProductInfo
               product={product}
               selectedColor={selectedColor}

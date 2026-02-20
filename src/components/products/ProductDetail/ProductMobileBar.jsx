@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import BaseButton from "@/components/ui/BaseButton";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +28,8 @@ export default function ProductMobileBar({
   onAddToCart,
   className
 }) {
+  const t = useTranslations();
+
   if (!product) return null;
 
   return (
@@ -39,14 +42,14 @@ export default function ProductMobileBar({
       <div className="px-6 py-4">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <p className="text-xs text-gray-600">Total Price</p>
+            <p className="text-xs text-gray-600">{t("product.totalPrice")}</p>
             <p className="text-2xl font-bold text-gray-900">
               ${finalPrice?.toFixed(2) || product.price.toFixed(2)}
             </p>
           </div>
           <div className="text-right">
-            <p className="text-xs text-gray-600">Size: {selectedSizeData?.name || "N/A"}</p>
-            <p className="text-sm text-gray-700">Qty: {quantity}</p>
+            <p className="text-xs text-gray-600">{t("product.size")}: {selectedSizeData?.name || t("product.notAvailable")}</p>
+            <p className="text-sm text-gray-700">{t("product.quantity")}: {quantity}</p>
           </div>
         </div>
         <BaseButton
@@ -58,7 +61,7 @@ export default function ProductMobileBar({
           disabled={!isInStock}
         >
           <i className="ri-shopping-cart-line text-xl"></i>
-          <span>{!isInStock ? "Out of Stock" : "Add to Cart"}</span>
+          <span>{!isInStock ? t("product.outOfStock") : t("product.addToCart")}</span>
         </BaseButton>
         <div className="h-2"></div>
       </div>

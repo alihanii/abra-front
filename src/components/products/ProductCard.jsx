@@ -82,7 +82,7 @@ export default function ProductCard({
     // if (href) {
     //   router.push(href);
     // } else if (slug) {
-      router.push(`${ROUTES.PRODUCTS}/${slug}`);
+    router.push(`${ROUTES.PRODUCTS}/${slug}`);
     // }
   };
 
@@ -125,9 +125,9 @@ export default function ProductCard({
   const isInCart = Boolean(cartItem);
 
   // Use product data if available, otherwise fallback to props
-  const displayName =  name;
-  const displayPrice =  price;
-  const displayImage =  image;
+  const displayName = name;
+  const displayPrice = price;
+  const displayImage = image;
 
   const maxQuantity =
     product && availableStock !== undefined ? cartItem?.quantity + availableStock : availableStock;
@@ -235,7 +235,7 @@ export default function ProductCard({
       <div
         className={cn("flex flex-col flex-1", "mr-3 md:ml-0", "justify-between md:justify-start")}
       >
-        <div className="flex-1 items-end flex flex-col ml-2">
+        <div className="flex-1 items-start flex flex-col ml-2">
           <h3
             className={cn(
               "font-bold text-gray-900 mb-1 md:mb-2",
@@ -247,7 +247,7 @@ export default function ProductCard({
           </h3>
 
           {/* Price */}
-          <div className="flex items-center justify-between mb-2 md:mb-4">
+          <div className="text-left mb-2 md:mb-4 w-full">
             <span className={cn("font-bold text-gray-900", "text-base md:text-2xl")}>
               ${displayPrice.toFixed(2)}
             </span>

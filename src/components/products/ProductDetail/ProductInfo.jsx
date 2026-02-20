@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import BaseButton from "@/components/ui/BaseButton";
 import QuantityControl from "@/components/ui/QuantityControl";
 import { cn } from "@/lib/utils";
@@ -51,6 +52,8 @@ export default function ProductInfo({
     return product.sizes?.[selectedSize] || null;
   }, [product, selectedSize]);
 
+  const t = useTranslations();
+
   // Check if there's a discount
   const hasDiscount = originalPrice && originalPrice > finalPrice;
 
@@ -70,7 +73,7 @@ export default function ProductInfo({
           <>
             <span className="text-xl text-gray-500 line-through">${originalPrice.toFixed(2)}</span>
             <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
-              Save ${discountAmount}
+              {t("product.saveAmount", { amount: `$${discountAmount}` })}
             </span>
           </>
         )}
@@ -85,7 +88,7 @@ export default function ProductInfo({
       {product.colors && Object.keys(product.colors).length > 0 && (
         <div className="mb-6">
           <label className="block text-sm font-semibold text-gray-900 mb-3">
-            Color: {selectedColorData?.name || "Select Color"}
+            {t("product.color")}: {selectedColorData?.name || t("product.selectColor")}
           </label>
           <div className="flex gap-3">
             {Object.entries(product.colors).map(([key, color]) => {
@@ -112,7 +115,7 @@ export default function ProductInfo({
                     !hasStock && "opacity-50"
                   )}
                   style={{ backgroundColor: color.value }}
-                  aria-label={`Select color ${color.name}${!hasStock ? " (Out of stock)" : ""}`}
+                  aria-label={`${t("product.selectColor")} ${color.name}${!hasStock ? ` (${t("product.outOfStock")})` : ""}`}
                 >
                   {!hasStock && (
                     <span className="absolute inset-0 flex items-center justify-center">
@@ -129,7 +132,7 @@ export default function ProductInfo({
       {/* Size Selection */}
       {product.sizes && Object.keys(product.sizes).length > 0 && (
         <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-900 mb-3">Size</label>
+          <label className="block text-sm font-semibold text-gray-900 mb-3">{t("product.size")}</label>
           <div className="flex flex-wrap gap-2">
             {Object.entries(product.sizes).map(([key, size]) => {
               // Check if this size has stock for selected color
@@ -148,7 +151,7 @@ export default function ProductInfo({
                     "!rounded-lg px-6 py-3 whitespace-nowrap relative",
                     selectedColor && !hasStock && "opacity-50"
                   )}
-                  aria-label={`Select size ${size.name}${selectedColor && !hasStock ? " (Out of stock)" : ""}`}
+                  aria-label={`${t("product.size")} ${size.name}${selectedColor && !hasStock ? ` (${t("product.outOfStock")})` : ""}`}
                 >
                   {size.name}
                   {/* {selectedColor && hasStock && (
@@ -188,7 +191,7 @@ export default function ProductInfo({
           {!isInStock && (
             <p className="text-sm text-red-600 mt-2">
               <i className="ri-error-warning-line mr-1"></i>
-              This combination is out of stock
+              {t("product.combinationOutOfStock")}
             </p>
           )}
         </div>
@@ -205,14 +208,14 @@ export default function ProductInfo({
           disabled={!isInStock || !selectedColor || !selectedSize}
         >
           <i className="ri-shopping-cart-line text-xl"></i>
-          <span>{!isInStock ? "Out of Stock" : "Add to Cart"}</span>
+          <span>{!isInStock ? t("product.outOfStock") : t("product.addToCart")}</span>
         </BaseButton>
       )}
 
       {/* Features List */}
       {product.features && product.features.length > 0 && (
         <div className="mt-8 pt-8 border-t border-gray-200">
-          <h3 className="font-bold text-gray-900 mb-4">What&apos;s Included:</h3>
+          <h3 className="font-bold text-gray-900 mb-4">{t("product.whatsIncluded")}:</h3>
           <ul className="space-y-3">
             {product.features.map((feature, index) => (
               <li
