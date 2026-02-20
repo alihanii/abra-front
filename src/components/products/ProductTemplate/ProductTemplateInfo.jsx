@@ -247,7 +247,7 @@ export default function ProductTemplateInfo({
                     fullWidth
                     onClick={onAddToCart}
                     disabled={!isInStock || !selectedColor || !selectedSize}
-                    className="mb-8"
+                    className="mb-8 lg:inline-block hidden"
                 >
                     <i className="ri-shopping-cart-line mr-2"></i>
                     {isInStock ? t("designStudio.addToCart") : t("designStudio.outOfStock")}

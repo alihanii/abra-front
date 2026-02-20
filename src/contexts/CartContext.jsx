@@ -12,13 +12,18 @@ import {
   getCartFromStorage,
   saveCartToStorage,
   clearCartStorage,
+  getCustomCartFromStorage,
+  saveCustomCartToStorage,
+  clearCustomCartStorage,
   getUniqueProductIds,
+  getUniqueCustomProductIds,
   generateCartItemKey,
   decodeSharedCart,
+  decodeSharedCustomCart,
   buildShareCartUrl
 } from "@/lib/utils/cartStorage";
 import { calculateFinalPrice } from "@/lib/utils/cartPricing";
-import { useCartProductsList } from "@/hooks/useApi";
+import { useCartProductsList, useCartCustomProductsList } from "@/hooks/useApi";
 
 /**
  * Cart Context
@@ -64,6 +69,18 @@ const getAvailableStock = (product, colorName, sizeName) => {
 };
 
 /**
+ * Get available stock for a custom product (template_stock keyed by color_key-size_key)
+ * @param {Object} product - Custom product from API (color_key, size_key, template_stock)
+ * @returns {number} Available stock quantity
+ */
+const getAvailableStockCustom = (product) => {
+  if (!product?.template_stock || product.color_key == null || product.size_key == null)
+    return 0;
+  const stockKey = `${product.color_key}-${product.size_key}`;
+  return Number(product.template_stock[stockKey]) || 0;
+};
+
+/**
  * Cart Provider Component
  * Persists minimal cart data (id, color, size, quantity) to localStorage.
  * On mount, fetches full product details from API and derives display items.
@@ -93,6 +110,27 @@ export function CartProvider({ children }) {
     return getCartFromStorage();
   });
 
+  // Custom products cart: [{ custom_product_id, quantity }]
+  const [cartCustomEntries, setCartCustomEntries] = useState(() => {
+    if (typeof window === "undefined") return getCustomCartFromStorage();
+
+    const params = new URLSearchParams(window.location.search);
+    const sharedCustomCart = params.get("shared_custom_cart");
+
+    if (sharedCustomCart) {
+      const decoded = decodeSharedCustomCart(sharedCustomCart);
+      if (decoded.length > 0) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("shared_custom_cart");
+        window.history.replaceState({}, "", url.pathname + url.search);
+        saveCustomCartToStorage(decoded);
+        return decoded;
+      }
+    }
+
+    return getCustomCartFromStorage();
+  });
+
   // Local cache for full item data (populated when user adds items during session)
   const [itemsCache, setItemsCache] = useState({});
 
@@ -103,9 +141,15 @@ export function CartProvider({ children }) {
     () => getUniqueProductIds(cartEntries),
     [cartEntries]
   );
+  const customProductIds = useMemo(
+    () => getUniqueCustomProductIds(cartCustomEntries),
+    [cartCustomEntries]
+  );
 
   // Fetch full product details from API (enabled only when there are items)
   const { data: productsResponse, isLoading } = useCartProductsList(productIds);
+  const { data: customProductsResponse, isLoading: isCustomProductsLoading } =
+    useCartCustomProductsList(customProductIds);
 
   // Derive full cart items from cartEntries + API data + local cache
   const items = useMemo(() => {
@@ -155,8 +199,48 @@ export function CartProvider({ children }) {
       .filter(Boolean);
   }, [cartEntries, productsResponse, itemsCache]);
 
+  // Derive full custom cart items from cartCustomEntries + API data
+  const customItems = useMemo(() => {
+    if (cartCustomEntries.length === 0) return [];
+
+    const apiResults = customProductsResponse?.results ?? [];
+    const customProductsMap = new Map(
+      apiResults.map((p) => [Number(p.id), p])
+    );
+
+    return cartCustomEntries
+      .map((entry) => {
+        const product = customProductsMap.get(entry.custom_product_id);
+        if (!product) return null;
+
+        const price = parseFloat(product.price) || 0;
+        const image =
+          product.custom_image_front?.[0]?.url ||
+          product.custom_image_behind?.[0]?.url ||
+          "";
+
+        const availableStock = getAvailableStockCustom(product);
+
+        return {
+          id: String(product.id),
+          custom_product_id: product.id,
+          name: product.name || "Custom",
+          price,
+          image,
+          size: product.size_name || "",
+          color: product.color_name || "",
+          quantity: entry.quantity,
+          availableStock,
+          _product: product
+        };
+      })
+      .filter(Boolean);
+  }, [cartCustomEntries, customProductsResponse]);
+
   // Hydration is complete when there are no stored items or API data has arrived
-  const isHydrated = cartEntries.length === 0 || !!productsResponse;
+  const isHydrated =
+    (cartEntries.length === 0 || !!productsResponse) &&
+    (cartCustomEntries.length === 0 || !!customProductsResponse);
 
   // Validate stock when API data arrives: adjust quantities or remove out-of-stock items
   useEffect(() => {
@@ -215,10 +299,61 @@ export function CartProvider({ children }) {
     return () => clearTimeout(timer);
   }, [productsResponse]); // Only run when API data changes
 
+  // Validate custom product stock when API data arrives: adjust quantities or remove out-of-stock
+  useEffect(() => {
+    if (!customProductsResponse?.results?.length) return;
+
+    const customProductsMap = new Map(
+      customProductsResponse.results.map((p) => [Number(p.id), p])
+    );
+
+    const timer = setTimeout(() => {
+      setCartCustomEntries((prev) => {
+        if (prev.length === 0) return prev;
+
+        let hasChanges = false;
+
+        const adjusted = prev
+          .map((entry) => {
+            const product = customProductsMap.get(entry.custom_product_id);
+
+            if (!product) {
+              hasChanges = true;
+              return null;
+            }
+
+            const stock = getAvailableStockCustom(product);
+
+            if (stock <= 0) {
+              hasChanges = true;
+              return null;
+            }
+
+            if (entry.quantity > stock) {
+              hasChanges = true;
+              return { ...entry, quantity: stock };
+            }
+
+            return entry;
+          })
+          .filter(Boolean);
+
+        return hasChanges ? adjusted : prev;
+      });
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [customProductsResponse]);
+
   // Sync cartEntries to localStorage on change
   useEffect(() => {
     saveCartToStorage(cartEntries);
   }, [cartEntries]);
+
+  // Sync cartCustomEntries to localStorage on change
+  useEffect(() => {
+    saveCustomCartToStorage(cartCustomEntries);
+  }, [cartCustomEntries]);
 
   /**
    * Add item to cart
@@ -300,12 +435,63 @@ export function CartProvider({ children }) {
   );
 
   /**
-   * Clear all items from cart
+   * Add custom product to cart
+   * @param {Object} item - { custom_product_id, quantity }
+   */
+  const addCustomItem = useCallback((item) => {
+    const customProductId = Number(item.custom_product_id);
+    const quantity = Number(item.quantity) || 1;
+
+    setCartCustomEntries((prev) => {
+      const existingIdx = prev.findIndex(
+        (e) => e.custom_product_id === customProductId
+      );
+      if (existingIdx !== -1) {
+        return prev.map((e, idx) =>
+          idx === existingIdx
+            ? { ...e, quantity: e.quantity + quantity }
+            : e
+        );
+      }
+      return [...prev, { custom_product_id: customProductId, quantity }];
+    });
+  }, []);
+
+  /**
+   * Remove custom product from cart by custom_product_id
+   */
+  const removeCustomItem = useCallback((customProductId) => {
+    setCartCustomEntries((prev) =>
+      prev.filter((e) => e.custom_product_id !== Number(customProductId))
+    );
+  }, []);
+
+  /**
+   * Update custom product quantity
+   */
+  const updateCustomQuantity = useCallback((customProductId, quantity) => {
+    if (quantity <= 0) {
+      removeCustomItem(customProductId);
+      return;
+    }
+    setCartCustomEntries((prev) =>
+      prev.map((e) =>
+        e.custom_product_id === Number(customProductId)
+          ? { ...e, quantity }
+          : e
+      )
+    );
+  }, [removeCustomItem]);
+
+  /**
+   * Clear all items from cart (regular + custom)
    */
   const clearCart = useCallback(() => {
     setCartEntries([]);
+    setCartCustomEntries([]);
     setItemsCache({});
     clearCartStorage();
+    clearCustomCartStorage();
   }, []);
 
   /**
@@ -330,11 +516,11 @@ export function CartProvider({ children }) {
   }, []);
 
   /**
-   * Generate a shareable cart link and copy to clipboard
+   * Generate a shareable cart link and copy to clipboard (includes regular + custom cart)
    * @returns {Promise<string>} The shareable URL
    */
   const shareCart = useCallback(async () => {
-    const url = buildShareCartUrl(cartEntries);
+    const url = buildShareCartUrl(cartEntries, cartCustomEntries);
     if (!url) return "";
 
     try {
@@ -352,14 +538,19 @@ export function CartProvider({ children }) {
     }
 
     return url;
-  }, [cartEntries]);
+  }, [cartEntries, cartCustomEntries]);
 
-  // Calculate totals
+  // Calculate totals (regular + custom items)
   const totals = useMemo(() => {
-    const subtotal = items.reduce(
+    const regularSubtotal = items.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
     );
+    const customSubtotal = customItems.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+    const subtotal = regularSubtotal + customSubtotal;
     const shipping = 0; // Free shipping
     const total = subtotal + shipping;
 
@@ -368,23 +559,29 @@ export function CartProvider({ children }) {
       shipping: shipping.toFixed(2),
       total: total.toFixed(2)
     };
-  }, [items]);
+  }, [items, customItems]);
 
-  // Calculate total items count
+  // Calculate total items count (regular + custom)
   const totalItems = useMemo(() => {
-    return items.reduce((sum, item) => sum + item.quantity, 0);
-  }, [items]);
+    const regular = items.reduce((sum, item) => sum + item.quantity, 0);
+    const custom = customItems.reduce((sum, item) => sum + item.quantity, 0);
+    return regular + custom;
+  }, [items, customItems]);
 
   const value = {
     items,
+    customItems,
     isOpen,
-    isLoading: !isHydrated && isLoading,
+    isLoading: !isHydrated && (isLoading || isCustomProductsLoading),
     isHydrated,
     totals,
     totalItems,
     addItem,
+    addCustomItem,
     removeItem,
+    removeCustomItem,
     updateQuantity,
+    updateCustomQuantity,
     clearCart,
     openCart,
     closeCart,

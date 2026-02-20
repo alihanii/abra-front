@@ -7,13 +7,15 @@ import { useAuth } from "@/contexts/AuthContext";
 import { showError, showSuccess, showLoading, dismissToast } from "@/lib/utils/toast";
 import { prepareImageFiles } from "@/lib/utils/canvasUtils";
 
+const MAX_IMAGE_SIZE_BYTES = 1 * 1024 * 1024; // 1 MB
+
 /**
  * Custom hook for handling custom product creation and cart addition
  * @returns {Object} Hook return object with createAndAddToCart function
  */
 export const useCustomProduct = () => {
   const { isAuthenticated } = useAuth();
-  const { addItem, openCart } = useCart();
+  const { addCustomItem, openCart } = useCart();
   const createCustomProductMutation = useCreateCustomProduct();
 
   /**
@@ -53,6 +55,12 @@ export const useCustomProduct = () => {
       return;
     }
 
+    // Require at least one uploaded image (front or behind)
+    if (!frontImage && !behindImage) {
+      showError("لطفاً حداقل یک تصویر (جلو یا پشت) آپلود کنید");
+      return;
+    }
+
     // Check authentication
     if (!isAuthenticated) {
       showError("برای افزودن محصول به سبد خرید، ابتدا باید وارد حساب کاربری خود شوید");
@@ -69,28 +77,35 @@ export const useCustomProduct = () => {
       formData.append("size", selectedSize);
 
       // Prepare front images
+      let frontFiles = [];
       if (frontImage) {
-        const frontFiles = await prepareImageFiles({
+        frontFiles = await prepareImageFiles({
           uploadedImage: frontImage,
           containerRef: frontImageContainerRef,
           view: "front"
         });
-        frontFiles.forEach(file => {
-          formData.append("image_front", file);
-        });
       }
 
       // Prepare behind images
+      let behindFiles = [];
       if (behindImage) {
-        const behindFiles = await prepareImageFiles({
+        behindFiles = await prepareImageFiles({
           uploadedImage: behindImage,
           containerRef: behindImageContainerRef,
           view: "behind"
         });
-        behindFiles.forEach(file => {
-          formData.append("image_behind", file);
-        });
       }
+
+      // Validate max size per image (1 MB)
+      const allFiles = [...frontFiles, ...behindFiles];
+      const oversized = allFiles.find((file) => file.size > MAX_IMAGE_SIZE_BYTES);
+      if (oversized) {
+        showError("حجم هر تصویر باید حداکثر ۱ مگابایت باشد");
+        return;
+      }
+
+      frontFiles.forEach((file) => formData.append("image_front", file));
+      behindFiles.forEach((file) => formData.append("image_behind", file));
 
       // Create custom product via API
       const customProduct = await createCustomProductMutation.mutateAsync(formData);
@@ -98,18 +113,10 @@ export const useCustomProduct = () => {
       dismissToast(loadingToast);
 
       if (customProduct?.id) {
-        // Add to cart using the created product ID
-        addItem({
-          id: String(customProduct.id),
-          slug: `custom-${customProduct.id}`,
-          name: customProduct.name || `${template.type} (Custom Design)`,
-          price: parseFloat(customProduct.price) || finalPrice,
-          image: customProduct.custom_image_front?.[0]?.url || 
-                 customProduct.custom_image_behind?.[0]?.url || 
-                 currentTemplateImage?.url || "",
-          size: customProduct.size_name || selectedSizeData?.name || selectedSize,
-          color: customProduct.color_name || selectedColorData?.name || selectedColor,
-          quantity: quantity
+        // Add to custom cart (separate array, stored under abraa_cart_custom)
+        addCustomItem({
+          custom_product_id: customProduct.id,
+          quantity
         });
 
         showSuccess("محصول سفارشی با موفقیت به سبد خرید اضافه شد");
@@ -125,7 +132,7 @@ export const useCustomProduct = () => {
                           "خطا در ایجاد محصول سفارشی";
       showError(errorMessage);
     }
-  }, [isAuthenticated, createCustomProductMutation, addItem, openCart]);
+  }, [isAuthenticated, createCustomProductMutation, addCustomItem, openCart]);
 
   return {
     createAndAddToCart,

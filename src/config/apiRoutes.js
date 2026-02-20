@@ -50,7 +50,7 @@ export const API_ROUTES = {
   ORDERS: {
     BASE: "/orders",
     LIST: "/orders",
-    CREATE: "/orders",
+    CREATE: "/orders/",
     DETAIL: (id) => `/orders/${id}`,
     CANCEL: (id) => `/orders/${id}/cancel`,
     TRACK: (id) => `/orders/${id}/track`
@@ -111,6 +111,7 @@ export const API_ROUTES = {
   // Custom Products endpoints
   CUSTOM_PRODUCTS: {
     BASE: "/custom-products",
+    LIST: "/custom-products/",
     CREATE: "/custom-products/create/"
   }
 };

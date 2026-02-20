@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useTranslations } from 'next-intl';
 import { useCart } from "@/contexts/CartContext";
 import CartItem from "./CartItem";
+import CartCustomItem from "./CartCustomItem";
 import EmptyCart from "./EmptyCart";
 import CartSummary from "./CartSummary";
 
@@ -13,7 +14,8 @@ import CartSummary from "./CartSummary";
  */
 export default function CartDrawer() {
   const t = useTranslations();
-  const { isOpen, closeCart, items, shareCart } = useCart();
+  const { isOpen, closeCart, items, customItems, shareCart } = useCart();
+  const hasItems = items.length > 0 || customItems.length > 0;
   const [isMounted, setIsMounted] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
@@ -109,7 +111,7 @@ export default function CartDrawer() {
 
             <div className="flex items-center gap-1">
               {/* Share Cart Button */}
-              {items.length > 0 && (
+              {hasItems && (
                 <button
                   onClick={handleShareCart}
                   className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all cursor-pointer"
@@ -133,13 +135,14 @@ export default function CartDrawer() {
 
           {/* Cart Content */}
           <div className="flex-1 overflow-y-auto px-6 py-6">
-            {items.length === 0 ? (
+            {!hasItems ? (
               <EmptyCart />
             ) : (
               <div className="space-y-4">
+                {/* Regular products */}
                 {items.map((item, index) => (
                   <div
-                    key={item.id+ "-" + item.size + "-" + item.color}
+                    key={item.id + "-" + item.size + "-" + item.color}
                     className={`
                       transition-all duration-300 ease-out
                       ${isAnimating ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
@@ -151,19 +154,40 @@ export default function CartDrawer() {
                     <CartItem item={item} />
                   </div>
                 ))}
+
+                {/* Divider between regular and custom products */}
+                {items.length > 0 && customItems.length > 0 && (
+                  <hr className="border-t border-gray-200 my-4" aria-hidden="true" />
+                )}
+
+                {/* Custom products */}
+                {customItems.map((item, index) => (
+                  <div
+                    key={"custom-" + item.custom_product_id}
+                    className={`
+                      transition-all duration-300 ease-out
+                      ${isAnimating ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
+                    `}
+                    style={{
+                      transitionDelay: `${(items.length + index) * 50}ms`
+                    }}
+                  >
+                    <CartCustomItem item={item} />
+                  </div>
+                ))}
               </div>
             )}
           </div>
 
           {/* Footer Summary */}
-          {items.length > 0 && (
+          {hasItems && (
             <div
               className={`
                 transition-all duration-300 ease-out
                 ${isAnimating ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
               `}
               style={{
-                transitionDelay: `${items.length * 50}ms`
+                transitionDelay: `${(items.length + customItems.length) * 50}ms`
               }}
             >
               <CartSummary />

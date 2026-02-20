@@ -11,6 +11,7 @@ import * as bannerService from "@/lib/api/services/banners";
 import * as cartService from "@/lib/api/services/cart";
 import * as productTemplateService from "@/lib/api/services/productTemplates";
 import * as customProductService from "@/lib/api/services/customProducts";
+import * as orderService from "@/lib/api/services/orders";
 
 // Query Keys - Centralized query key factory
 export const queryKeys = {
@@ -26,6 +27,7 @@ export const queryKeys = {
   cart: {
     all: ["cart"],
     products: (ids) => ["cart", "products", ids],
+    customProducts: (ids) => ["cart", "customProducts", ids],
     pricing: ["cart", "pricing"],
   },
   auth: {
@@ -43,6 +45,10 @@ export const queryKeys = {
   customProducts: {
     all: ["customProducts"],
     create: ["customProducts", "create"],
+  },
+  orders: {
+    all: ["orders"],
+    create: ["orders", "create"],
   },
 };
 
@@ -99,6 +105,23 @@ export const useCartProductsList = (ids = [], options = {}) => {
   return useQuery({
     queryKey: queryKeys.cart.products(ids),
     queryFn: () => productService.getProducts({ id: ids }),
+    enabled: ids.length > 0,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    ...options
+  });
+};
+
+/**
+ * Fetch custom products by array of IDs (for cart custom items)
+ * GET /api/custom-products/?id=35&id=36
+ * @param {Array<number>} ids - Array of custom product IDs
+ * @param {Object} options - Query options
+ * @returns {Object} Query result with results array
+ */
+export const useCartCustomProductsList = (ids = [], options = {}) => {
+  return useQuery({
+    queryKey: queryKeys.cart.customProducts(ids),
+    queryFn: () => customProductService.getCustomProductsByIds(ids),
     enabled: ids.length > 0,
     staleTime: 5 * 60 * 1000, // 5 minutes
     ...options
@@ -236,6 +259,28 @@ export const useProductTemplates = (params = {}, options = {}) => {
   return useQuery({
     queryKey: queryKeys.productTemplates.list(params),
     queryFn: () => productTemplateService.getProductTemplates(params),
+    ...options
+  });
+};
+
+/**
+ * Create order mutation using TanStack Query
+ * @param {Object} options - Mutation options (onSuccess, onError)
+ * @returns {Object} Mutation object with mutate/mutateAsync function
+ */
+export const useCreateOrder = (options = {}) => {
+  return useMutation({
+    mutationFn: (payload) => orderService.createOrder(payload),
+    onSuccess: (data, variables, context) => {
+      if (options.onSuccess) {
+        options.onSuccess(data, variables, context);
+      }
+    },
+    onError: (error, variables, context) => {
+      if (options.onError) {
+        options.onError(error, variables, context);
+      }
+    },
     ...options
   });
 };

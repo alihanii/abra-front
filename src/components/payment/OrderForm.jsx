@@ -51,6 +51,7 @@ const getFieldErrors = (data) => {
  * @param {Object} props
  * @param {Object|null} props.user - Auth user (for default values)
  * @param {Array} props.items - minimal items to send to backend [{id,color,size,quantity}]
+ * @param {Array} props.custom_items - minimal custom items [{custom_product_id,quantity,unit_price}]
  * @param {Object|null} props.pricing - pricing summary (optional to send)
  * @param {Function} props.onSubmit - async (payload) => Promise
  * @param {boolean} props.isSubmitting
@@ -58,6 +59,7 @@ const getFieldErrors = (data) => {
 export default function OrderForm({
   user,
   items = [],
+  custom_items = [],
   pricing = null,
   onSubmit,
   isSubmitting = false
@@ -107,26 +109,27 @@ export default function OrderForm({
     e.preventDefault();
     setError(null);
 
-    if (!items.length) {
+    if (!items.length && !custom_items.length) {
       setError("سبد خرید خالی است.");
       return;
     }
-  if (!isValid) {
-    setTouched({
-      full_name: true,
-      phone_number: true,
-      postal_code: true,
-      address: true
-    });
-    setError("لطفاً اطلاعات را کامل و صحیح وارد کنید.");
-    return;
-  }
+    if (!isValid) {
+      setTouched({
+        full_name: true,
+        phone_number: true,
+        postal_code: true,
+        address: true
+      });
+      setError("لطفاً اطلاعات را کامل و صحیح وارد کنید.");
+      return;
+    }
     if (!onSubmit) return;
 
     const payload = {
       ...resolvedForm,
-      items,
-      pricing
+      items: [...items, ...custom_items],
+      // custom_items,
+      // pricing
     };
 
     try {
@@ -153,78 +156,78 @@ export default function OrderForm({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-            <BaseInput
-              label="نام و نام خانوادگی"
-              variant="primary"
-              size="md"
-              value={resolvedForm.full_name}
-              onChange={(e) => {
-                setTouched((prev) => ({ ...prev, full_name: true }));
-                update("full_name", e.target.value);
-              }}
-              placeholder="مثلاً: علی رضایی"
-              disabled={isSubmitting}
-              required
-              aria-invalid={touched.full_name && !!fieldErrors.full_name}
-            />
-            {touched.full_name && fieldErrors.full_name ? (
-              <p className="mt-2 mr-1 text-xs text-red-600">
-                {fieldErrors.full_name}
-              </p>
-            ) : null}
+              <BaseInput
+                label="نام و نام خانوادگی"
+                variant="primary"
+                size="md"
+                value={resolvedForm.full_name}
+                onChange={(e) => {
+                  setTouched((prev) => ({ ...prev, full_name: true }));
+                  update("full_name", e.target.value);
+                }}
+                placeholder="مثلاً: علی رضایی"
+                disabled={isSubmitting}
+                required
+                aria-invalid={touched.full_name && !!fieldErrors.full_name}
+              />
+              {touched.full_name && fieldErrors.full_name ? (
+                <p className="mt-2 mr-1 text-xs text-red-600">
+                  {fieldErrors.full_name}
+                </p>
+              ) : null}
             </div>
 
-<div>
-            <BaseInput
-              label="شماره تماس"
-              type="tel"
-              inputMode="numeric"
-              variant="primary"
-              size="md"
-              value={resolvedForm.phone_number}
-              onChange={(e) => {
-                setTouched((prev) => ({ ...prev, phone_number: true }));
-                update("phone_number", digitsOnly(e.target.value).slice(0, 11));
-              }}
-              placeholder="09123456789"
-              disabled={isSubmitting}
-              required
-              maxLength={11}
-              aria-invalid={touched.phone_number && !!fieldErrors.phone_number}
-            />
-            {touched.phone_number && fieldErrors.phone_number ? (
-              <p className="mt-2 mr-1 text-xs text-red-600">
-                {fieldErrors.phone_number}
-              </p>
-            ) : null}
+            <div>
+              <BaseInput
+                label="شماره تماس"
+                type="tel"
+                inputMode="numeric"
+                variant="primary"
+                size="md"
+                value={resolvedForm.phone_number}
+                onChange={(e) => {
+                  setTouched((prev) => ({ ...prev, phone_number: true }));
+                  update("phone_number", digitsOnly(e.target.value).slice(0, 11));
+                }}
+                placeholder="09123456789"
+                disabled={isSubmitting}
+                required
+                maxLength={11}
+                aria-invalid={touched.phone_number && !!fieldErrors.phone_number}
+              />
+              {touched.phone_number && fieldErrors.phone_number ? (
+                <p className="mt-2 mr-1 text-xs text-red-600">
+                  {fieldErrors.phone_number}
+                </p>
+              ) : null}
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <BaseInput
-              label="کد پستی"
-              inputMode="numeric"
-              variant="primary"
-              size="md"
-              value={resolvedForm.postal_code}
-              onChange={(e) => {
-                setTouched((prev) => ({ ...prev, postal_code: true }));
-                update("postal_code", digitsOnly(e.target.value).slice(0, 10));
-              }}
-              placeholder="مثلاً: 1234567890"
-              disabled={isSubmitting}
-              required
-              maxLength={10}
-              aria-invalid={touched.postal_code && !!fieldErrors.postal_code}
-            />
-            {touched.postal_code && fieldErrors.postal_code ? (
-              <p className="mt-2 mr-1 text-xs text-red-600">
-                {fieldErrors.postal_code}
-              </p>
-            ) : (
-              <div className="hidden sm:block" />
-            )}
+            <div>
+              <BaseInput
+                label="کد پستی"
+                inputMode="numeric"
+                variant="primary"
+                size="md"
+                value={resolvedForm.postal_code}
+                onChange={(e) => {
+                  setTouched((prev) => ({ ...prev, postal_code: true }));
+                  update("postal_code", digitsOnly(e.target.value).slice(0, 10));
+                }}
+                placeholder="مثلاً: 1234567890"
+                disabled={isSubmitting}
+                required
+                maxLength={10}
+                aria-invalid={touched.postal_code && !!fieldErrors.postal_code}
+              />
+              {touched.postal_code && fieldErrors.postal_code ? (
+                <p className="mt-2 mr-1 text-xs text-red-600">
+                  {fieldErrors.postal_code}
+                </p>
+              ) : (
+                <div className="hidden sm:block" />
+              )}
             </div>
           </div>
 
@@ -264,7 +267,7 @@ export default function OrderForm({
               variant="primary"
               size="lg"
               fullWidth
-              disabled={!isValid || isSubmitting || !items.length}
+              disabled={!isValid || isSubmitting || (!items.length && !custom_items.length)}
             >
               {isSubmitting ? (
                 <>
