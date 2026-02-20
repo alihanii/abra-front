@@ -12,8 +12,8 @@ import BaseButton from "@/components/ui/BaseButton";
  * @param {string} props.subtitle - Slide subtitle
  * @param {string} props.buttonText - Button text
  * @param {string} props.buttonHref - Button link
- * @param {string} props.gradientFrom - Gradient start color
- * @param {string} props.gradientTo - Gradient end color
+ * @param {string} props.gradientFrom - Gradient start color (hex, rgb, etc.)
+ * @param {string} props.gradientTo - Gradient end color (hex, rgb, etc.)
  * @param {Object} props.image - Image object with sm, md, lg for responsive images
  * @param {boolean} props.isActive - Whether slide is active
  */
@@ -22,8 +22,8 @@ export default function HeroSlide({
   subtitle,
   buttonText,
   buttonHref,
-  gradientFrom = "from-blue-50",
-  gradientTo = "to-blue-100",
+  gradientFrom = "#eff6ff",
+  gradientTo = "#dbeafe",
   image,
   isActive = false
 }) {
@@ -94,12 +94,13 @@ export default function HeroSlide({
           </div>
         )}
 
-        {/* Gradient Background */}
+        {/* Gradient Background - inline style for dynamic colors */}
         <div
-          className={`
-            absolute inset-0 bg-gradient-to-br ${gradientFrom} ${gradientTo} z-10
-            ${hasImage ? "opacity-60" : ""}
-          `}
+          className="absolute inset-0 z-10"
+          style={{
+            background: `linear-gradient(to bottom right, ${gradientFrom}, ${gradientTo})`,
+            opacity: hasImage ? 0.6 : 1
+          }}
         />
 
         {/* Content */}
