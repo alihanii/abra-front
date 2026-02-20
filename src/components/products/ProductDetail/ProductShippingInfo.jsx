@@ -32,7 +32,7 @@ export default function ProductShippingInfo({ className }) {
 
   return (
     <div className={cn("mt-12 grid grid-cols-1 md:grid-cols-3 gap-6", className)}>
-      {features.map((feature, index) => (
+      {/* {features.map((feature, index) => (
         <div
           key={index}
           className="bg-white rounded-2xl p-6 shadow-sm"
@@ -43,7 +43,7 @@ export default function ProductShippingInfo({ className }) {
           <h3 className="font-bold text-gray-900 mb-2">{feature.title}</h3>
           <p className="text-gray-600 text-sm">{feature.description}</p>
         </div>
-      ))}
+      ))} */}
     </div>
   );
 }

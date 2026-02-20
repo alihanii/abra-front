@@ -213,6 +213,33 @@
     "tryAgain": "تلاش مجدد",
     "goHome": "بازگشت به صفحه اصلی",
     "contactSupport": "تماس با پشتیبانی"
+  },
+  "designStudio": {
+    "title": "استودیو طراحی",
+    "selectTemplate": "انتخاب محصول",
+    "designView": "نمای طراحی",
+    "frontDesign": "طراحی جلو",
+    "behindDesign": "طراحی پشت",
+    "color": "رنگ",
+    "size": "سایز",
+    "quantity": "تعداد",
+    "inStock": "موجود است ({count} عدد)",
+    "outOfStock": "ناموجود",
+    "addToCart": "افزودن به سبد خرید",
+    "uploadDesign": "بارگذاری طرح",
+    "uploadYourDesign": "طراحی خود را آپلود کنید",
+    "uploadInstructions": "روی دکمه \"آپلود طراحی\" کلیک کنید یا فایل تصویر خود را روی تمپلیت بکشید و رها کنید. می‌توانید برای جلو و پشت طراحی‌های جداگانه آپلود کنید با استفاده از دکمه‌های \"طراحی جلو\" و \"طراحی پشت\".",
+    "imageSize": "سایز تصویر: {size}%",
+    "dragToReposition": "تصویر را بکشید تا موقعیت آن را تغییر دهید",
+    "removeImage": "حذف تصویر",
+    "features": {
+      "title": "ویژگی‌ها",
+      "customDesignUpload": "آپلود طراحی سفارشی",
+      "highQualityPrinting": "چاپ با کیفیت بالا",
+      "multipleColorOptions": "گزینه‌های رنگ متعدد"
+    },
+    "price": "قیمت",
+    "save": "صرفه‌جویی"
   }
 }
 

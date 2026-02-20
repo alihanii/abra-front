@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ROUTES } from "@/config/routes";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
-import { useCalculateCartPricing } from "@/hooks/useApi";
+import { useCalculateCartPricing, useCreateOrder } from "@/hooks/useApi";
 import { promiseToast, showInfo, showError } from "@/lib/utils/toast";
 import BaseButton from "@/components/ui/BaseButton";
 import BaseSkeleton from "@/components/ui/BaseSkeleton";
@@ -15,18 +15,27 @@ import { PaymentCartList, PricingSummary, OrderForm } from "@/components/payment
 export default function PaymentPage() {
   const router = useRouter();
   const { isAuthenticated, user, logout, isLoading: isAuthLoading } = useAuth();
-  const { items, clearCart, isLoading: isCartLoading } = useCart();
+  const { items, customItems, clearCart, isLoading: isCartLoading } = useCart();
 
-  // Prepare payload for backend API
+  // Prepare payload for backend API (regular products)
   const minimalItemsForBackend = useMemo(() => {
     return items.map((item) => ({
       id: String(item.id),
       color: item.color,
       size: item.size,
       quantity: item.quantity,
-      unit_price: item.price // price already calculated by CartContext
+      unit_price: item.price
     }));
   }, [items]);
+
+  // Prepare payload for backend API (custom products)
+  const minimalCustomItemsForBackend = useMemo(() => {
+    return customItems.map((item) => ({
+      custom_product_id: item.custom_product_id,
+      quantity: item.quantity,
+      unit_price: item.price
+    }));
+  }, [customItems]);
 
   // Pricing state
   const [pricing, setPricing] = useState(null);
@@ -41,27 +50,38 @@ export default function PaymentPage() {
     }
   });
 
-  // Order submit state
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const redirectedRef = useRef(false);
 
-  const handleEmptyCart = useCallback(() => {
-    showInfo("سبد خرید شما خالی است.");
-    logout();
-    try {
-      clearCart();
-    } catch {
-      // ignore
-    }
-    router.replace(ROUTES.HOME);
-  }, [logout, clearCart, router]);
+  const createOrderMutation = useCreateOrder();
 
-  // If cart empty while on payment, redirect home and logout
+  const handleSubmitOrder = useCallback(
+    async (payload) => {
+      const req = createOrderMutation.mutateAsync(payload);
+      const result = await promiseToast(req, {
+        loading: "در حال ثبت سفارش...",
+        success: "سفارش با موفقیت ثبت شد",
+        error: (err) =>
+          err?.response?.data?.message || err?.message || "ثبت سفارش ناموفق بود"
+      });
+      clearCart();
+      router.replace(ROUTES.HOME);
+      return result;
+    },
+    [createOrderMutation, clearCart, router]
+  );
+
+  const handleEmptyCart = useCallback(() => {
+    // showInfo("سبد خرید شما خالی است.");
+    clearCart();
+    router.replace(ROUTES.HOME);
+  }, [clearCart, router]);
+
+  // If cart empty while on payment, redirect home (no logout - user may have just placed order)
   useEffect(() => {
-    if (!isCartLoading && items.length === 0) {
+    if (!isCartLoading && items.length === 0 && customItems.length === 0) {
       handleEmptyCart();
     }
-  }, [items.length, isCartLoading, handleEmptyCart]);
+  }, [items.length, customItems.length, isCartLoading, handleEmptyCart]);
 
   // If user is not authenticated on payment, redirect home and open ProfileDrawer there.
   useEffect(() => {
@@ -75,45 +95,19 @@ export default function PaymentPage() {
     router.replace(`${ROUTES.HOME}?open_profile=1`);
   }, [isAuthLoading, isAuthenticated, router]);
 
-  // Fetch pricing whenever cart items change
+  // Fetch pricing whenever cart items change (regular + custom)
   useEffect(() => {
-    if (!minimalItemsForBackend.length || isCartLoading) return;
+    const hasItems = minimalItemsForBackend.length > 0 || minimalCustomItemsForBackend.length > 0;
+    if (!hasItems || isCartLoading) return;
 
-    const payload = { items: minimalItemsForBackend };
+    const payload = {
+      items: [...minimalItemsForBackend, ...minimalCustomItemsForBackend]
+    };
 
     calculatePricing(payload);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [minimalItemsForBackend, isCartLoading]);
+  }, [minimalItemsForBackend, minimalCustomItemsForBackend, isCartLoading]);
 
-  const submitOrder = async (payload) => {
-    setIsSubmitting(true);
-    try {
-      const req = fetch("/api/mock/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      }).then(async (res) => {
-        if (!res.ok) {
-          const body = await res.json().catch(() => null);
-          throw new Error(body?.message || "خطا در ثبت سفارش");
-        }
-        return await res.json();
-      });
-
-      const result = await promiseToast(req, {
-        loading: "در حال ثبت سفارش...",
-        success: "سفارش با موفقیت ثبت شد",
-        error: "ثبت سفارش ناموفق بود"
-      });
-
-      // Clear cart after successful order
-      clearCart();
-      router.replace(ROUTES.HOME);
-      return result;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   // Reusable loading skeleton component
   const PaymentLoadingSkeleton = () => (
@@ -131,14 +125,14 @@ export default function PaymentPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left column - Form skeleton */}
           <div className="lg:col-span-2 space-y-12">
-          <BaseSkeleton isLoading={true} variant="text" className="h-8 w-30">
-            <div className="h-4" />
-          </BaseSkeleton>
+            <BaseSkeleton isLoading={true} variant="text" className="h-8 w-30">
+              <div className="h-4" />
+            </BaseSkeleton>
             <div className="border border-gray-200 rounded-2xl bg-white p-5 sm:p-8 shadow-sm">
               <BaseSkeleton isLoading={true} variant="text" className="h-6 w-40 mb-6">
                 <div className="h-6" />
               </BaseSkeleton>
-              
+
               <div className="space-y-4">
                 {/* Full name field */}
                 <BaseSkeleton isLoading={true} className="h-11 w-full">
@@ -166,11 +160,11 @@ export default function PaymentPage() {
 
           {/* Right column - Pricing skeleton */}
           <div className="lg:col-span-1 space-y-6">
-          <BaseSkeleton isLoading={true} variant="text" className="h-8 w-20">
-            <div className="h-4" />
-          </BaseSkeleton>
+            <BaseSkeleton isLoading={true} variant="text" className="h-8 w-20">
+              <div className="h-4" />
+            </BaseSkeleton>
             <div className="border border-gray-200 rounded-2xl bg-white p-5 sm:p-8 shadow-sm">
-              
+
               <div className="space-y-2">
                 {/* Discount */}
                 <BaseSkeleton isLoading={true} variant="text" className="h-5 w-full">
@@ -223,7 +217,7 @@ export default function PaymentPage() {
   }
 
   // Cart is empty - will be handled by useEffect redirect
-  if (items.length === 0) {
+  if (items.length === 0 && customItems.length === 0) {
     return null;
   }
 
@@ -247,9 +241,10 @@ export default function PaymentPage() {
               <OrderForm
                 user={user}
                 items={minimalItemsForBackend}
+                custom_items={minimalCustomItemsForBackend}
                 pricing={pricing}
-                onSubmit={submitOrder}
-                isSubmitting={isSubmitting}
+                onSubmit={handleSubmitOrder}
+                isSubmitting={createOrderMutation.isPending}
               />
             </div>
 
