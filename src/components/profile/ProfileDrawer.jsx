@@ -322,10 +322,7 @@ export default function ProfileDrawer() {
                   threshold={0.1}
                 >
                   {activeTab === "history" ? (
-                    <PurchaseHistory
-                      orders={user?.orders}
-                      isLoading={authLoading}
-                    />
+                    <PurchaseHistory />
                   ) : (
                     <AccountSettings
                       user={user}

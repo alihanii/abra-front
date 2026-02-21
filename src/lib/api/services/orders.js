@@ -3,8 +3,23 @@
  * Order related API calls
  */
 
-import { post } from "../http";
+import { get, post } from "../http";
 import { API_ROUTES } from "@/config/apiRoutes";
+
+/**
+ * Get paginated orders list
+ * @param {Object} params - Query params
+ * @param {number} [params.page=1] - Page number
+ * @param {Object} options - Request options
+ * @returns {Promise<{count: number, next: string|null, previous: string|null, results: Array}>}
+ */
+export const getOrders = async (params = {}, options = {}) => {
+  const response = await get(API_ROUTES.ORDERS.LIST, params, {
+    requireAuth: true,
+    ...options
+  });
+  return response.data;
+};
 
 /**
  * Create order

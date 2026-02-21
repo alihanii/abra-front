@@ -2,6 +2,7 @@
 
 import BaseImage from "@/components/ui/BaseImage";
 import { container } from "@/lib/styles";
+import { formatPrice } from "@/lib/utils/formatPrice";
 
 /**
  * PaymentCartList
@@ -49,7 +50,7 @@ export default function PaymentCartList({ items = [], isLoading = false }) {
                   <div className="flex items-start justify-between gap-3">
                     <h4 className="font-semibold text-gray-900 truncate">{item.name}</h4>
                     <div className="text-sm font-bold text-gray-900 shrink-0">
-                      ${Number(item.unitPrice || 0).toFixed(2)}
+                      {formatPrice(item.unitPrice ?? 0)}
                     </div>
                   </div>
 

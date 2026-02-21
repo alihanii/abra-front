@@ -10,37 +10,37 @@ import AbraLogo from "@/components/ui/AbraLogo";
 export default function Footer() {
   const t = useTranslations();
   const currentYear = new Date().getFullYear();
-  
+
   // Fetch categories from API
   const { data: categoriesResponse } = useCategories({
     page: 1,
     page_size: 100,
   });
-  
+
   // Transform categories to shop links format
   const shopLinks = useMemo(() => {
     const links = [];
-    
+
     // Add categories from API
     if (categoriesResponse?.results) {
       categoriesResponse.results.slice(0, 5).forEach((category) => {
         links.push({
           id: category.slug || category.id,
-          label: category.label || category.name,
+          label: category.name,
           href: `${ROUTES.PRODUCTS}?category=${category.slug || category.id}`
         });
       });
     }
-    
+
     // Add Custom Design link (static)
     links.push({
       id: "customDesign",
-      label: "Custom Design",
+      label: t('shopLinks.customDesign'),
       href: ROUTES.DESIGN_STUDIO
     });
-    
+
     return links;
-  }, [categoriesResponse]);
+  }, [categoriesResponse, t]);
 
   return (
     <footer className="bg-white border-t border-[#F5F5F5]">

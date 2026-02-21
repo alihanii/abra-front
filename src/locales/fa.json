@@ -67,7 +67,13 @@
     "priceHighToLow": "قیمت: زیاد به کم",
     "nameAToZ": "نام: الف تا ی",
     "nameZToA": "نام: ی تا الف",
-    "newestFirst": "جدیدترین اول"
+    "newestFirst": "جدیدترین اول",
+    "colorBlack": "مشکی",
+    "colorWhite": "سفید",
+    "colorGray": "طوسی",
+    "colorNavy": "آبی نفتی",
+    "colorOlive": "زیتونی",
+    "colorBurgundy": "زرشکی"
   },
   "common": {
     "loading": "در حال بارگذاری...",

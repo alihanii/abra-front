@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import BaseButton from "@/components/ui/BaseButton";
 import { cn } from "@/lib/utils";
+import { formatPrice } from "@/lib/utils/formatPrice";
 
 /**
  * ProductMobileBar Component
@@ -44,7 +45,7 @@ export default function ProductMobileBar({
           <div>
             <p className="text-xs text-gray-600">{t("product.totalPrice")}</p>
             <p className="text-2xl font-bold text-gray-900">
-              ${finalPrice?.toFixed(2) || product.price.toFixed(2)}
+              {formatPrice(finalPrice ?? product.price)}
             </p>
           </div>
           <div className="text-right">

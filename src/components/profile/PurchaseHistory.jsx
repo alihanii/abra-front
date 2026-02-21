@@ -1,84 +1,60 @@
 "use client";
 
-import { useState } from "react";
-import BaseImage from "@/components/ui/BaseImage";
-import ScrollReveal from "@/components/ui/ScrollReveal";
+import { useRef, useMemo, useCallback, useState, useEffect } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { useOrdersList } from "@/hooks/useApi";
+import OrderCard from "./OrderCard";
 import LoadingScreen from "@/components/ui/LoadingScreen";
-import { cn } from "@/lib/utils";
+import BaseButton from "@/components/ui/BaseButton";
 
-/**
- * Purchase History Component
- * Displays user's purchase history
- *
- * @param {Array} props.orders - Array of order objects
- * @param {boolean} props.isLoading - Whether data is loading
- */
-export default function PurchaseHistory({ orders = [], isLoading = false }) {
-  // Mock data for demonstration - replace with actual orders from props
-  const mockOrders =
-    orders.length > 0
-      ? orders
-      : [
-          {
-            id: "order-1",
-            orderNumber: "ORD-2024-001",
-            date: "2024-01-15",
-            status: "delivered",
-            total: 125.99,
-            items: [
-              {
-                id: "item-1",
-                name: "Classic Black Hoodie",
-                image:
-                  "https://readdy.ai/api/search-image?query=Premium%20black%20hoodie&width=200&height=200",
-                quantity: 2,
-                price: 45.99
-              },
-              {
-                id: "item-2",
-                name: "Couple Hoodies Set",
-                image:
-                  "https://readdy.ai/api/search-image?query=Couple%20hoodies&width=200&height=200",
-                quantity: 1,
-                price: 79.99
-              }
-            ]
-          },
-          {
-            id: "order-2",
-            orderNumber: "ORD-2024-002",
-            date: "2024-01-20",
-            status: "processing",
-            total: 89.99,
-            items: [
-              {
-                id: "item-3",
-                name: "Premium T-Shirt",
-                image:
-                  "https://readdy.ai/api/search-image?query=Premium%20t-shirt&width=200&height=200",
-                quantity: 1,
-                price: 89.99
-              }
-            ]
-          }
-        ];
+const ITEM_HEIGHT_ESTIMATE = 140;
+const GAP_MOBILE = 26;
+const GAP_DESKTOP = 0;
 
-  const getStatusLabel = (status) => {
-    const statusMap = {
-      delivered: { label: "تحویل شده", color: "text-green-600 bg-green-50" },
-      processing: { label: "در حال پردازش", color: "text-blue-600 bg-blue-50" },
-      shipped: { label: "ارسال شده", color: "text-purple-600 bg-purple-50" },
-      cancelled: { label: "لغو شده", color: "text-red-600 bg-red-50" }
-    };
-    return statusMap[status] || { label: status, color: "text-gray-600 bg-gray-50" };
-  };
+export default function PurchaseHistory() {
+  const parentRef = useRef(null);
+  const [gap, setGap] = useState(GAP_MOBILE);
 
-  // Show loading screen if data is loading
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const handler = () => setGap(mq.matches ? GAP_DESKTOP : GAP_MOBILE);
+    handler();
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  const {
+    data,
+    isLoading,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage
+  } = useOrdersList();
+
+  const orders = useMemo(() => {
+    if (!data?.pages) return [];
+    return data.pages.flatMap((page) => page.results ?? []);
+  }, [data]);
+
+  const totalCount = data?.pages?.[0]?.count ?? 0;
+  const canShowMore = hasNextPage && !isFetchingNextPage;
+
+  const rowVirtualizer = useVirtualizer({
+    count: orders.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => ITEM_HEIGHT_ESTIMATE,
+    overscan: 3,
+    gap,
+    isRtl: true,
+    getItemKey: useCallback((index) => orders[index]?.id ?? index, [orders])
+  });
+
+  const virtualItems = rowVirtualizer.getVirtualItems();
+
   if (isLoading) {
     return (
       <div className="relative min-h-[300px] flex items-center justify-center">
         <LoadingScreen
-          isLoading={true}
+          isLoading
           logoText="Abra"
           typingSpeed={100}
           minDisplayTime={800}
@@ -90,89 +66,79 @@ export default function PurchaseHistory({ orders = [], isLoading = false }) {
     );
   }
 
-  if (mockOrders.length === 0) {
+  if (orders.length === 0) {
     return (
-      <ScrollReveal
-        animation="fadeUp"
-        delay={0}
-      >
-        <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
-          <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-            <i className="ri-shopping-bag-line text-3xl text-gray-400"></i>
-          </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">تاریخچه خرید خالی است</h3>
-          <p className="text-gray-600 text-sm">شما هنوز خریدی انجام نداده‌اید.</p>
+      <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
+        <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+          <i className="ri-shopping-bag-line text-3xl text-gray-400" aria-hidden />
         </div>
-      </ScrollReveal>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">تاریخچه خرید خالی است</h3>
+        <p className="text-gray-600 text-sm">شما هنوز خریدی انجام نداده‌اید.</p>
+      </div>
     );
   }
 
   return (
-    <div className="space-y-4">
-      {mockOrders.map((order, index) => {
-        const statusInfo = getStatusLabel(order.status);
-        return (
-          <ScrollReveal
-            key={order.id}
-            animation="fadeUp"
-            delay={index * 100}
-            threshold={0.1}
-          >
-            <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-              {/* Order Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 pb-4 border-b border-gray-200">
-                <div className="flex flex-col gap-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600">شماره سفارش:</span>
-                    <span className="font-semibold text-gray-900">{order.orderNumber}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <i className="ri-calendar-line"></i>
-                    <span>{order.date}</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span
-                    className={cn("px-3 py-1 rounded-full text-xs font-semibold", statusInfo.color)}
-                  >
-                    {statusInfo.label}
-                  </span>
-                  <span className="text-lg font-bold text-gray-900">${order.total.toFixed(2)}</span>
-                </div>
+    <div className="flex flex-col gap-4">
+      <div
+        ref={parentRef}
+        className="scrollbar-hide overflow-auto min-h-[200px] max-h-[35vh] sm:min-h-[240px] sm:max-h-[42vh] md:min-h-[280px] md:max-h-[50vh] rounded-xl"
+      >
+        <div
+          style={{
+            height: `${rowVirtualizer.getTotalSize()}px`,
+            width: "100%",
+            position: "relative"
+          }}
+        >
+          {virtualItems.map((virtualRow) => {
+            const order = orders[virtualRow.index];
+            if (!order) return null;
+            return (
+              <div
+                key={virtualRow.key}
+                data-index={virtualRow.index}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  left: 0,
+                  transform: `translateY(${virtualRow.start}px)`
+                }}
+              >
+                <OrderCard order={order} />
               </div>
+            );
+          })}
+        </div>
+      </div>
 
-              {/* Order Items */}
-              <div className="space-y-3">
-                {order.items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex gap-3"
-                  >
-                    <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0">
-                      <BaseImage
-                        src={item.image}
-                        alt={item.name}
-                        width={64}
-                        height={64}
-                        className="rounded-lg"
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold text-gray-900 mb-1 truncate">{item.name}</h4>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">تعداد: {item.quantity}</span>
-                        <span className="font-semibold text-gray-900">
-                          ${(item.price * item.quantity).toFixed(2)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </ScrollReveal>
-        );
-      })}
+      {canShowMore && (
+        <BaseButton
+          variant="outline"
+          size="md"
+          onClick={() => fetchNextPage()}
+          disabled={isFetchingNextPage}
+        >
+          {isFetchingNextPage ? (
+            <>
+              <i className="ri-loader-4-line animate-spin ml-2" aria-hidden />
+              در حال بارگذاری...
+            </>
+          ) : (
+            <>
+              <i className="ri-add-line ml-2" aria-hidden />
+              نمایش بیشتر ({orders.length} از {totalCount})
+            </>
+          )}
+        </BaseButton>
+      )}
+
+      {isFetchingNextPage && !canShowMore && (
+        <div className="flex justify-center py-2">
+          <i className="ri-loader-4-line animate-spin text-2xl text-gray-400" aria-hidden />
+        </div>
+      )}
     </div>
   );
 }

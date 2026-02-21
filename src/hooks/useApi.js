@@ -3,7 +3,7 @@
  * Example hooks for using API with TanStack Query
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import * as categoryService from "@/lib/api/services/categories";
 import * as productService from "@/lib/api/services/products";
 import * as authService from "@/lib/api/services/auth";
@@ -49,6 +49,7 @@ export const queryKeys = {
   },
   orders: {
     all: ["orders"],
+    list: (page) => ["orders", "list", page],
     create: ["orders", "create"],
   },
   payment: {
@@ -263,6 +264,26 @@ export const useProductTemplates = (params = {}, options = {}) => {
   return useQuery({
     queryKey: queryKeys.productTemplates.list(params),
     queryFn: () => productTemplateService.getProductTemplates(params),
+    ...options
+  });
+};
+
+/**
+ * Fetch orders list with infinite pagination (Show more)
+ * @param {Object} options - Query options
+ * @returns {Object} Infinite query result
+ */
+export const useOrdersList = (options = {}) => {
+  return useInfiniteQuery({
+    queryKey: queryKeys.orders.list("infinite"),
+    queryFn: ({ pageParam = 1 }) => orderService.getOrders({ page: pageParam }),
+    getNextPageParam: (lastPage) => {
+      if (!lastPage?.next) return undefined;
+      const url = new URL(lastPage.next);
+      const page = url.searchParams.get("page");
+      return page ? Number(page) : undefined;
+    },
+    initialPageParam: 1,
     ...options
   });
 };

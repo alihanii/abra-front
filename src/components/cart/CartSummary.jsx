@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useCart } from "@/contexts/CartContext";
 import { ROUTES } from "@/config/routes";
 import BaseButton from "@/components/ui/BaseButton";
-
+import { formatPrice } from "@/lib/utils/formatPrice";
 /**
  * Cart Summary Component
  * Displays cart totals and checkout actions
@@ -19,7 +19,7 @@ export default function CartSummary() {
       <div className="space-y-3 mb-4">
         <div className="flex justify-between text-gray-700">
           <span>{t('cartSummary.subtotal')}</span>
-          <span className="font-semibold">${totals.subtotal}</span>
+          <span className="font-semibold">{formatPrice(totals.subtotal)}</span>
         </div>
 
         {/* <div className="flex justify-between text-gray-700">
@@ -29,7 +29,7 @@ export default function CartSummary() {
 
         <div className="border-t border-gray-300 pt-3 flex justify-between text-lg font-bold text-gray-900">
           <span>{t('cartSummary.total')}</span>
-          <span>${totals.total}</span>
+          <span>{formatPrice(totals.total)}</span>
         </div>
       </div>
 

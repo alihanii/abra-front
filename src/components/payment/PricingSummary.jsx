@@ -2,12 +2,7 @@
 
 import { container } from "@/lib/styles";
 import BaseSkeleton from "@/components/ui/BaseSkeleton";
-
-const formatMoney = (value) => {
-  const num = Number(value || 0);
-  if (Number.isNaN(num)) return "$0.00";
-  return `$${num.toFixed(2)}`;
-};
+import { formatPrice } from "@/lib/utils/formatPrice";
 
 /**
  * PricingSummary
@@ -50,32 +45,32 @@ export default function PricingSummary({ pricing, isLoading = false }) {
             <div className="flex justify-between text-sm text-gray-700">
               <span>تخفیف</span>
               <span className="font-semibold text-green-700">
-                {formatMoney(pricing.discount_amount)}
+                {formatPrice(pricing.discount_amount)}
               </span>
             </div>
 
             <div className="flex justify-between text-sm text-gray-700">
               <span>جمع محصولات (بدون تخفیف)</span>
               <span className="font-semibold">
-                {formatMoney(pricing.subtotal_without_discount)}
+                {formatPrice(pricing.subtotal_without_discount)}
               </span>
             </div>
 
             <div className="flex justify-between text-sm text-gray-700">
               <span>جمع محصولات (با تخفیف)</span>
               <span className="font-semibold">
-                {formatMoney(pricing.products_total_after_discount)}
+                {formatPrice(pricing.products_total_after_discount)}
               </span>
             </div>
 
             <div className="flex justify-between text-sm text-gray-700">
               <span>هزینه ارسال</span>
-              <span className="font-semibold">{formatMoney(pricing.shipping_cost)}</span>
+              <span className="font-semibold">{formatPrice(pricing.shipping_cost)}</span>
             </div>
 
             <div className="border-t border-gray-200 pt-3 flex justify-between text-base font-bold text-gray-900">
               <span>جمع کل</span>
-              <span>{formatMoney(pricing.grand_total)}</span>
+              <span>{formatPrice(pricing.grand_total)}</span>
             </div>
           </div>
         )}

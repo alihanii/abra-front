@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import BaseButton from "@/components/ui/BaseButton";
 import QuantityControl from "@/components/ui/QuantityControl";
 import { cn } from "@/lib/utils";
+import { formatPrice } from "@/lib/utils/formatPrice";
 
 /**
  * ProductInfo Component
@@ -67,13 +68,13 @@ export default function ProductInfo({
       {/* Price */}
       <div className="flex items-baseline gap-3 mb-4">
         <span className="text-3xl font-bold text-gray-900">
-          ${finalPrice?.toFixed(2) || product.price.toFixed(2)}
+          {formatPrice(finalPrice ?? product.price)}
         </span>
         {hasDiscount && discountAmount && (
           <>
-            <span className="text-xl text-gray-500 line-through">${originalPrice.toFixed(2)}</span>
+            <span className="text-xl text-gray-500 line-through">{formatPrice(originalPrice)}</span>
             <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
-              {t("product.saveAmount", { amount: `$${discountAmount}` })}
+              {t("product.saveAmount", { amount: formatPrice(discountAmount) })}
             </span>
           </>
         )}

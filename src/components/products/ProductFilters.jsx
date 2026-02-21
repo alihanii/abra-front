@@ -19,10 +19,10 @@ import { cn } from "@/lib/utils";
 export default function ProductFilters({ filters = {}, onFiltersChange, className }) {
   const t = useTranslations();
   const [isOpen, setIsOpen] = useState(false);
-  
+
   // Fetch categories from API
   const { data: categoriesResponse, isLoading: isLoadingCategories } = useCategories(
-    {page: 1},
+    { page: 1 },
     {
       staleTime: 1000 * 60 * 10, // 10 minutes
       refetchOnWindowFocus: false
@@ -65,7 +65,7 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
   // Build category options from API response
   const categoryOptions = useMemo(() => {
     const options = [{ value: "all", label: t('filters.allCategories') }];
-    
+
     if (categoriesResponse?.results) {
       categoriesResponse.results.forEach((category) => {
         options.push({
@@ -74,16 +74,16 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
         });
       });
     }
-    
+
     return options;
   }, [categoriesResponse, t]);
 
   const priceOptions = [
     { value: "all", label: t('filters.allPrices') },
-    { value: "0-20", label: "$0 - $20" },
-    { value: "20-30", label: "$20 - $30" },
-    { value: "30-40", label: "$30 - $40" },
-    { value: "40+", label: "$40+" }
+    { value: "0-200000", label: "0 - 200,000" },
+    { value: "200000-600000", label: "200,000 - 600,000" },
+    { value: "600000-1100000", label: "600,000 - 1,100,000" },
+    { value: "1100000+", label: "1100,000+" }
   ];
 
   const sizeOptions = [
@@ -98,12 +98,12 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
 
   const colorOptions = [
     { value: "all", label: t('filters.allColors') },
-    { value: "black", label: "Black" },
-    { value: "white", label: "White" },
-    { value: "gray", label: "Gray" },
-    { value: "navy", label: "Navy Blue" },
-    { value: "olive", label: "Olive Green" },
-    { value: "burgundy", label: "Burgundy" }
+    { value: "black", label: t('filters.colorBlack') },
+    { value: "white", label: t('filters.colorWhite') },
+    { value: "gray", label: t('filters.colorGray') },
+    { value: "navy", label: t('filters.colorNavy') },
+    { value: "olive", label: t('filters.colorOlive') },
+    { value: "burgundy", label: t('filters.colorBurgundy') }
   ];
 
   const sortOptions = [

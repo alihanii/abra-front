@@ -7,6 +7,7 @@ import { useProduct } from "@/hooks/useProduct";
 import QuantityControl from "@/components/ui/QuantityControl";
 import BaseImage from "@/components/ui/BaseImage";
 import { container } from "@/lib/styles";
+import { formatPrice } from "@/lib/utils/formatPrice";
 
 /**
  * Cart Item Component
@@ -108,7 +109,7 @@ export default function CartItem({ item }) {
 
           {/* Price and Quantity Controls */}
           <div className="flex items-end gap-2 justify-between flex-col">
-            <span className="text-lg font-bold text-gray-900">${displayPrice.toFixed(2)}</span>
+            <span className="text-lg font-bold text-gray-900">{formatPrice(displayPrice)}</span>
 
             {/* Quantity Controls */}
             <QuantityControl

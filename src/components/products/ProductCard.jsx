@@ -10,6 +10,7 @@ import { useProduct } from "@/hooks/useProduct";
 import { useCart } from "@/contexts/CartContext";
 import { ROUTES } from "@/config/routes";
 import { cn } from "@/lib/utils";
+import { formatPrice } from "@/lib/utils/formatPrice";
 
 /**
  * Product Card Component
@@ -249,7 +250,7 @@ export default function ProductCard({
           {/* Price */}
           <div className="text-left mb-2 md:mb-4 w-full">
             <span className={cn("font-bold text-gray-900", "text-base md:text-2xl")}>
-              ${displayPrice.toFixed(2)}
+              {formatPrice(displayPrice)}
             </span>
           </div>
         </div>
