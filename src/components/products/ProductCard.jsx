@@ -125,6 +125,13 @@ export default function ProductCard({
   const isMobile = size === "sm";
   const isInCart = Boolean(cartItem);
 
+  const colorSwatches = useMemo(() => {
+    if (!product?.colors || Object.keys(product.colors).length === 0) return [];
+    return Object.entries(product.colors).filter(
+      ([_, c]) => c?.available !== false
+    );
+  }, [product?.colors]);
+
   // Use product data if available, otherwise fallback to props
   const displayName = name;
   const displayPrice = price;
@@ -246,6 +253,23 @@ export default function ProductCard({
           >
             {displayName}
           </h3>
+          {/* Color swatches */}
+          {colorSwatches.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-1 md:mt-2">
+              {colorSwatches.map(([key, color]) => (
+                <span
+                  key={key}
+                  className={cn(
+                    "w-4 h-4 rounded-full border border-gray-300 shrink-0",
+                    selectedColor === key && "ring-2 ring-gray-900 ring-offset-1"
+                  )}
+                  style={{ backgroundColor: color.value || "#e5e7eb" }}
+                  title={color.name}
+                  aria-hidden
+                />
+              ))}
+            </div>
+          )}
 
           {/* Price */}
           <div className="text-left mb-2 md:mb-4 w-full">

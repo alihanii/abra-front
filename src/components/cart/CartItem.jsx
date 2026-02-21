@@ -108,7 +108,7 @@ export default function CartItem({ item }) {
           </div>
 
           {/* Price and Quantity Controls */}
-          <div className="flex items-end gap-2 justify-between flex-col">
+          <div className="flex items-end gap-2 justify-between flex-col absolute left-6 bottom-6">
             <span className="text-lg font-bold text-gray-900">{formatPrice(displayPrice)}</span>
 
             {/* Quantity Controls */}

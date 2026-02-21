@@ -66,7 +66,7 @@ export default function CartCustomItem({ item }) {
             )}
           </div>
 
-          <div className="flex items-end gap-2 justify-between flex-col">
+          <div className="flex items-end gap-2 justify-between flex-col absolute left-6 bottom-6">
             <span className="text-lg font-bold text-gray-900">
               {formatPrice(displayPrice)}
             </span>
