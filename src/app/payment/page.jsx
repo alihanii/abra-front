@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { ROUTES } from "@/config/routes";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
-import { useCalculateCartPricing, useCreateOrder } from "@/hooks/useApi";
-import { promiseToast, showInfo, showError } from "@/lib/utils/toast";
+import { useCalculateCartPricing, useInitiatePayment } from "@/hooks/useApi";
+import { showInfo, showError } from "@/lib/utils/toast";
 import BaseButton from "@/components/ui/BaseButton";
 import BaseSkeleton from "@/components/ui/BaseSkeleton";
 import Alert from "@/components/ui/Alert";
@@ -52,22 +52,30 @@ export default function PaymentPage() {
 
   const redirectedRef = useRef(false);
 
-  const createOrderMutation = useCreateOrder();
+  const initiatePaymentMutation = useInitiatePayment();
 
   const handleSubmitOrder = useCallback(
     async (payload) => {
-      const req = createOrderMutation.mutateAsync(payload);
-      const result = await promiseToast(req, {
-        loading: "در حال ثبت سفارش...",
-        success: "سفارش با موفقیت ثبت شد",
-        error: (err) =>
-          err?.response?.data?.message || err?.message || "ثبت سفارش ناموفق بود"
-      });
-      clearCart();
-      router.replace(ROUTES.HOME);
-      return result;
+      try {
+        const result = await initiatePaymentMutation.mutateAsync(payload);
+        if (result?.payment_url) {
+          window.location.href = result.payment_url;
+          return result;
+        }
+        showError("پاسخ نامعتبر از سرور. لطفاً دوباره تلاش کنید.");
+        throw new Error("Invalid response");
+      } catch (err) {
+        const msg =
+          err?.response?.data?.message ??
+          err?.response?.data?.detail ??
+          (typeof err?.response?.data === "string" ? err.response.data : null) ??
+          err?.message ??
+          "خطا در اتصال. لطفاً دوباره تلاش کنید.";
+        showError(Array.isArray(msg) ? msg.join(", ") : String(msg));
+        throw err;
+      }
     },
-    [createOrderMutation, clearCart, router]
+    [initiatePaymentMutation]
   );
 
   const handleEmptyCart = useCallback(() => {
@@ -244,7 +252,7 @@ export default function PaymentPage() {
                 custom_items={minimalCustomItemsForBackend}
                 pricing={pricing}
                 onSubmit={handleSubmitOrder}
-                isSubmitting={createOrderMutation.isPending}
+                isSubmitting={initiatePaymentMutation.isPending}
               />
             </div>
 

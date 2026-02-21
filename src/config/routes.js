@@ -19,6 +19,8 @@ export const ROUTES = {
   FAQ: "/faq",
   CHECKOUT: "/checkout",
   PAYMENT: "/payment",
+  PAYMENT_SUCCESS: "/payment/success",
+  PAYMENT_FAILURE: "/payment/failure",
   PRODUCT_TEMPLATES: "/product-templates"
 };
 

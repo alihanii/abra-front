@@ -71,6 +71,7 @@ export const API_ROUTES = {
   // Payment endpoints
   PAYMENT: {
     BASE: "/payment",
+    INITIATE: "/payment/initiate/",
     CREATE_INTENT: "/payment/intent",
     CONFIRM: "/payment/confirm",
     METHODS: "/payment/methods"

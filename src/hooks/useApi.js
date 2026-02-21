@@ -12,6 +12,7 @@ import * as cartService from "@/lib/api/services/cart";
 import * as productTemplateService from "@/lib/api/services/productTemplates";
 import * as customProductService from "@/lib/api/services/customProducts";
 import * as orderService from "@/lib/api/services/orders";
+import * as paymentService from "@/lib/api/services/payment";
 
 // Query Keys - Centralized query key factory
 export const queryKeys = {
@@ -49,6 +50,9 @@ export const queryKeys = {
   orders: {
     all: ["orders"],
     create: ["orders", "create"],
+  },
+  payment: {
+    initiate: ["payment", "initiate"],
   },
 };
 
@@ -271,6 +275,29 @@ export const useProductTemplates = (params = {}, options = {}) => {
 export const useCreateOrder = (options = {}) => {
   return useMutation({
     mutationFn: (payload) => orderService.createOrder(payload),
+    onSuccess: (data, variables, context) => {
+      if (options.onSuccess) {
+        options.onSuccess(data, variables, context);
+      }
+    },
+    onError: (error, variables, context) => {
+      if (options.onError) {
+        options.onError(error, variables, context);
+      }
+    },
+    ...options
+  });
+};
+
+/**
+ * Initiate payment mutation - creates order and redirects to Zarinpal gateway
+ * Response: { payment_url, order_id, invoice_number }
+ * @param {Object} options - Mutation options (onSuccess, onError)
+ * @returns {Object} Mutation object with mutate/mutateAsync, isPending
+ */
+export const useInitiatePayment = (options = {}) => {
+  return useMutation({
+    mutationFn: (payload) => paymentService.initiatePayment(payload),
     onSuccess: (data, variables, context) => {
       if (options.onSuccess) {
         options.onSuccess(data, variables, context);
