@@ -79,28 +79,26 @@ export default function ScrollNavigation({
   return (
     <div className={`${displayClass} gap-2 ${className}`}>
       <button
+        onClick={handleScrollRight}
+        // disabled={!canScrollRight}
+        className={`
+            ${sizeClasses[size]} flex items-center justify-center bg-white rounded-full shadow-md
+            hover:shadow-lg transition-all cursor-pointer
+          `}
+        aria-label={t('ui.scrollRight')}
+      >
+        <i className="ri-arrow-right-s-line text-gray-900"></i>
+      </button>
+      <button
         onClick={handleScrollLeft}
-        disabled={!canScrollLeft}
+        // disabled={!canScrollLeft}
         className={`
           ${sizeClasses[size]} flex items-center justify-center bg-white rounded-full shadow-md
           hover:shadow-lg transition-all cursor-pointer
-          ${!canScrollLeft ? "opacity-50 cursor-not-allowed" : ""}
         `}
         aria-label={t('ui.scrollLeft')}
       >
         <i className="ri-arrow-left-s-line text-gray-900"></i>
-      </button>
-      <button
-        onClick={handleScrollRight}
-        disabled={!canScrollRight}
-        className={`
-          ${sizeClasses[size]} flex items-center justify-center bg-white rounded-full shadow-md
-          hover:shadow-lg transition-all cursor-pointer
-          ${!canScrollRight ? "opacity-50 cursor-not-allowed" : ""}
-        `}
-        aria-label={t('ui.scrollRight')}
-      >
-        <i className="ri-arrow-right-s-line text-gray-900"></i>
       </button>
     </div>
   );
