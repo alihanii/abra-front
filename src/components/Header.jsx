@@ -58,17 +58,6 @@ export default function Header({ onUserClick }) {
     router.replace(next ? `${pathname}?${next}` : pathname, { scroll: false });
   }, [openProfile, router, pathname]);
 
-  // Prevent body scroll when mobile menu is open
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isMobileMenuOpen]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
@@ -191,7 +180,8 @@ export default function Header({ onUserClick }) {
         {/* Mobile Navigation */}
         <nav
           className={`
-            md:hidden overflow-hidden transition-all duration-300 ease-in-out
+            md:hidden transition-all duration-300 ease-in-out
+            ${isMobileMenuOpen ? "overflow-y-auto" : "overflow-hidden"}
             ${
               isMobileMenuOpen
                 ? "max-h-96 opacity-100 mt-4 pb-4 border-t border-gray-200 pt-4"

@@ -1,60 +1,56 @@
 "use client";
 
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 import CategoryCard from "./CategoryCard";
-import ScrollReveal from "@/components/ui/ScrollReveal";
-import { ROUTES } from "@/config/routes";
+import { useHomeCategories } from "@/hooks/useApi";
 
 /**
  * Category Grid Component
- * Grid layout for displaying category cards
+ * Grid layout for displaying category cards (fetched from API)
  */
 export default function CategoryGrid() {
   const t = useTranslations();
-  
-  const CATEGORIES = [
-    {
-      id: 1,
-      title: t('homeCategories.thirtyOffHoodies'),
-      description: t('homeCategories.limitedTimeOffer'),
-      href: `${ROUTES.PRODUCTS}?category=hoodies`,
-      image:
-        "https://readdy.ai/api/search-image?query=Modern%20minimalist%20banner%20with%20premium%20hoodies%20displayed%20on%20soft%20pastel%20blue%20background%2C%20clean%20product%20photography%2C%20professional%20e-commerce%20style%2C%20elegant%20layout%2C%20high%20resolution%2C%20contemporary%20design%2C%20subtle%20shadows%2C%20commercial%20photography%2C%20lifestyle%20aesthetic&width=800&height=400&seq=banner1&orientation=landscape",
-      delay: 0
-    },
-    {
-      id: 2,
-      title: t('homeCategories.coupleMatchingSets'),
-      description: t('homeCategories.perfectForPartners'),
-      href: ROUTES.MATCHING_SETS,
-      image:
-        "https://readdy.ai/api/search-image?query=Modern%20minimalist%20banner%20with%20matching%20couple%20clothing%20on%20soft%20pastel%20background%2C%20clean%20product%20photography%2C%20professional%20e-commerce%20style%2C%20elegant%20layout%2C%20high%20resolution%2C%20contemporary%20design%2C%20subtle%20shadows%2C%20commercial%20photography%2C%20romantic%20aesthetic&width=800&height=400&seq=banner2&orientation=landscape",
-      delay: 100
-    },
-    {
-      id: 3,
-      title: t('homeCategories.designYourOwn'),
-      description: t('homeCategories.unleashCreativity'),
-      href: ROUTES.DESIGN_STUDIO,
-      image:
-        "https://readdy.ai/api/search-image?query=Modern%20minimalist%20banner%20with%20custom%20design%20concept%20on%20soft%20pastel%20background%2C%20clean%20artistic%20photography%2C%20professional%20e-commerce%20style%2C%20elegant%20layout%2C%20high%20resolution%2C%20contemporary%20design%2C%20subtle%20shadows%2C%20commercial%20photography%2C%20creative%20aesthetic&width=800&height=400&seq=banner3&orientation=landscape",
-      delay: 200
-    }
-  ];
+  const { data, isLoading, isError } = useHomeCategories({
+    staleTime: 1000 * 60 * 10, // 10 minutes
+  });
+
+  const categories = data?.results ?? [];
+
+  if (isLoading) {
+    return (
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ animationDelay: `100ms` }}
+          >
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="h-[280px] rounded-2xl bg-gray-100 animate-pulse"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (isError || categories.length === 0) {
+    return null;
+  }
 
   return (
     <section className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {CATEGORIES.map((category) => (
+          {categories.map((category, index) => (
             <CategoryCard
               key={category.id}
               href={category.href}
               image={category.image}
-              alt={category.title}
-              title={category.title}
-              description={category.description}
-              delay={category.delay}
+              alt={t(category.title)}
+              title={t(category.title)}
+              description={t(category.description)}
+              delay={index * 100}
             />
           ))}
         </div>

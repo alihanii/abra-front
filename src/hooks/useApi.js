@@ -8,6 +8,7 @@ import * as categoryService from "@/lib/api/services/categories";
 import * as productService from "@/lib/api/services/products";
 import * as authService from "@/lib/api/services/auth";
 import * as bannerService from "@/lib/api/services/banners";
+import * as homeCategoryService from "@/lib/api/services/homeCategories";
 import * as cartService from "@/lib/api/services/cart";
 import * as productTemplateService from "@/lib/api/services/productTemplates";
 import * as customProductService from "@/lib/api/services/customProducts";
@@ -39,6 +40,10 @@ export const queryKeys = {
     all: ["banners"],
     list: ["banners", "list"],
   },
+  homeCategories: {
+    all: ["homeCategories"],
+    list: ["homeCategories", "list"],
+  },
   productTemplates: {
     all: ["productTemplates"],
     list: (params) => ["productTemplates", "list", params],
@@ -62,6 +67,15 @@ export const useBanners = (options = {}) => {
   return useQuery({
     queryKey: queryKeys.banners.list,
     queryFn: () => bannerService.getBanners(),
+    ...options
+  });
+};
+
+// Home Categories Hooks
+export const useHomeCategories = (options = {}) => {
+  return useQuery({
+    queryKey: queryKeys.homeCategories.list,
+    queryFn: () => homeCategoryService.getHomeCategories(),
     ...options
   });
 };

@@ -9,6 +9,11 @@ export const API_ROUTES = {
     LIST: "/banners/",
   },
 
+  // Home Categories endpoints
+  HOME_CATEGORIES: {
+    LIST: "/home-categories/",
+  },
+
   // Auth endpoints
   AUTH: {
     LOGIN: "/accounts/login/",
