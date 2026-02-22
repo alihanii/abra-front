@@ -9,7 +9,7 @@
   },
   "hero": {
     "title": "لباس رویایی خود را طراحی کنید",
-    "description": "طراحی سفارشی بسازید یا از مجموعه آماده ما انتخاب کنید. لباس‌های پنبه‌ای با کیفیت عالی و چاپ حرفه‌ای.",
+    "description": "طراحی سفارشی بسازید یا از مجموعه آماده ما انتخاب کنید. لباس‌های نخی با کیفیت عالی و چاپ حرفه‌ای.",
     "startCustomDesign": "شروع طراحی سفارشی",
     "buyReadyDesigns": "خرید طرح‌های آماده"
   },
@@ -32,8 +32,8 @@
   "features": {
     "printGuarantee": "ضمانت چاپ",
     "printGuaranteeDesc": "چاپ با کیفیت بالا و ماندگار",
-    "cottonFabric": "پارچه پنبه‌ای",
-    "cottonFabricDesc": "۱۰۰٪ پنبه مرغوب",
+    "cottonFabric": "پارچه نخی",
+    "cottonFabricDesc": "۱۰۰٪ نخی مرغوب",
     "fastDelivery": "ارسال سریع",
     "fastDeliveryDesc": "ارسال سریع به درب منزل شما"
   },
@@ -123,7 +123,7 @@
   },
   "shopByCategory": {
     "title": "خرید بر اساس دسته‌بندی",
-    "subtitle": "بوم مناسب خود را انتخاب کنید",
+    "subtitle": "دسته بندی مناسب خود را انتخاب کنید",
     "loadError": "خطا در بارگذاری دسته‌بندی‌ها. لطفاً دوباره تلاش کنید."
   },
   "whyChoose": {
@@ -132,7 +132,7 @@
     "customDesigns": "طراحی سفارشی",
     "customDesignsDesc": "آپلود آثار هنری خودتان",
     "premiumQuality": "کیفیت مرغوب",
-    "premiumQualityDesc": "پارچه ۱۰۰٪ پنبه",
+    "premiumQualityDesc": "پارچه ۱۰۰٪ نخی",
     "fairPricing": "قیمت‌گذاری منصفانه",
     "fairPricingDesc": "تجزیه هزینه شفاف",
     "support": "پشتیبانی ۲۴/۷",
@@ -179,7 +179,7 @@
   "social": {
     "facebook": "فیسبوک",
     "instagram": "اینستاگرام",
-    "twitter": "توییتر"
+    "telegram": "تلگرام"
   },
   "featuredProducts": {
     "title": "محصولات ویژه",
@@ -259,4 +259,3 @@
     "save": "صرفه‌جویی"
   }
 }
-

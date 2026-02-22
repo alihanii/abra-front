@@ -50,26 +50,23 @@ export default function CartCustomItem({ item }) {
         </div>
 
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-gray-900 mb-1 truncate">{item.name}</h3>
+          <h3 className="font-semibold text-gray-900 mb-1 truncate text-sm md:text-base">{item.name}</h3>
 
           <div className="flex flex-wrap gap-2 text-sm text-gray-600 mb-2">
             {item.size && (
-              <span>
+              <span className="text-sm">
                 {t("cart.size")}: {item.size}
               </span>
             )}
-            {item.size && item.color && <span>{t("cart.separator")}</span>}
+            {item.size && item.color && <span className="hidden md:block">{t("cart.separator")}</span>}
             {item.color && (
-              <span>
+              <span className="text-sm">
                 {t("cart.color")}: {item.color}
               </span>
             )}
           </div>
 
-          <div className="flex items-end gap-2 justify-between flex-col absolute left-6 bottom-6">
-            <span className="text-lg font-bold text-gray-900">
-              {formatPrice(displayPrice)}
-            </span>
+          <div className="flex md:items-center items-end md:gap-10 gap-1 flex-col md:flex-row justify-between absolute left-6 md:bottom-6 bottom-5 ">
 
             <QuantityControl
               value={item.quantity}
@@ -79,6 +76,9 @@ export default function CartCustomItem({ item }) {
               max={maxQuantity}
               size="xs"
             />
+            <span className="text-sm md:text-lg font-bold text-gray-900">
+              {formatPrice(displayPrice)}
+            </span>
           </div>
         </div>
 

@@ -126,20 +126,19 @@ export default function CartItem({ item }) {
 
         {/* Product Details */}
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-gray-900 mb-1 truncate">{item.name}</h3>
+          <h3 className="font-semibold text-gray-900 mb-1 truncate text-sm md:text-base">{item.name}</h3>
 
           {/* Product Variants */}
           <div className="flex flex-wrap gap-2 text-sm text-gray-600 mb-2">
-            {sizeDisplayName && <span>{t('cart.size')}: {sizeDisplayName}</span>}
-            {sizeDisplayName && colorDisplayName && <span>{t('cart.separator')}</span>}
+            {sizeDisplayName && <span className="text-sm">{t('cart.size')}: {sizeDisplayName}</span>}
+            {sizeDisplayName && colorDisplayName && <span className="hidden md:block">{t('cart.separator')}</span>}
             {colorDisplayName && (
-              <span>{t('cart.color')}: {colorDisplayName}</span>
+              <span className="text-sm">{t('cart.color')}: {colorDisplayName}</span>
             )}
           </div>
 
           {/* Price and Quantity Controls */}
-          <div className="flex items-end gap-2 justify-between flex-col absolute left-6 bottom-6">
-            <span className="text-lg font-bold text-gray-900">{formatPrice(displayPrice)}</span>
+          <div className="flex md:items-center items-end md:gap-10 gap-1 flex-col md:flex-row justify-between absolute left-6 md:bottom-6 bottom-5 ">
 
             {/* Quantity Controls */}
             <QuantityControl
@@ -150,7 +149,9 @@ export default function CartItem({ item }) {
               max={maxQuantity}
               size="xs"
             />
+            <span className="text-sm md:text-lg font-bold text-gray-900">{formatPrice(displayPrice)}</span>
           </div>
+
         </div>
 
         {/* Remove Button */}

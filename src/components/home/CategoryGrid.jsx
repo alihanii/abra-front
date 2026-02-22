@@ -1,7 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import CategoryCard from "./CategoryCard";
+import ScrollReveal from "@/components/ui/ScrollReveal";
+import { BaseSkeleton } from "@/components/ui";
 import { useHomeCategories } from "@/hooks/useApi";
 
 /**
@@ -9,7 +10,6 @@ import { useHomeCategories } from "@/hooks/useApi";
  * Grid layout for displaying category cards (fetched from API)
  */
 export default function CategoryGrid() {
-  const t = useTranslations();
   const { data, isLoading, isError } = useHomeCategories({
     staleTime: 1000 * 60 * 10, // 10 minutes
   });
@@ -20,12 +20,13 @@ export default function CategoryGrid() {
     return (
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ animationDelay: `100ms` }}
-          >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
-              <div
+              <BaseSkeleton
                 key={i}
-                className="h-[280px] rounded-2xl bg-gray-100 animate-pulse"
+                isLoading
+                variant="rectangular"
+                className="h-[280px] w-full rounded-2xl"
               />
             ))}
           </div>
@@ -43,15 +44,21 @@ export default function CategoryGrid() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {categories.map((category, index) => (
-            <CategoryCard
+            <ScrollReveal
               key={category.id}
-              href={category.href}
-              image={category.image}
-              alt={t(category.title)}
-              title={t(category.title)}
-              description={t(category.description)}
+              animation="fadeUp"
               delay={index * 100}
-            />
+              className="overflow-hidden rounded-2xl"
+            >
+              <CategoryCard
+                href={category.href}
+                image={category.image}
+                alt={category.title}
+                title={category.title}
+                description={category.description}
+                delay={index * 100}
+              />
+            </ScrollReveal>
           ))}
         </div>
       </div>

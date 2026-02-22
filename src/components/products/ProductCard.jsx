@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import BaseImage from "@/components/ui/BaseImage";
 import BaseButton from "@/components/ui/BaseButton";
 import QuantityControl from "@/components/ui/QuantityControl";
-import { BaseSkeleton } from "@/components/ui";
 import { useProduct } from "@/hooks/useProduct";
 import { useCart } from "@/contexts/CartContext";
 import { ROUTES } from "@/config/routes";
@@ -150,49 +149,41 @@ export default function ProductCard({
           "w-full md:w-auto",
           "border-b md:border-b-0 border-gray-200 last:border-b-0",
           "rounded-none md:rounded-2xl",
-          isMobile ? "p-3" : "p-5 gap-6",
+          isMobile ? "p-3" : "p-5 gap-2",
           className
         )}
       >
-        {/* Image Container Skeleton */}
+        {/* Image Skeleton */}
         <div
           className={cn(
-            "relative overflow-hidden rounded-lg shrink-0",
-            "w-24 h-24 md:w-full md:h-auto",
-            "md:aspect-5/6 md:mb-4"
+            "relative overflow-hidden rounded-lg shrink-0 bg-gray-200 animate-pulse",
+            "w-20 h-20 md:w-full md:h-auto",
+            "md:aspect-6/6 md:mb-4"
           )}
-        >
-          <BaseSkeleton isLoading={true} variant="rectangular" className="w-full h-full" />
-        </div>
+        />
 
         {/* Product Info Skeleton */}
         <div
-          className={cn("flex flex-col flex-1", "ml-3 md:ml-0", "justify-between md:justify-start")}
+          className={cn(
+            "flex flex-col flex-1",
+            "ml-3 md:ml-0",
+            "justify-between md:justify-start"
+          )}
         >
-          <div className="flex-1">
-            {/* Title Skeleton - 2 lines for mobile, 1 line for desktop */}
-            <BaseSkeleton isLoading={true} variant="text" className={cn(
-              "mb-1 md:mb-2",
-              "h-3 md:h-6 w-full"
-            )} />
-            <BaseSkeleton isLoading={true} variant="text" className={cn(
-              "mb-2 md:hidden",
-              "h-3 w-2/3"
-            )} />
+          <div className="flex-1 flex flex-col items-start ml-2">
+            <div className="mb-1 md:mb-2 h-3 md:h-6 w-full bg-gray-200 rounded animate-pulse" />
+            <div className="mb-2 md:hidden h-3 w-2/3 bg-gray-200 rounded animate-pulse" />
 
-            {/* Price Skeleton */}
-            <BaseSkeleton isLoading={true} variant="text" className={cn(
-              "mb-2 md:mb-4",
-              "h-4 md:h-8 w-16 md:w-28"
-            )} />
+            <div className="flex gap-1.5 mt-1 md:mt-2">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="w-4 h-4 rounded-full bg-gray-200 animate-pulse" />
+              ))}
+            </div>
+
+            <div className="mb-2 md:mb-4 h-4 md:h-6 w-16 md:w-24 mt-0.5 bg-gray-200 rounded animate-pulse self-end" />
           </div>
 
-          {/* Button Skeleton */}
-          <div className="mt-auto md:mt-0">
-            <BaseSkeleton isLoading={true} variant="default" className={cn(
-              "h-8 md:h-12 w-full rounded-full"
-            )} />
-          </div>
+          <div className="mt-auto md:mt-0 h-8 md:h-12 w-full rounded-full bg-gray-200 animate-pulse" />
         </div>
       </div>
     );
@@ -207,7 +198,7 @@ export default function ProductCard({
         "w-full md:w-auto",
         "border-b md:border-b-0 border-gray-200 last:border-b-0",
         "rounded-none md:rounded-2xl",
-        isMobile ? "p-3" : "p-5 gap-6",
+        isMobile ? "p-3" : "p-5 gap-2",
         className
       )}
     >
@@ -215,8 +206,8 @@ export default function ProductCard({
       <div
         className={cn(
           "relative overflow-hidden rounded-lg shrink-0",
-          "w-24 h-24 md:w-full md:h-auto",
-          "md:aspect-5/6 md:mb-4"
+          "w-20 h-20 md:w-full md:h-auto",
+          "md:aspect-6/6 md:mb-4"
         )}
       >
         <BaseImage
@@ -273,7 +264,7 @@ export default function ProductCard({
 
           {/* Price */}
           <div className="text-left mb-2 md:mb-4 w-full">
-            <span className={cn("font-bold text-gray-900", "text-base md:text-2xl")}>
+            <span className={cn("font-bold text-gray-900", "text-base md:text-lg")}>
               {formatPrice(displayPrice)}
             </span>
           </div>

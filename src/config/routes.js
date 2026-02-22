@@ -111,22 +111,16 @@ export const COMPANY_LINKS = [
  */
 export const SOCIAL_LINKS = [
   {
-    id: "facebook",
-    icon: "ri-facebook-fill",
-    href: "#",
-    label: "Facebook"
+    id: "telegram",
+    icon: "ri-telegram-fill",
+    href: "https://t.me/abrawear",
+    label: "telegram"
   },
   {
     id: "instagram",
     icon: "ri-instagram-line",
-    href: "#",
+    href: "https://www.instagram.com/abrawear?igsh=MTFyOWJjMDdyMjl4eQ==",
     label: "Instagram"
-  },
-  {
-    id: "twitter",
-    icon: "ri-twitter-x-line",
-    href: "#",
-    label: "Twitter"
   }
 ];
 
