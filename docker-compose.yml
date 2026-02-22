@@ -1,8 +1,6 @@
 services:
   nextjs-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/alihanii/abra-front:latest
     container_name: nextjs_container
     ports:
       - "3000:3000"
