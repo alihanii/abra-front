@@ -323,8 +323,8 @@ export default function ProductDetailPage() {
       name: product.name,
       price: finalPrice,
       image: product.images?.[0]?.url || "",
-      size: selectedSizeData?.name || selectedSize,
-      color: selectedColorData?.name || selectedColor,
+      size: selectedSizeData?.id ?? selectedSize,
+      color: selectedColorData?.id ?? selectedColor,
       quantity: quantity
     });
 

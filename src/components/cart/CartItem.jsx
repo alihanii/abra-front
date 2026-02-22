@@ -39,19 +39,23 @@ export default function CartItem({ item }) {
     selectSize
   } = useProduct(productInput);
 
-  // Find color and size keys from item.color and item.size (display names)
+  // Find color and size keys from item.color (id) and item.size (id)
   // and set them in useProduct hook
   useEffect(() => {
     if (!product || !item.color || !item.size) return;
 
-    // Find color key by matching display name
+    // Find color key by id first, then fallback to display name (legacy)
     const colorKey = Object.keys(product.colors || {}).find(
-      (key) => product.colors[key]?.name === item.color
+      (key) =>
+        String(product.colors[key]?.id) === String(item.color) ||
+        product.colors[key]?.name === item.color
     );
 
-    // Find size key by matching display name
+    // Find size key by id first, then fallback to display name (legacy)
     const sizeKey = Object.keys(product.sizes || {}).find(
-      (key) => product.sizes[key]?.name === item.size
+      (key) =>
+        String(product.sizes[key]?.id) === String(item.size) ||
+        product.sizes[key]?.name === item.size
     );
 
     // Set color and size if found and different from current selection
@@ -82,6 +86,30 @@ export default function CartItem({ item }) {
   const displayPrice = product && finalPrice > 0 ? finalPrice : item.price;
   const maxQuantity = product && availableStock !== undefined ? item.quantity + availableStock : 99;
 
+  // Resolve color display name from product (item.color is id)
+  const colorDisplayName = useMemo(() => {
+    if (!item.color) return null;
+    if (!product?.colors) return item.color;
+    const colorKey = Object.keys(product.colors).find(
+      (k) =>
+        String(product.colors[k]?.id) === String(item.color) ||
+        product.colors[k]?.name === item.color
+    );
+    return product.colors?.[colorKey]?.name ?? item.color;
+  }, [product, item.color]);
+
+  // Resolve size display name from product (item.size is id)
+  const sizeDisplayName = useMemo(() => {
+    if (!item.size) return null;
+    if (!product?.sizes) return item.size;
+    const sizeKey = Object.keys(product.sizes).find(
+      (k) =>
+        String(product.sizes[k]?.id) === String(item.size) ||
+        product.sizes[k]?.name === item.size
+    );
+    return product.sizes?.[sizeKey]?.name ?? item.size;
+  }, [product, item.size]);
+
   return (
     <div className={container}>
       <div className="flex gap-4">
@@ -102,9 +130,11 @@ export default function CartItem({ item }) {
 
           {/* Product Variants */}
           <div className="flex flex-wrap gap-2 text-sm text-gray-600 mb-2">
-            {item.size && <span>{t('cart.size')}: {item.size}</span>}
-            {item.size && item.color && <span>{t('cart.separator')}</span>}
-            {item.color && <span>{t('cart.color')}: {item.color}</span>}
+            {sizeDisplayName && <span>{t('cart.size')}: {sizeDisplayName}</span>}
+            {sizeDisplayName && colorDisplayName && <span>{t('cart.separator')}</span>}
+            {colorDisplayName && (
+              <span>{t('cart.color')}: {colorDisplayName}</span>
+            )}
           </div>
 
           {/* Price and Quantity Controls */}

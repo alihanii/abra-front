@@ -89,7 +89,7 @@ export default function ProductInfo({
       {product.colors && Object.keys(product.colors).length > 0 && (
         <div className="mb-6">
           <label className="block text-sm font-semibold text-gray-900 mb-3">
-            {t("product.color")}: {selectedColorData?.name || t("product.selectColor")}
+            {t("product.color")}: {selectedColorData?.id || t("product.selectColor")}
           </label>
           <div className="flex gap-3">
             {Object.entries(product.colors).map(([key, color]) => {

@@ -89,15 +89,15 @@ export function useProduct(slugOrProduct) {
   const quantityInCart = useMemo(() => {
     if (!product || !selectedColor || !selectedSize) return 0;
 
-    // Match by (id, color display name, size display name)
-    const colorName = product.colors?.[selectedColor]?.name || selectedColor;
-    const sizeName = product.sizes?.[selectedSize]?.name || selectedSize;
+    // Match by (id, color id, size id)
+    const colorId = product.colors?.[selectedColor]?.id ?? selectedColor;
+    const sizeId = product.sizes?.[selectedSize]?.id ?? selectedSize;
 
     const cartItem = items.find(
       (item) =>
         String(item.id) === String(product.id) &&
-        item.color === colorName &&
-        item.size === sizeName
+        String(item.color) === String(colorId) &&
+        String(item.size) === String(sizeId)
     );
     return cartItem ? cartItem.quantity : 0;
   }, [product, selectedColor, selectedSize, items]);

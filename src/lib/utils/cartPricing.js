@@ -6,19 +6,21 @@
 /**
  * Calculate final price for a product based on selected color and size
  * @param {Object} product - Full product object from API
- * @param {string} colorName - Selected color display name
- * @param {string} sizeName - Selected size display name
+ * @param {string|number} colorIdOrName - Selected color id (or legacy display name)
+ * @param {string|number} sizeIdOrName - Selected size id (or legacy display name)
  * @returns {number} Final calculated price
  */
-export const calculateFinalPrice = (product, colorName, sizeName) => {
+export const calculateFinalPrice = (product, colorIdOrName, sizeIdOrName) => {
   if (!product) return 0;
 
   // Get base price from product
   let basePrice = product.price || 0;
 
-  // Find color key by display name
+  // Find color key by id first, then fallback to display name (legacy)
   const colorKey = Object.keys(product.colors || {}).find(
-    (key) => product.colors[key]?.name === colorName
+    (key) =>
+      String(product.colors[key]?.id) === String(colorIdOrName) ||
+      product.colors[key]?.name === colorIdOrName
   );
 
   // If color has specific price, use it instead of base price
@@ -26,9 +28,11 @@ export const calculateFinalPrice = (product, colorName, sizeName) => {
     basePrice = product.colors[colorKey].price;
   }
 
-  // Find size key by display name
+  // Find size key by id first, then fallback to display name (legacy)
   const sizeKey = Object.keys(product.sizes || {}).find(
-    (key) => product.sizes[key]?.name === sizeName
+    (key) =>
+      String(product.sizes[key]?.id) === String(sizeIdOrName) ||
+      product.sizes[key]?.name === sizeIdOrName
   );
 
   // Apply size price modifier if it exists
@@ -44,19 +48,21 @@ export const calculateFinalPrice = (product, colorName, sizeName) => {
 /**
  * Calculate original price (before discount) for a product based on selected color and size
  * @param {Object} product - Full product object from API
- * @param {string} colorName - Selected color display name
- * @param {string} sizeName - Selected size display name
+ * @param {string|number} colorIdOrName - Selected color id (or legacy display name)
+ * @param {string|number} sizeIdOrName - Selected size id (or legacy display name)
  * @returns {number|null} Original price or null if no original price exists
  */
-export const calculateOriginalPrice = (product, colorName, sizeName) => {
+export const calculateOriginalPrice = (product, colorIdOrName, sizeIdOrName) => {
   if (!product) return null;
 
   // Get base original price from product
   let baseOriginalPrice = product.originalPrice || null;
 
-  // Find color key by display name
+  // Find color key by id first, then fallback to display name (legacy)
   const colorKey = Object.keys(product.colors || {}).find(
-    (key) => product.colors[key]?.name === colorName
+    (key) =>
+      String(product.colors[key]?.id) === String(colorIdOrName) ||
+      product.colors[key]?.name === colorIdOrName
   );
 
   // If color has specific original price, use it
@@ -64,9 +70,11 @@ export const calculateOriginalPrice = (product, colorName, sizeName) => {
     baseOriginalPrice = product.colors[colorKey].originalPrice;
   }
 
-  // Find size key by display name
+  // Find size key by id first, then fallback to display name (legacy)
   const sizeKey = Object.keys(product.sizes || {}).find(
-    (key) => product.sizes[key]?.name === sizeName
+    (key) =>
+      String(product.sizes[key]?.id) === String(sizeIdOrName) ||
+      product.sizes[key]?.name === sizeIdOrName
   );
 
   // Apply size price modifier to original price if it exists

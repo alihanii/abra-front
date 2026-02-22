@@ -37,29 +37,33 @@ const CartContext = createContext(undefined);
 const isSameEntry = (a, b) => {
   return (
     String(a.id) === String(b.id) &&
-    a.color === b.color &&
-    a.size === b.size
+    String(a.color) === String(b.color) &&
+    String(a.size) === String(b.size)
   );
 };
 
 /**
  * Get available stock for a specific color-size combination
  * @param {Object} product - Full product object from API
- * @param {string} colorName - Selected color display name
- * @param {string} sizeName - Selected size display name
+ * @param {string|number} colorIdOrName - Selected color id (or legacy display name)
+ * @param {string|number} sizeIdOrName - Selected size id (or legacy display name)
  * @returns {number} Available stock quantity
  */
-const getAvailableStock = (product, colorName, sizeName) => {
+const getAvailableStock = (product, colorIdOrName, sizeIdOrName) => {
   if (!product) return 0;
 
-  // Find color key by display name
+  // Find color key by id first, then fallback to display name (legacy)
   const colorKey = Object.keys(product.colors || {}).find(
-    (key) => product.colors[key]?.name === colorName
+    (key) =>
+      String(product.colors[key]?.id) === String(colorIdOrName) ||
+      product.colors[key]?.name === colorIdOrName
   );
 
-  // Find size key by display name
+  // Find size key by id first, then fallback to display name (legacy)
   const sizeKey = Object.keys(product.sizes || {}).find(
-    (key) => product.sizes[key]?.name === sizeName
+    (key) =>
+      String(product.sizes[key]?.id) === String(sizeIdOrName) ||
+      product.sizes[key]?.name === sizeIdOrName
   );
 
   if (!colorKey || !sizeKey) return 0;

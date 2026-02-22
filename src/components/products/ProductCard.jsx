@@ -60,17 +60,17 @@ export default function ProductCard({
     finalPrice
   } = useProduct(productData || slug);
 
-  // Check if product is in cart by matching (id, color, size)
-  const cartItemColor = selectedColorData?.name || selectedColor;
-  const cartItemSize = selectedSizeData?.name || selectedSize;
+  // Check if product is in cart by matching (id, color id, size id)
+  const cartItemColor = selectedColorData?.id ?? selectedColor;
+  const cartItemSize = selectedSizeData?.id ?? selectedSize;
 
   const cartItem = useMemo(() => {
     if (!product || !cartItemColor || !cartItemSize) return null;
     return items.find(
       (item) =>
         String(item.id) === String(product.id) &&
-        item.color === cartItemColor &&
-        item.size === cartItemSize
+        String(item.color) === String(cartItemColor) &&
+        String(item.size) === String(cartItemSize)
     );
   }, [items, product, cartItemColor, cartItemSize]);
 
@@ -103,8 +103,8 @@ export default function ProductCard({
       name: product.name,
       price: finalPrice,
       image: product.images?.[0]?.url || "",
-      size: selectedSizeData?.name || selectedSize,
-      color: selectedColorData?.name || selectedColor,
+      size: selectedSizeData?.id ?? selectedSize,
+      color: selectedColorData?.id ?? selectedColor,
       quantity: quantity
     });
 
