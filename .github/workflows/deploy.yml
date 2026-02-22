@@ -3,7 +3,7 @@ name: Deploy Next.js Project
 on:
   push:
     branches:
-      - master # Ensure this matches your main branch name
+      - master
 
 permissions:
   contents: read
@@ -45,18 +45,8 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            # Navigate to the project directory
             cd /home/ubuntu/frontend
-
-            # Login to GHCR using a Personal Access Token (PAT) 
-            # Note: GITHUB_TOKEN is ephemeral, for VPS a PAT is recommended
-            echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-            # Pull the latest image
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             docker compose pull
-
-            # Restart the service
             docker compose up -d
-
-            # Clean up old images
             docker image prune -f
