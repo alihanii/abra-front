@@ -193,6 +193,9 @@ export default function FilterDropdown({
                         selected && "bg-gray-100 font-semibold"
                       )}
                     >
+                      <p className={cn("flex-1 text-gray-900 text-right", selected && "text-gray-900")}>
+                        {option.label}
+                      </p>
                       {multiple && (
                         <i
                           className={cn(
@@ -205,9 +208,6 @@ export default function FilterDropdown({
                         <i className="ri-check-line text-base text-gray-900 shrink-0" />
                       )}
                       {!multiple && !selected && <span className="w-4 shrink-0" />}
-                      <span className={cn("flex-1 text-gray-900", selected && "text-gray-900")}>
-                        {option.label}
-                      </span>
                     </button>
                   </li>
                 );

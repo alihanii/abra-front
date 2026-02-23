@@ -17,6 +17,7 @@ import AbraLogo from "@/components/ui/AbraLogo";
  * @param {string} props.className - Additional CSS classes
  * @param {string} props.size - Size: 'sm' | 'md' | 'lg' | 'xl' (default: 'lg')
  * @param {boolean} props.loop - Whether to loop the typing animation (default: false)
+ * @param {number} props.initialDisplayTime - Time to show full text before typing starts in milliseconds (default: 1000)
  */
 export default function LoadingScreen({
   isLoading = true,
@@ -26,7 +27,8 @@ export default function LoadingScreen({
   onComplete,
   className,
   size = "lg",
-  loop = false
+  loop = false,
+  initialDisplayTime = 1000
 }) {
   const [displayedText, setDisplayedText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
@@ -36,6 +38,7 @@ export default function LoadingScreen({
   // Use refs to store intervals/timeouts so they persist across re-renders
   const typeIntervalRef = useRef(null);
   const pauseTimeoutRef = useRef(null);
+  const initialDelayRef = useRef(null);
 
   // Typewriter effect with loop support
   useEffect(() => {
@@ -51,11 +54,18 @@ export default function LoadingScreen({
         clearTimeout(pauseTimeoutRef.current);
         pauseTimeoutRef.current = null;
       }
+      if (initialDelayRef.current) {
+        clearTimeout(initialDelayRef.current);
+        initialDelayRef.current = null;
+      }
       return;
     }
 
     let currentIndex = 0;
     const text = logoText;
+
+    // Show full text immediately for the first second
+    setDisplayedText(text);
 
     const startTyping = () => {
       // Clear any existing intervals/timeouts before starting
@@ -104,9 +114,17 @@ export default function LoadingScreen({
       }, typingSpeed);
     };
 
-    startTyping();
+    // After showing full text, start typewriter effect
+    initialDelayRef.current = setTimeout(() => {
+      initialDelayRef.current = null;
+      startTyping();
+    }, initialDisplayTime);
 
     return () => {
+      if (initialDelayRef.current) {
+        clearTimeout(initialDelayRef.current);
+        initialDelayRef.current = null;
+      }
       if (typeIntervalRef.current) {
         clearInterval(typeIntervalRef.current);
         typeIntervalRef.current = null;
@@ -116,7 +134,7 @@ export default function LoadingScreen({
         pauseTimeoutRef.current = null;
       }
     };
-  }, [isLoading, logoText, typingSpeed, minDisplayTime, onComplete, startTime, loop]);
+  }, [isLoading, logoText, typingSpeed, minDisplayTime, onComplete, startTime, loop, initialDisplayTime]);
 
   // Cursor blinking animation
   useEffect(() => {

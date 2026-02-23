@@ -70,7 +70,7 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
       categoriesResponse.results.forEach((category) => {
         options.push({
           value: category.slug,
-          label: category.label || category.name
+          label: category.name
         });
       });
     }
@@ -186,7 +186,7 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
               />
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 flex-1 overflow-visible relative">
+            <div className="flex flex-wrap items-center gap-3 flex-1 overflow-visible relative" dir="rtl">
               <FilterDropdown
                 label={t('filters.category')}
                 options={categoryOptions}

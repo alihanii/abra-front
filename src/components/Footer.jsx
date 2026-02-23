@@ -81,7 +81,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer inline-block hover:translate-x-1"
+                    className="text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer inline-block hover:-translate-x-1"
                   >
                     {/* {t(`shopLinks.${link.id}`, { defaultValue: link.label })} */}
                     {link.label}
@@ -99,7 +99,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer inline-block hover:translate-x-1"
+                    className="text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer inline-block hover:-translate-x-1"
                   >
                     {t(`supportLinks.${link.id}`)}
                   </Link>
@@ -116,7 +116,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer inline-block hover:translate-x-1"
+                    className="text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer inline-block hover:-translate-x-1"
                   >
                     {t(`companyLinks.${link.id}`)}
                   </Link>
