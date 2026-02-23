@@ -6,4 +6,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://212.80.24.223/api
+      - NEXT_PUBLIC_APP_NAME=Abraa
+      - NEXT_PUBLIC_APP_URL=http://212.80.24.223/api
     restart: always
