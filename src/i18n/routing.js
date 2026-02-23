@@ -1,12 +1,10 @@
 export const routing = {
-  // A list of all locales that are supported
-  locales: ['fa'],
+  locales: ["fa"],
+  defaultLocale: "fa",
 
-  // Used when no locale matches
-  defaultLocale: 'fa',
-  
-  // Only show locale prefix when it's not the default locale
-  // Since we only have 'fa' as default, it will never show in URL
-  localePrefix: 'as-needed'
+  // No locale prefix in URL (e.g. /products not /fa/products)
+  localePrefix: "never",
+
+  // Disable Accept-Language detection; always use defaultLocale on server
+  localeDetection: false
 };
-
