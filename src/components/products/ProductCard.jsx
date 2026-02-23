@@ -237,8 +237,8 @@ export default function ProductCard({
         <div className="flex-1 items-start flex flex-col ml-2">
           <h3
             className={cn(
-              "font-bold text-gray-900 mb-1 md:mb-2",
-              "text-xs md:text-lg",
+              "md:font-bold font-semibold text-gray-900 mb-1 md:mb-2",
+              "text-xs md:text-base lg:text-lg",
               "line-clamp-2 md:line-clamp-none"
             )}
           >

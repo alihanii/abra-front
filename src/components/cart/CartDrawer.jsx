@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useCart } from "@/contexts/CartContext";
 import CartItem from "./CartItem";
 import CartCustomItem from "./CartCustomItem";
+import CartItemSkeleton from "./CartItemSkeleton";
 import EmptyCart from "./EmptyCart";
 import CartSummary from "./CartSummary";
 
@@ -14,8 +15,10 @@ import CartSummary from "./CartSummary";
  */
 export default function CartDrawer() {
   const t = useTranslations();
-  const { isOpen, closeCart, items, customItems, shareCart } = useCart();
+  const { isOpen, closeCart, items, customItems, shareCart, isLoading, regularEntryCount, customEntryCount } = useCart();
   const hasItems = items.length > 0 || customItems.length > 0;
+  const hasPendingEntries = regularEntryCount > 0 || customEntryCount > 0;
+  const showSkeletons = isLoading && hasPendingEntries;
   const [isMounted, setIsMounted] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
@@ -111,7 +114,7 @@ export default function CartDrawer() {
 
             <div className="flex items-center gap-1">
               {/* Share Cart Button */}
-              {hasItems && (
+              {(hasItems || showSkeletons) && (
                 <button
                   onClick={handleShareCart}
                   className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all cursor-pointer"
@@ -135,11 +138,42 @@ export default function CartDrawer() {
 
           {/* Cart Content */}
           <div className="flex-1 overflow-y-auto px-6 py-6">
-            {!hasItems ? (
+            {!hasItems && !showSkeletons ? (
               <EmptyCart />
+            ) : showSkeletons ? (
+              <div className="space-y-4">
+                {Array.from({ length: regularEntryCount }).map((_, index) => (
+                  <div
+                    key={`skeleton-regular-${index}`}
+                    className={`
+                      transition-all duration-300 ease-out
+                      ${isAnimating ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
+                    `}
+                    style={{ transitionDelay: `${index * 50}ms` }}
+                  >
+                    <CartItemSkeleton />
+                  </div>
+                ))}
+                {regularEntryCount > 0 && customEntryCount > 0 && (
+                  <hr className="border-t border-gray-200 my-4" aria-hidden="true" />
+                )}
+                {Array.from({ length: customEntryCount }).map((_, index) => (
+                  <div
+                    key={`skeleton-custom-${index}`}
+                    className={`
+                      transition-all duration-300 ease-out
+                      ${isAnimating ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
+                    `}
+                    style={{
+                      transitionDelay: `${(regularEntryCount + index) * 50}ms`
+                    }}
+                  >
+                    <CartItemSkeleton />
+                  </div>
+                ))}
+              </div>
             ) : (
               <div className="space-y-4">
-                {/* Regular products */}
                 {items.map((item, index) => (
                   <div
                     key={item.id + "-" + item.size + "-" + item.color}
@@ -147,20 +181,14 @@ export default function CartDrawer() {
                       transition-all duration-300 ease-out
                       ${isAnimating ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
                     `}
-                    style={{
-                      transitionDelay: `${index * 50}ms`
-                    }}
+                    style={{ transitionDelay: `${index * 50}ms` }}
                   >
                     <CartItem item={item} />
                   </div>
                 ))}
-
-                {/* Divider between regular and custom products */}
                 {items.length > 0 && customItems.length > 0 && (
                   <hr className="border-t border-gray-200 my-4" aria-hidden="true" />
                 )}
-
-                {/* Custom products */}
                 {customItems.map((item, index) => (
                   <div
                     key={"custom-" + item.custom_product_id}
@@ -180,7 +208,7 @@ export default function CartDrawer() {
           </div>
 
           {/* Footer Summary */}
-          {hasItems && (
+          {hasItems && !showSkeletons && (
             <div
               className={`
                 transition-all duration-300 ease-out

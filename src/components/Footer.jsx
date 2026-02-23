@@ -130,7 +130,7 @@ export default function Footer() {
         <div className="border-t border-[#F5F5F5] pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-600 text-sm">{t('footer.allRightsReserved', { year: currentYear })}</p>
           <a
-            href="https://readdy.ai/?origin=logo"
+            href="/"
             className="text-gray-600 text-sm hover:text-gray-900 transition-colors cursor-pointer"
             target="_blank"
             rel="noopener noreferrer"

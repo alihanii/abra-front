@@ -578,6 +578,8 @@ export function CartProvider({ children }) {
     isOpen,
     isLoading: !isHydrated && (isLoading || isCustomProductsLoading),
     isHydrated,
+    regularEntryCount: cartEntries.length,
+    customEntryCount: cartCustomEntries.length,
     totals,
     totalItems,
     addItem,
