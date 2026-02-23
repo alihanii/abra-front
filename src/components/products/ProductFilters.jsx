@@ -80,10 +80,10 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
 
   const priceOptions = [
     { value: "all", label: t('filters.allPrices') },
-    { value: "0-200000", label: "0 - 200,000" },
-    { value: "200000-600000", label: "200,000 - 600,000" },
-    { value: "600000-1100000", label: "600,000 - 1,100,000" },
-    { value: "1100000+", label: "1100,000+" }
+    { value: "0-1000000", label: "0 - 100,000" },
+    { value: "1000000-6000000", label: "100,000 - 600,000" },
+    { value: "6000000-11000000", label: "600,000 - 1,100,000" },
+    { value: "11000000+", label: "1100,000+" }
   ];
 
   const sizeOptions = [
@@ -103,6 +103,7 @@ export default function ProductFilters({ filters = {}, onFiltersChange, classNam
     { value: "gray", label: t('filters.colorGray') },
     { value: "navy", label: t('filters.colorNavy') },
     { value: "olive", label: t('filters.colorOlive') },
+    { value: "red", label: t('filters.red') },
     { value: "burgundy", label: t('filters.colorBurgundy') }
   ];
 

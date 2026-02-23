@@ -99,7 +99,7 @@ export default function LoginForm({
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute left-5 top-10 text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
+            className="absolute left-5 bottom-1 sm:bottom-2   text-gray-500 hover:text-gray-700 transition-colors cursor-pointer "
             aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
           >
             <i className={cn("text-xl", showPassword ? "ri-eye-off-line" : "ri-eye-line")}></i>
